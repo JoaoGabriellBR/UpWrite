@@ -5,8 +5,8 @@ import { Icons } from "@/components/icons";
 
 export default function Header() {
     return (
-        <header className="py-7 max-w-7xl mx-auto">
-            <div className="flex flex-row justify-between items-center">
+        <header className=" w-full py-7">
+            <div className="max-w-7xl mx-auto px-4 flex flex-row justify-between items-center">
                 <div className="flex flex-row justify-between items-center gap-1">
                     <Icons.logo className='w-6 h-6'/>
                     <h1 className="font-heading text-xl font-extrabold">React Notes</h1>

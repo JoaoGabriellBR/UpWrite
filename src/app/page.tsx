@@ -6,14 +6,14 @@ export default function Home() {
   return (
     <>
       <Header />
-      <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
+      <section className="py-8 md:py-20 w-full flex flex-col justify-center items-center">
         <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
           <Link
             href=""
             className="rounded-2xl bg-muted px-4 py-1.5 text-sm font-medium"
             target="_blank"
           >
-            Follow along on Github
+            Confira no Github
           </Link>
           <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
             Simplifique sua vida e aumente sua produtividade.
@@ -24,12 +24,10 @@ export default function Home() {
           </p>
           <div className="space-x-4">
             <Button asChild size="lg">
-              <Link href="/login">Registrar</Link>
+              <Link href="/register">Registrar</Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link href="" target="_blank" rel="noreferrer">
-                Login
-              </Link>
+              <Link href="/login">Login</Link>
             </Button>
           </div>
         </div>
