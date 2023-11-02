@@ -54,7 +54,7 @@ import {
     TentTree,
     Text,
     Trash,
-    User,
+    UserCircle2,
     Weight,
     X,
     CalendarCheck
@@ -75,7 +75,7 @@ import {
     ellipsis: MoreVertical,
     add: Plus,
     warning: AlertTriangle,
-    user: User,
+    user: UserCircle2,
     arrowRight: ArrowRight,
     help: HelpCircle,
     pizza: Pizza,

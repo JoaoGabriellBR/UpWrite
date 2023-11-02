@@ -28,9 +28,10 @@ export default function Register() {
                 </div>
             </header>
 
-            <section className="overflow-hidden py-8 md:py-20 w-full flex flex-col justify-center items-center">
+            <section className="py-8 md:py-20 w-full flex flex-col justify-center items-center">
                 <Card>
-                    <CardHeader className="space-y-1">
+                    <CardHeader className="space-y-1 flex items-center">
+                        <Icons.logo className="h-6 w-6 text-primary" />
                         <CardTitle className="text-2xl">Criar uma conta</CardTitle>
                         <CardDescription>
                             Coloque o seu email abaixo para criar sua conta.

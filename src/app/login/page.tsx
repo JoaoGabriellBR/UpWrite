@@ -30,11 +30,11 @@ export default function Login() {
 
             <section className="overflow-hidden py-8 md:py-20 w-full flex flex-col justify-center items-center">
                 <Card>
-                    <CardHeader className="space-y-1 flex flex-col items-center">
-                        <Icons.logo className="h-6 w-6" />
+                    <CardHeader className="space-y-1 flex items-center">
+                        <Icons.logo className="h-6 w-6 text-primary" />
                         <CardTitle className="text-2xl">Bem vindo de volta</CardTitle>
                         <CardDescription>
-                            Coloque o seu email abaixo para criar sua conta.
+                            Insira o seu email abaixo para logar em sua conta.
                         </CardDescription>
                     </CardHeader>
 
