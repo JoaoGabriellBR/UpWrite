@@ -30,6 +30,8 @@ import {
     IceCream,
     Image,
     Italic,
+    Underline,
+    StrikethroughIcon,
     Kanban,
     KanbanSquare,
     Laptop,
@@ -57,7 +59,13 @@ import {
     UserCircle2,
     Weight,
     X,
-    CalendarCheck
+    CalendarCheck,
+    MoreHorizontal,
+    AlignLeft,
+    AlignRight,
+    AlignCenter,
+    AlignJustify,
+    Baseline
   } from 'lucide-react';
   
   export const Icons = {
@@ -113,7 +121,14 @@ import {
     pencil: Pencil,
     bold: Bold,
     italic: Italic,
+    underline: Underline,
     strikethrough: Strikethrough,
+    alignLeft: AlignLeft,
+    alignRight: AlignRight,
+    alignCenter: AlignCenter,
+    alignJustify: AlignJustify,
+    baseline: Baseline,
+    image: Image,
     code: Code,
     text: Text,
     heading1: Heading1,
@@ -121,6 +136,7 @@ import {
     heading3: Heading3,
     arrowLeftToLine: ArrowLeftToLine,
     arrowRightToLine: ArrowRightToLine,
+    moreHorizontal: MoreHorizontal,
     github: (props: LucideProps) => (
       <svg viewBox="0 0 438.549 438.549" {...props}>
         <path
