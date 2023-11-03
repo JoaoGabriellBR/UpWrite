@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import DropdownAvatar from "@/components/dropdown-avatar";
 import InputEditor from "@/components/Input-editor";
 import Editor from "@/components/editor";
+import { Card, CardTitle, CardDescription } from "@/components/ui/card";
 
 export default function CreateNote() {
 
@@ -23,7 +24,7 @@ export default function CreateNote() {
 
                     <div className="flex flex-row items-center gap-3">
 
-                        <Button type="submit" className="h-9">
+                        <Button variant="outline" type="submit" className="h-9 border-none">
                             <Icons.check className="mr-2 h-5 w-5" />
                             Salvar
                         </Button>
@@ -32,13 +33,19 @@ export default function CreateNote() {
                             <Icons.close className="h-5 w-5" />
                         </Button>
                     </div>
+
                 </div>
             </header>
 
-            <div className="w-full max-w-8x1 mx-auto px-4 flex flex-col items-center justify-center">
-                <Editor />
-                <InputEditor />
-            </div>
+            <section className="w-full">
+                <div className="flex flex-col items-start w-[100%] max-w-8xl mx-auto px-4">
+                    <Editor />
+                </div>
+
+                <div className="flex flex-col items-start w-[100%] max-w-8xl mx-auto px-4">
+                    <InputEditor />
+                </div>
+            </section>
         </>
     )
 }

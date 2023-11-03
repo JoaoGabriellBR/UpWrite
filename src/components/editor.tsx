@@ -29,7 +29,7 @@ import { Toggle } from "@/components/ui/toggle";
 export default function Editor() {
     return (
         <>
-            <div className="flex flex-row justify-start items-center flex-wrap gap-2">
+            <div className="flex flex-row justify-start items-center flex-wrap gap-2 py-3">
                 <Toggle variant="outline" aria-label="Toggle Bold">
                     <Icons.bold className="h-4 w-4" />
                 </Toggle>
@@ -45,10 +45,10 @@ export default function Editor() {
 
 
                 <Select>
-                    <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="28px" />
+                    <SelectTrigger className="w-[180px] border-none">
+                        <SelectValue placeholder="Arial" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="border-none">
                         <SelectItem value="8pt">Arial</SelectItem>
                         <SelectItem value="10pt">Arial Black</SelectItem>
                         <SelectItem value="12pt">Inter</SelectItem>
@@ -64,10 +64,10 @@ export default function Editor() {
                 </Select>
 
                 <Select>
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-[180px] border-none">
                         <SelectValue placeholder="Titulo" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="border-none">
                         <SelectItem className="text-[24px]" value="titulo1">Título 1</SelectItem>
                         <SelectItem className="text-[20px]" value="titulo2">Título 2</SelectItem>
                         <SelectItem className="text-[18px]" value="titulo3">Título 3</SelectItem>
@@ -78,10 +78,10 @@ export default function Editor() {
                 </Select>
 
                 <Select>
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-[180px] border-none">
                         <SelectValue placeholder="28px" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="border-none">
                         <SelectItem value="8pt">8px</SelectItem>
                         <SelectItem value="10pt">10px</SelectItem>
                         <SelectItem value="12pt">12px</SelectItem>
@@ -119,6 +119,14 @@ export default function Editor() {
 
                 <Toggle variant="outline" aria-label="Code">
                     <Icons.code className="h-4 w-4" />
+                </Toggle>
+
+                <Toggle variant="outline" aria-label="List Unordered">
+                    <Icons.list className="h-4 w-4" />
+                </Toggle>
+
+                <Toggle variant="outline" aria-label="List Ordered">
+                    <Icons.listOrdered className="h-4 w-4" />
                 </Toggle>
 
                 <DropdownMenu>

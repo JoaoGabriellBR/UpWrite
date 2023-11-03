@@ -65,7 +65,9 @@ import {
     AlignRight,
     AlignCenter,
     AlignJustify,
-    Baseline
+    Baseline,
+    List,
+    ListOrdered
   } from 'lucide-react';
   
   export const Icons = {
@@ -130,6 +132,8 @@ import {
     baseline: Baseline,
     image: Image,
     code: Code,
+    list: List,
+    listOrdered: ListOrdered,
     text: Text,
     heading1: Heading1,
     heading2: Heading2,
