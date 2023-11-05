@@ -59,7 +59,6 @@ import {
     UserCircle2,
     Weight,
     X,
-    CalendarCheck,
     MoreHorizontal,
     AlignLeft,
     AlignRight,
@@ -67,11 +66,12 @@ import {
     AlignJustify,
     Baseline,
     List,
-    ListOrdered
+    ListOrdered,
+    PackageCheck
   } from 'lucide-react';
   
   export const Icons = {
-    logo: CalendarCheck,
+    logo: PackageCheck,
     close: X,
     spinner: Loader2,
     chevronLeft: ChevronLeft,

@@ -2,7 +2,7 @@ import InputEditor from "@/components/Input-editor";
 import Editor from "@/components/editor";
 import HeaderNotes from "@/components/header-notes";
 
-export default function CreateNote() {
+export default function EditNote() {
 
     return (
         <>

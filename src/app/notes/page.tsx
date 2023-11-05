@@ -38,7 +38,7 @@ export default function Notes() {
                 <div className="max-w-5xl mx-auto px-4 flex flex-row justify-between items-center">
                     <div className="flex flex-row justify-between items-center gap-1">
                         <Icons.logo className='w-6 h-6 text-primary' />
-                        <h1 className="font-heading text-xl font-extrabold">React Notes</h1>
+                        <h1 className="font-heading text-xl font-extrabold">Note up</h1>
                     </div>
                     <DropdownAvatar />
                 </div>
@@ -64,14 +64,11 @@ export default function Notes() {
             <section className="max-w-5xl mx-auto px-4 flex flex-col items-center justify-start gap-5">
                 {testeCards?.map((card) => (
                     <>
-                        <Card className="w-full flex flex-row justify-between items-center">
-                            <CardHeader>
+                        <Card className='w-full'>
+                            <CardHeader className="w-full flex flex-row justify-between items-center">
                                 <Link href="#">
                                     <CardTitle>{card.title}</CardTitle>
                                 </Link>
-                                <CardDescription>{card.description}</CardDescription>
-                            </CardHeader>
-                            <CardHeader>
                                 <CardDescription>{card.updated_at}</CardDescription>
                             </CardHeader>
                         </Card>
