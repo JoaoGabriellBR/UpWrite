@@ -67,7 +67,9 @@ import {
     Baseline,
     List,
     ListOrdered,
-    PackageCheck
+    PackageCheck,
+    Heading4,
+    Heading5
   } from 'lucide-react';
   
   export const Icons = {
@@ -138,6 +140,8 @@ import {
     heading1: Heading1,
     heading2: Heading2,
     heading3: Heading3,
+    heading4: Heading4,
+    heading5: Heading5,
     arrowLeftToLine: ArrowLeftToLine,
     arrowRightToLine: ArrowRightToLine,
     moreHorizontal: MoreHorizontal,
