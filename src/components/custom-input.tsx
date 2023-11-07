@@ -1,8 +1,9 @@
-import Placeholder from '@tiptap/extension-placeholder';
 import { BubbleMenu, EditorContent, JSONContent, useEditor } from '@tiptap/react';
+import Placeholder from '@tiptap/extension-placeholder';
+import TextAlign from '@tiptap/extension-text-align'
 import StarterKit from '@tiptap/starter-kit';
-import { Icons } from './icons';
 import { Toggle } from './ui/toggle';
+import { Icons } from './icons';
 import {
   Select,
   SelectContent,
@@ -33,6 +34,10 @@ export const CustomInput = ({ defaultValue, onChange, placeholder }: EditorProps
         placeholder: placeholder ?? 'Write something...',
         emptyEditorClass:
           'before:select-none before:pointer-events-none before:float-left before:h-0 before:text-muted-foreground before:content-[attr(data-placeholder)]'
+      }),
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+        alignments: ['left', 'center', 'right', 'justify']
       })
     ],
     content: defaultValue,
@@ -115,24 +120,6 @@ export const CustomInput = ({ defaultValue, onChange, placeholder }: EditorProps
           <Icons.heading3 className="h-3.5 w-3.5" />
         </Toggle>
 
-        {/* <Toggle
-          size="sm"
-          className="h-8 rounded-none"
-          pressed={editor.isActive('heading', { level: 4 })}
-          onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-        >
-          <Icons.heading4 className="h-3.5 w-3.5" />
-        </Toggle>
-
-        <Toggle
-          size="sm"
-          className="h-8 rounded-none"
-          pressed={editor.isActive('heading', { level: 5 })}
-          onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-        >
-          <Icons.heading5 className="h-3.5 w-3.5" />
-        </Toggle> */}
-
         <Toggle
           size="sm"
           className="h-8 rounded-none"
@@ -141,7 +128,6 @@ export const CustomInput = ({ defaultValue, onChange, placeholder }: EditorProps
         >
           <Icons.code className="h-3.5 w-3.5" />
         </Toggle>
-
 
 
         {/* <Select>

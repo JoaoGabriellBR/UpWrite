@@ -1,5 +1,6 @@
 import Placeholder from '@tiptap/extension-placeholder';
 import { EditorContent, JSONContent, useEditor } from '@tiptap/react';
+import TextAlign from '@tiptap/extension-text-align';
 import StarterKit from '@tiptap/starter-kit';
 import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/icons";
@@ -29,37 +30,49 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
+import { Color } from '@tiptap/extension-color'
+import Text from '@tiptap/extension-text'
+import TextStyle from '@tiptap/extension-text-style'
+
 interface EditorProps {
     defaultValue: any;
-    placeholder?: string;
     onChange: (newValue: JSONContent) => void;
 }
 
-export default function Editor({ defaultValue, onChange, placeholder }: EditorProps) {
+export default function Editor({ defaultValue, onChange }: EditorProps) {
 
     const editor = useEditor({
         editorProps: {
             attributes: {
-                class: 'outline-none'
-            }
+                class: "w-full outline-none",
+            },
         },
         extensions: [
             StarterKit.configure({
                 // codeBlock: false,
                 bulletList: {
                     keepMarks: true,
-                    keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+                    keepAttributes: false,
                 },
                 orderedList: {
                     keepMarks: true,
-                    keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+                    keepAttributes: false,
                 },
             }),
             Placeholder.configure({
-                placeholder: placeholder ?? 'Write something...',
+                placeholder: "Escreva suas ideias...",
                 emptyEditorClass:
                     'before:select-none before:pointer-events-none before:float-left before:h-0 before:text-muted-foreground before:content-[attr(data-placeholder)]'
-            })
+            }),
+            TextAlign.configure({
+                types: ['heading', 'paragraph'],
+                alignments: ['left', 'center', 'right', 'justify']
+            }),
+            Color.configure({
+                types: ['textStyle'],
+            }),
+            Text,
+            TextStyle,
         ],
         content: defaultValue,
         onUpdate: ({ editor }) => onChange(editor.getJSON())
@@ -155,25 +168,55 @@ export default function Editor({ defaultValue, onChange, placeholder }: EditorPr
                     </SelectContent>
                 </Select>
 
-                <Toggle variant="outline" aria-label="Align Left">
+                <Toggle
+                    variant="outline"
+                    aria-label="Align Left"
+                    onClick={() => editor.chain().focus().setTextAlign('left').run()}
+                    className={editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''}
+                >
                     <Icons.alignLeft className="h-4 w-4" />
                 </Toggle>
 
-                <Toggle variant="outline" aria-label="Align Center">
+                <Toggle 
+                    variant="outline"
+                    aria-label="Align Center"
+                    onClick={() => editor.chain().focus().setTextAlign('center').run()}
+                    className={editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''}
+                >
                     <Icons.alignCenter className="h-4 w-4" />
                 </Toggle>
 
-                <Toggle variant="outline" aria-label="Align Right">
+                <Toggle
+                    variant="outline"
+                    aria-label="Align Right"
+                    onClick={() => editor.chain().focus().setTextAlign('right').run()}
+                    className={editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''}
+                >
                     <Icons.alignRight className="h-4 w-4" />
                 </Toggle>
 
-                <Toggle variant="outline" aria-label="Align Justify">
+                <Toggle
+                    variant="outline"
+                    aria-label="Align Justify"
+                    onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+                    className={editor.isActive({ textAlign: 'justify' }) ? 'is-active' : ''}
+                >
                     <Icons.alignJustify className="h-4 w-4" />
                 </Toggle>
 
-                <Toggle variant="outline" aria-label="Text Color">
+                <Toggle
+                    variant="outline"
+                    aria-label="Text Color"
+                >
                     <Icons.baseline className="h-4 w-4" />
                 </Toggle>
+
+                <input
+                    type="color"
+                    onInput={e => editor.chain().focus().setColor(e.target.value).run()}
+                    value={editor.getAttributes('textStyle').color}
+                    data-testid="setColor"
+                />
 
                 <Toggle variant="outline" aria-label="Image">
                     <Icons.image className="h-4 w-4" />
@@ -250,11 +293,14 @@ export default function Editor({ defaultValue, onChange, placeholder }: EditorPr
                     </AlertDialogContent>
                 </AlertDialog>
             </div>
+
             <Input outline placeholder="Título" className="border-none py-7 placeholder:opacity-70 scroll-m-20 text-2xl tracking-tight lg:text-3xl" />
-            <EditorContent
-                className="prose prose-sm prose-stone max-w-full dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"
-                editor={editor}
-            />
+            <div className='w-full px-4'>
+                <EditorContent
+                    className="prose prose-sm prose-stone max-w-full dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"
+                    editor={editor}
+                />
+            </div>
 
         </>
     )
