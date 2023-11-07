@@ -1,4 +1,9 @@
+import Placeholder from '@tiptap/extension-placeholder';
+import { EditorContent, JSONContent, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/icons";
+import { Toggle } from "@/components/ui/toggle";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -12,7 +17,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Toggle } from "@/components/ui/toggle";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -23,23 +27,72 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 
-export default function Editor() {
+interface EditorProps {
+    defaultValue: any;
+    placeholder?: string;
+    onChange: (newValue: JSONContent) => void;
+}
+
+export default function Editor({ defaultValue, onChange, placeholder }: EditorProps) {
+
+    const editor = useEditor({
+        editorProps: {
+            attributes: {
+                class: 'outline-none'
+            }
+        },
+        extensions: [
+            StarterKit.configure({
+                // codeBlock: false,
+                bulletList: {
+                    keepMarks: true,
+                    keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+                },
+                orderedList: {
+                    keepMarks: true,
+                    keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+                },
+            }),
+            Placeholder.configure({
+                placeholder: placeholder ?? 'Write something...',
+                emptyEditorClass:
+                    'before:select-none before:pointer-events-none before:float-left before:h-0 before:text-muted-foreground before:content-[attr(data-placeholder)]'
+            })
+        ],
+        content: defaultValue,
+        onUpdate: ({ editor }) => onChange(editor.getJSON())
+    });
+
+    if (!editor) return null;
+
     return (
         <>
             <div className="flex flex-row justify-start items-center flex-wrap gap-2 py-3">
-                <Toggle variant="outline" aria-label="Toggle Bold">
-                    <Icons.bold className="h-4 w-4" />
+                <Toggle
+                    size="sm"
+                    className="h-8 rounded-none"
+                    pressed={editor.isActive('bold')}
+                    onClick={() => editor.chain().focus().toggleBold().run()}
+                >
+                    <Icons.bold className="h-3.5 w-3.5" />
                 </Toggle>
-                <Toggle variant="outline" aria-label="Toggle italic">
-                    <Icons.italic className="h-4 w-4" />
+                <Toggle
+                    size="sm"
+                    className="h-8 rounded-none"
+                    pressed={editor.isActive('italic')}
+                    onClick={() => editor.chain().focus().toggleItalic().run()}
+                >
+                    <Icons.italic className="h-3.5 w-3.5" />
                 </Toggle>
-                <Toggle aria-label="Toggle Underline">
-                    <Icons.underline className="h-4 w-4" />
-                </Toggle>
-                <Toggle aria-label="Toggle Strike Through">
-                    <Icons.strikethrough className="h-4 w-4" />
+                <Toggle
+                    size="sm"
+                    className="h-8 rounded-none"
+                    pressed={editor.isActive('strike')}
+                    onClick={() => editor.chain().focus().toggleStrike().run()}
+                >
+                    <Icons.strikethrough className="h-3.5 w-3.5" />
                 </Toggle>
 
 
@@ -64,10 +117,20 @@ export default function Editor() {
 
                 <Select>
                     <SelectTrigger className="w-[180px] border-none">
-                        <SelectValue placeholder="Titulo" />
+                        <SelectValue placeholder="Texto" />
                     </SelectTrigger>
                     <SelectContent className="border-none">
-                        <SelectItem className="text-[24px]" value="titulo1">Título 1</SelectItem>
+
+                        {/* <SelectItem
+                            className="text-[24px]"
+                            value="titulo1"
+                            pressed={editor.isActive('heading', { level: 1 })}
+                            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                        >
+                            Título 1
+                        </SelectItem> */}
+
+
                         <SelectItem className="text-[20px]" value="titulo2">Título 2</SelectItem>
                         <SelectItem className="text-[18px]" value="titulo3">Título 3</SelectItem>
                         <SelectItem className="text-[16px]" value="titulo4">Título 4</SelectItem>
@@ -116,15 +179,48 @@ export default function Editor() {
                     <Icons.image className="h-4 w-4" />
                 </Toggle>
 
-                <Toggle variant="outline" aria-label="Code">
+                <Toggle
+                    variant="outline"
+                    aria-label="Paragraph"
+                    onClick={() => editor.chain().focus().setParagraph().run()}
+                    className={editor.isActive('paragraph') ? 'is-active' : ''}
+                >
+                    <Icons.paragraph className="h-4 w-4" />
+                </Toggle>
+
+                <Toggle
+                    variant="outline"
+                    aria-label="Block Quote"
+                    onClick={() => editor.chain().focus().toggleBlockquote().run()}
+                    className={editor.isActive('blockquote') ? 'is-active' : ''}
+                >
+                    <Icons.blockquote className="h-4 w-4" />
+                </Toggle>
+
+                <Toggle
+                    variant="outline"
+                    aria-label="Code"
+                    onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+                    className={editor.isActive('codeBlock') ? 'is-active' : ''}
+                >
                     <Icons.code className="h-4 w-4" />
                 </Toggle>
 
-                <Toggle variant="outline" aria-label="List Unordered">
+                <Toggle
+                    variant="outline"
+                    aria-label="List Unordered"
+                    onClick={() => editor.chain().focus().toggleBulletList().run()}
+                    className={editor.isActive('bulletList') ? 'is-active' : ''}
+                >
                     <Icons.list className="h-4 w-4" />
                 </Toggle>
 
-                <Toggle variant="outline" aria-label="List Ordered">
+                <Toggle
+                    variant="outline"
+                    aria-label="List Ordered"
+                    onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                    className={editor.isActive('orderedList') ? 'is-active' : ''}
+                >
                     <Icons.listOrdered className="h-4 w-4" />
                 </Toggle>
 
@@ -144,8 +240,7 @@ export default function Editor() {
                         <AlertDialogHeader>
                             <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
                             <AlertDialogDescription>
-                                This action cannot be undone. This will permanently delete your account
-                                and remove your data from our servers.
+                                Essa ação não pode ser desfeita. Isso excluirá permanentemente sua nota.
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
@@ -155,6 +250,12 @@ export default function Editor() {
                     </AlertDialogContent>
                 </AlertDialog>
             </div>
+            <Input outline placeholder="Título" className="border-none py-7 placeholder:opacity-70 scroll-m-20 text-2xl tracking-tight lg:text-3xl" />
+            <EditorContent
+                className="prose prose-sm prose-stone max-w-full dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"
+                editor={editor}
+            />
+
         </>
     )
 }

@@ -69,7 +69,9 @@ import {
     ListOrdered,
     PackageCheck,
     Heading4,
-    Heading5
+    Heading5,
+    TextQuote,
+    Pilcrow
   } from 'lucide-react';
   
   export const Icons = {
@@ -97,6 +99,7 @@ import {
     kanban: Kanban,
     kanbanSquare: KanbanSquare,
     bookmark: Bookmark,
+    blockquote: TextQuote,
     clock: Clock,
     check: Check,
     flag: Flag,
@@ -121,6 +124,7 @@ import {
     coffee: Coffee,
     tag: Tag,
     plus: Plus,
+    paragraph: Pilcrow,
     sendHorizontal: SendHorizontal,
     pencil: Pencil,
     bold: Bold,

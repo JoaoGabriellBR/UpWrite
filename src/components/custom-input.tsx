@@ -41,14 +41,14 @@ export const CustomInput = ({ defaultValue, onChange, placeholder }: EditorProps
 
   if (!editor) return null;
 
-  const headingOptions = [
-    { label: 'Normal', value: 'heading', args: { level: 0 } },
-    { label: 'Título 1', value: 'heading1', args: { level: 1 } },
-    { label: 'Título 2', value: 'heading2', args: { level: 2 } },
-    { label: 'Título 3', value: 'heading3', args: { level: 3 } },
-    { label: 'Título 4', value: 'heading4', args: { level: 4 } },
-    { label: 'Título 5', value: 'heading5', args: { level: 5 } },
-  ];
+  // const headingOptions = [
+  //   { label: 'Normal', value: 'heading', args: { level: 0 } },
+  //   { label: 'Título 1', value: 'heading1', args: { level: 1 } },
+  //   { label: 'Título 2', value: 'heading2', args: { level: 2 } },
+  //   { label: 'Título 3', value: 'heading3', args: { level: 3 } },
+  //   { label: 'Título 4', value: 'heading4', args: { level: 4 } },
+  //   { label: 'Título 5', value: 'heading5', args: { level: 5 } },
+  // ];
 
   return (
     <>
@@ -60,7 +60,7 @@ export const CustomInput = ({ defaultValue, onChange, placeholder }: EditorProps
         editor={editor}
         updateDelay={0}
         className='flex divide-x'
-        // className="w-auto flex divide-x overflow-hidden rounded-lg border bg-card shadow-lg shadow-black/20"
+      // className="w-auto flex divide-x overflow-hidden rounded-lg border bg-card shadow-lg shadow-black/20"
       >
         <Toggle
           size="sm"
@@ -86,14 +86,6 @@ export const CustomInput = ({ defaultValue, onChange, placeholder }: EditorProps
         >
           <Icons.strikethrough className="h-3.5 w-3.5" />
         </Toggle>
-        <Toggle
-          size="sm"
-          className="h-8 rounded-none"
-          pressed={editor.isActive('code')}
-          onClick={() => editor.chain().focus().toggleCode().run()}
-        >
-          <Icons.code className="h-3.5 w-3.5" />
-        </Toggle>
 
         <Toggle
           size="sm"
@@ -113,6 +105,7 @@ export const CustomInput = ({ defaultValue, onChange, placeholder }: EditorProps
           <Icons.heading2 className="h-3.5 w-3.5" />
         </Toggle>
 
+
         <Toggle
           size="sm"
           className="h-8 rounded-none"
@@ -122,7 +115,7 @@ export const CustomInput = ({ defaultValue, onChange, placeholder }: EditorProps
           <Icons.heading3 className="h-3.5 w-3.5" />
         </Toggle>
 
-        <Toggle
+        {/* <Toggle
           size="sm"
           className="h-8 rounded-none"
           pressed={editor.isActive('heading', { level: 4 })}
@@ -138,10 +131,20 @@ export const CustomInput = ({ defaultValue, onChange, placeholder }: EditorProps
           onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
         >
           <Icons.heading5 className="h-3.5 w-3.5" />
+        </Toggle> */}
+
+        <Toggle
+          size="sm"
+          className="h-8 rounded-none"
+          pressed={editor.isActive('code')}
+          onClick={() => editor.chain().focus().toggleCode().run()}
+        >
+          <Icons.code className="h-3.5 w-3.5" />
         </Toggle>
 
 
-        <Select>
+
+        {/* <Select>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Título" />
           </SelectTrigger>
@@ -156,7 +159,7 @@ export const CustomInput = ({ defaultValue, onChange, placeholder }: EditorProps
               </SelectItem>
             ))}
           </SelectContent>
-        </Select>
+        </Select> */}
 
         {/* <Select
           value={editor.isActive('heading', { level: 0 })}
