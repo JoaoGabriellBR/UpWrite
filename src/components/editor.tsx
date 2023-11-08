@@ -5,19 +5,15 @@ import StarterKit from '@tiptap/starter-kit';
 import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/icons";
 import { Toggle } from "@/components/ui/toggle";
+import { Color } from '@tiptap/extension-color';
+import Text from '@tiptap/extension-text';
+import TextStyle from '@tiptap/extension-text-style';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -29,10 +25,6 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
-import { Color } from '@tiptap/extension-color'
-import Text from '@tiptap/extension-text'
-import TextStyle from '@tiptap/extension-text-style'
 
 interface EditorProps {
     defaultValue: any;
@@ -108,65 +100,46 @@ export default function Editor({ defaultValue, onChange }: EditorProps) {
                     <Icons.strikethrough className="h-3.5 w-3.5" />
                 </Toggle>
 
+                <Toggle
+                    size="sm"
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                    className={`${editor.isActive('heading', { level: 1 }) ? 'is-active' : ''} h-8 rounded-none `}
+                >
+                    <Icons.heading1 className="h-3.5 w-3.5" />
+                </Toggle>
 
-                <Select>
-                    <SelectTrigger className="w-[180px] border-none">
-                        <SelectValue placeholder="Arial" />
-                    </SelectTrigger>
-                    <SelectContent className="border-none">
-                        <SelectItem value="8pt">Arial</SelectItem>
-                        <SelectItem value="10pt">Arial Black</SelectItem>
-                        <SelectItem value="12pt">Inter</SelectItem>
-                        <SelectItem value="14pt">Raleway</SelectItem>
-                        <SelectItem value="16pt">Open Sans</SelectItem>
-                        <SelectItem value="18pt">Helvetica</SelectItem>
-                        <SelectItem value="18pt">Georgia</SelectItem>
-                        <SelectItem value="24pt">Impact</SelectItem>
-                        <SelectItem value="36pt">Comic Sans MS</SelectItem>
-                        <SelectItem value="36pt">Verdana</SelectItem>
-                        <SelectItem value="36pt">Tahoma</SelectItem>
-                    </SelectContent>
-                </Select>
-
-                <Select>
-                    <SelectTrigger className="w-[180px] border-none">
-                        <SelectValue placeholder="Texto" />
-                    </SelectTrigger>
-                    <SelectContent className="border-none">
-
-                        {/* <SelectItem
-                            className="text-[24px]"
-                            value="titulo1"
-                            pressed={editor.isActive('heading', { level: 1 })}
-                            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                        >
-                            Título 1
-                        </SelectItem> */}
+                <Toggle
+                    size="sm"
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                    className={`${editor.isActive('heading', { level: 2 }) ? 'is-active' : ''} h-8 rounded-none `}
+                >
+                    <Icons.heading2 className="h-3.5 w-3.5" />
+                </Toggle>
 
 
-                        <SelectItem className="text-[20px]" value="titulo2">Título 2</SelectItem>
-                        <SelectItem className="text-[18px]" value="titulo3">Título 3</SelectItem>
-                        <SelectItem className="text-[16px]" value="titulo4">Título 4</SelectItem>
-                        <SelectItem className="text-[12px]" value="titulo5">Título 5</SelectItem>
-                        <SelectItem className="text-[8px]" value="titulo6">Título 6</SelectItem>
-                    </SelectContent>
-                </Select>
+                <Toggle
+                    size="sm"
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                    className={`${editor.isActive('heading', { level: 3 }) ? 'is-active' : ''} h-8 rounded-none `}
+                >
+                    <Icons.heading3 className="h-3.5 w-3.5" />
+                </Toggle>
 
-                <Select>
-                    <SelectTrigger className="w-[180px] border-none">
-                        <SelectValue placeholder="28px" />
-                    </SelectTrigger>
-                    <SelectContent className="border-none">
-                        <SelectItem value="8pt">8px</SelectItem>
-                        <SelectItem value="10pt">10px</SelectItem>
-                        <SelectItem value="12pt">12px</SelectItem>
-                        <SelectItem value="14pt">14px</SelectItem>
-                        <SelectItem value="16pt">16px</SelectItem>
-                        <SelectItem value="18pt">18px</SelectItem>
-                        <SelectItem value="24pt">24px</SelectItem>
-                        <SelectItem value="36pt">36px</SelectItem>
-                    </SelectContent>
-                </Select>
+                <Toggle
+                    size="sm"
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
+                    className={`${editor.isActive('heading', { level: 4 }) ? 'is-active' : ''} h-8 rounded-none `}
+                >
+                    <Icons.heading4 className="h-3.5 w-3.5" />
+                </Toggle>
+
+                <Toggle
+                    size="sm"
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
+                    className={`${editor.isActive('heading', { level: 5 }) ? 'is-active' : ''} h-8 rounded-none `}
+                >
+                    <Icons.heading5 className="h-3.5 w-3.5" />
+                </Toggle>
 
                 <Toggle
                     variant="outline"
@@ -177,7 +150,7 @@ export default function Editor({ defaultValue, onChange }: EditorProps) {
                     <Icons.alignLeft className="h-4 w-4" />
                 </Toggle>
 
-                <Toggle 
+                <Toggle
                     variant="outline"
                     aria-label="Align Center"
                     onClick={() => editor.chain().focus().setTextAlign('center').run()}
@@ -207,6 +180,9 @@ export default function Editor({ defaultValue, onChange }: EditorProps) {
                 <Toggle
                     variant="outline"
                     aria-label="Text Color"
+                    onInput={e => editor.chain().focus().setColor(e.target.value).run()}
+                    value={editor.getAttributes('textStyle').color}
+                    data-testid="setColor"
                 >
                     <Icons.baseline className="h-4 w-4" />
                 </Toggle>
@@ -295,13 +271,12 @@ export default function Editor({ defaultValue, onChange }: EditorProps) {
             </div>
 
             <Input outline placeholder="Título" className="border-none py-7 placeholder:opacity-70 scroll-m-20 text-2xl tracking-tight lg:text-3xl" />
-            <div className='w-full px-4'>
+            <div className='w-full px-3'>
                 <EditorContent
                     className="prose prose-sm prose-stone max-w-full dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"
                     editor={editor}
                 />
             </div>
-
         </>
     )
 }

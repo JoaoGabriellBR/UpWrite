@@ -17,13 +17,9 @@ export default function CreateNote() {
                 <div className="flex flex-col items-start w-[100%] max-w-8xl mx-auto px-4">
                     <Editor
                         defaultValue={text}
-                        onChange={(e) => setText(e.target.value)}
+                        onChange={(e: any) => setText(e.target.value)}
                     />
                 </div>
-
-                {/* <div className="flex flex-col items-start w-[100%] max-w-8xl mx-auto px-4">
-                    <InputEditor />
-                </div> */}
             </section>
         </>
     )
