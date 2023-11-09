@@ -41,7 +41,6 @@ export default function Editor({ defaultValue, onChange }: EditorProps) {
         },
         extensions: [
             StarterKit.configure({
-                // codeBlock: false,
                 bulletList: {
                     keepMarks: true,
                     keepAttributes: false,
@@ -72,89 +71,104 @@ export default function Editor({ defaultValue, onChange }: EditorProps) {
 
     if (!editor) return null;
 
+    const headingButtons = [
+        {
+            level: 1,
+            label: 'Heading 1',
+            icon: <Icons.heading1 className="h-4 w-4" />,
+        },
+        {
+            level: 2,
+            label: 'Heading 2',
+            icon: <Icons.heading2 className="h-4 w-4" />,
+        },
+        {
+            level: 3,
+            label: 'Heading 3',
+            icon: <Icons.heading3 className="h-4 w-4" />,
+        },
+        {
+            level: 4,
+            label: 'Heading 4',
+            icon: <Icons.heading4 className="h-4 w-4" />,
+        },
+        {
+            level: 5,
+            label: 'Heading 5',
+            icon: <Icons.heading5 className="h-4 w-4" />,
+        },
+    ];
+
+    const formattedButtons = [
+        {
+            property: 'bold',
+            label: 'Bold',
+            icon: <Icons.bold className="h-3.5 w-3.5" />,
+            toggleFunction: () => editor.chain().focus().toggleBold().run(),
+        },
+        {
+            property: 'italic',
+            label: 'Italic',
+            icon: <Icons.italic className="h-3.5 w-3.5" />,
+            toggleFunction: () => editor.chain().focus().toggleItalic().run(),
+        },
+        {
+            property: 'strikethrough',
+            label: 'Strike through',
+            icon: <Icons.strikethrough className="h-3.5 w-3.5" />,
+            toggleFunction: () => editor.chain().focus().toggleStrike().run(),
+        },
+        {
+            property: 'codeBlock',
+            label: 'Code Block',
+            icon: <Icons.code className="h-4 w-4" />,
+            toggleFunction: () => editor.chain().focus().toggleCodeBlock().run(),
+        },
+    ];
+
     return (
         <>
-            <div className="flex flex-row justify-start items-center flex-wrap gap-2 py-3">
-                <Toggle
-                    size="sm"
-                    className="h-8 rounded-none"
-                    pressed={editor.isActive('bold')}
-                    onClick={() => editor.chain().focus().toggleBold().run()}
-                >
-                    <Icons.bold className="h-3.5 w-3.5" />
-                </Toggle>
-                <Toggle
-                    size="sm"
-                    className="h-8 rounded-none"
-                    pressed={editor.isActive('italic')}
-                    onClick={() => editor.chain().focus().toggleItalic().run()}
-                >
-                    <Icons.italic className="h-3.5 w-3.5" />
-                </Toggle>
-                <Toggle
-                    size="sm"
-                    className="h-8 rounded-none"
-                    pressed={editor.isActive('strike')}
-                    onClick={() => editor.chain().focus().toggleStrike().run()}
-                >
-                    <Icons.strikethrough className="h-3.5 w-3.5" />
-                </Toggle>
+            <div className="flex flex-row justify-center items-center flex-wrap gap-2 py-3">
 
-                <Toggle
-                    size="sm"
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                    className={`${editor.isActive('heading', { level: 1 }) ? 'is-active' : ''} h-8 rounded-none `}
-                >
-                    <Icons.heading1 className="h-3.5 w-3.5" />
-                </Toggle>
-
-                <Toggle
-                    size="sm"
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                    className={`${editor.isActive('heading', { level: 2 }) ? 'is-active' : ''} h-8 rounded-none `}
-                >
-                    <Icons.heading2 className="h-3.5 w-3.5" />
-                </Toggle>
-
-
-                <Toggle
-                    size="sm"
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-                    className={`${editor.isActive('heading', { level: 3 }) ? 'is-active' : ''} h-8 rounded-none `}
-                >
-                    <Icons.heading3 className="h-3.5 w-3.5" />
-                </Toggle>
-
-                <Toggle
-                    size="sm"
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-                    className={`${editor.isActive('heading', { level: 4 }) ? 'is-active' : ''} h-8 rounded-none `}
-                >
-                    <Icons.heading4 className="h-3.5 w-3.5" />
-                </Toggle>
-
-                <Toggle
-                    size="sm"
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-                    className={`${editor.isActive('heading', { level: 5 }) ? 'is-active' : ''} h-8 rounded-none `}
-                >
-                    <Icons.heading5 className="h-3.5 w-3.5" />
-                </Toggle>
+                {formattedButtons.map((button) => (
+                    <Toggle
+                        variant="outline"
+                        size="sm"
+                        aria-label={button.label}
+                        className={`${editor.isActive(button.property) ? 'is-active' : ''} h-8 rounded-none `}
+                        onClick={button.toggleFunction}
+                        key={button.label}
+                    >
+                        {button.icon}
+                    </Toggle>
+                ))}
+                
+                {headingButtons.map(button => (
+                    <Toggle
+                        variant="outline"
+                        aria-label={button.label}
+                        onClick={() => editor.chain().focus().toggleHeading({ level: button.level }).run()}
+                        className={editor.isActive('heading', { level: button.level }) ? 'is-active' : ''}
+                        key={button.level}
+                    >
+                        {button.icon}
+                    </Toggle>
+                ))}
 
                 <Toggle
                     variant="outline"
                     aria-label="Align Left"
-                    onClick={() => editor.chain().focus().setTextAlign('left').run()}
                     className={editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''}
+                    onClick={() => editor.chain().focus().setTextAlign('left').run()}
                 >
                     <Icons.alignLeft className="h-4 w-4" />
                 </Toggle>
 
                 <Toggle
                     variant="outline"
-                    aria-label="Align Center"
                     onClick={() => editor.chain().focus().setTextAlign('center').run()}
                     className={editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''}
+                    aria-label="Align Center"
                 >
                     <Icons.alignCenter className="h-4 w-4" />
                 </Toggle>
@@ -162,8 +176,8 @@ export default function Editor({ defaultValue, onChange }: EditorProps) {
                 <Toggle
                     variant="outline"
                     aria-label="Align Right"
-                    onClick={() => editor.chain().focus().setTextAlign('right').run()}
                     className={editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''}
+                    onClick={() => editor.chain().focus().setTextAlign('right').run()}
                 >
                     <Icons.alignRight className="h-4 w-4" />
                 </Toggle>
@@ -171,13 +185,13 @@ export default function Editor({ defaultValue, onChange }: EditorProps) {
                 <Toggle
                     variant="outline"
                     aria-label="Align Justify"
-                    onClick={() => editor.chain().focus().setTextAlign('justify').run()}
                     className={editor.isActive({ textAlign: 'justify' }) ? 'is-active' : ''}
+                    onClick={() => editor.chain().focus().setTextAlign('justify').run()}
                 >
                     <Icons.alignJustify className="h-4 w-4" />
                 </Toggle>
 
-                <Toggle
+                {/* <Toggle
                     variant="outline"
                     aria-label="Text Color"
                     onInput={e => editor.chain().focus().setColor(e.target.value).run()}
@@ -192,7 +206,7 @@ export default function Editor({ defaultValue, onChange }: EditorProps) {
                     onInput={e => editor.chain().focus().setColor(e.target.value).run()}
                     value={editor.getAttributes('textStyle').color}
                     data-testid="setColor"
-                />
+                /> */}
 
                 <Toggle variant="outline" aria-label="Image">
                     <Icons.image className="h-4 w-4" />
@@ -201,8 +215,8 @@ export default function Editor({ defaultValue, onChange }: EditorProps) {
                 <Toggle
                     variant="outline"
                     aria-label="Paragraph"
-                    onClick={() => editor.chain().focus().setParagraph().run()}
                     className={editor.isActive('paragraph') ? 'is-active' : ''}
+                    onClick={() => editor.chain().focus().setParagraph().run()}
                 >
                     <Icons.paragraph className="h-4 w-4" />
                 </Toggle>
@@ -210,26 +224,17 @@ export default function Editor({ defaultValue, onChange }: EditorProps) {
                 <Toggle
                     variant="outline"
                     aria-label="Block Quote"
-                    onClick={() => editor.chain().focus().toggleBlockquote().run()}
                     className={editor.isActive('blockquote') ? 'is-active' : ''}
+                    onClick={() => editor.chain().focus().toggleBlockquote().run()}
                 >
                     <Icons.blockquote className="h-4 w-4" />
                 </Toggle>
 
                 <Toggle
                     variant="outline"
-                    aria-label="Code"
-                    onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-                    className={editor.isActive('codeBlock') ? 'is-active' : ''}
-                >
-                    <Icons.code className="h-4 w-4" />
-                </Toggle>
-
-                <Toggle
-                    variant="outline"
                     aria-label="List Unordered"
-                    onClick={() => editor.chain().focus().toggleBulletList().run()}
                     className={editor.isActive('bulletList') ? 'is-active' : ''}
+                    onClick={() => editor.chain().focus().toggleBulletList().run()}
                 >
                     <Icons.list className="h-4 w-4" />
                 </Toggle>
@@ -237,8 +242,8 @@ export default function Editor({ defaultValue, onChange }: EditorProps) {
                 <Toggle
                     variant="outline"
                     aria-label="List Ordered"
-                    onClick={() => editor.chain().focus().toggleOrderedList().run()}
                     className={editor.isActive('orderedList') ? 'is-active' : ''}
+                    onClick={() => editor.chain().focus().toggleOrderedList().run()}
                 >
                     <Icons.listOrdered className="h-4 w-4" />
                 </Toggle>
@@ -271,7 +276,7 @@ export default function Editor({ defaultValue, onChange }: EditorProps) {
             </div>
 
             <Input outline placeholder="Título" className="border-none py-7 placeholder:opacity-70 scroll-m-20 text-2xl tracking-tight lg:text-3xl" />
-            <div className='w-full px-3'>
+            <div className='w-full px-3 flex flex-row justify-start items-center'>
                 <EditorContent
                     className="prose prose-sm prose-stone max-w-full dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"
                     editor={editor}

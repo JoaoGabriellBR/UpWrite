@@ -1,10 +1,9 @@
 "use client"
 
 import { useState } from "react";
-import InputEditor from "@/components/Input-editor";
 import Editor from "@/components/editor";
 import HeaderNotes from "@/components/header-notes";
-import { CustomInput } from "@/components/custom-input";
+// import { CustomInput } from "@/components/custom-input";
 
 export default function CreateNote() {
 
