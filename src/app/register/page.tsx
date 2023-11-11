@@ -1,4 +1,8 @@
 "use client"
+
+import { signIn } from "next-auth/react";
+import { useState, ChangeEvent, FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
 import {
@@ -11,11 +15,61 @@ import {
 } from "@/components/ui/card"
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useRouter } from 'next/navigation';
+
+interface FormDataType {
+    name: string;
+    email: string;
+    password: string;
+}
 
 export default function Register() {
 
+    const inputFields = [
+        { id: "name", label: "Nome", htmlFor: "name", type: "text", placeholder: "João Gabriel" },
+        { id: "email", label: "Email", htmlFor: "email", type: "email", placeholder: "user@example.com" },
+        { id: "password", label: "Senha", htmlFor: "password", type: "password", placeholder: "********" },
+    ];
+
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: ""
+    });
+    const [error, setError] = useState("");
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>, field: keyof FormDataType) => {
+        setFormData({ ...formData, [field]: e.target.value })
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        setFormData({ name: "", email: "", password: "" });
+
+        try {
+            const res = await fetch("/api/register", {
+                method: "POST",
+                body: JSON.stringify(formData),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            setLoading(false);
+            if (!res.ok) {
+                setError((await res.json()).message);
+                return;
+            }
+
+            signIn(undefined, { callbackUrl: "/login" });
+        } catch (error: any) {
+            setLoading(false);
+            setError(error.message);
+            console.log(error)
+        }
+    };
 
     return (
         <>
@@ -45,21 +99,33 @@ export default function Register() {
                             <div className="relative flex justify-center text-xs uppercase">
                             </div>
                         </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="name">Nome</Label>
-                            <Input id="name" type="text" placeholder="João Gabriel" />
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input id="email" type="email" placeholder="user@example.com" />
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="password">Senha</Label>
-                            <Input id="password" type="password" placeholder="********" />
-                        </div>
+
+                        {error && (
+                            <p className="text-center bg-red-300 py-4 mb-6 rounded">{error}</p>
+                        )}
+
+                        {inputFields?.map((input) => (
+                            <div key={input.id} className="grid gap-2">
+                                <Label htmlFor={input.htmlFor}>{input.label}</Label>
+                                <Input
+                                    id={input.id}
+                                    type={input.type}
+                                    placeholder={input.placeholder}
+                                    value={formData[input.id as keyof FormDataType]}
+                                    onChange={(e) => handleChange(e, input.id as keyof FormDataType)}
+                                />
+                            </div>
+                        ))}
+
                     </CardContent>
                     <CardFooter>
-                        <Button className="w-full">Criar conta</Button>
+                        <Button
+                            disabled={loading}
+                            onClick={handleSubmit}
+                            // type='submit'
+                            className="w-full">
+                            {loading ? "Criando conta..." : "Criar Conta"}
+                        </Button>
                     </CardFooter>
                 </Card>
             </section>
