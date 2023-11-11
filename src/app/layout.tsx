@@ -4,6 +4,7 @@ import './globals.css'
 import { ThemeProvider } from '@/contexts/theme-provider';
 import localFont from 'next/font/local';
 import { cn } from '@/lib/utils';
+import { NextAuthProvider } from "./providers";
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -30,9 +31,11 @@ export default function RootLayout({
       <body
         className={cn('min-h-[100dvh] bg-background font-sans antialiased', fontSans.variable, fontHeading.variable)}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-        </ThemeProvider>
+        <NextAuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+          </ThemeProvider>
+        </NextAuthProvider>
       </body>
     </html>
   )
