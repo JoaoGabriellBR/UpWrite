@@ -14,11 +14,14 @@ import {
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { useTheme } from 'next-themes';
+import { signOut, useSession } from "next-auth/react";
 
 export default function DropdownAvatar() {
 
     const { setTheme } = useTheme();
-
+    const { data: session } = useSession();
+    const user = session?.user;
+    
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -65,7 +68,7 @@ export default function DropdownAvatar() {
                     </a>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">
+                <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Sair</span>
                 </DropdownMenuItem>

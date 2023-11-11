@@ -1,7 +1,7 @@
 "use client"
 
 import { signIn } from "next-auth/react";
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { inputFields } from "@/lib/inputFields";
 
 interface FormDataType {
     name: string;
@@ -23,13 +24,6 @@ interface FormDataType {
 }
 
 export default function Register() {
-
-    const inputFields = [
-        { id: "name", label: "Nome", htmlFor: "name", type: "text", placeholder: "João Gabriel" },
-        { id: "email", label: "Email", htmlFor: "email", type: "email", placeholder: "user@example.com" },
-        { id: "password", label: "Senha", htmlFor: "password", type: "password", placeholder: "********" },
-    ];
-
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -122,7 +116,6 @@ export default function Register() {
                         <Button
                             disabled={loading}
                             onClick={handleSubmit}
-                            // type='submit'
                             className="w-full">
                             {loading ? "Criando conta..." : "Criar Conta"}
                         </Button>

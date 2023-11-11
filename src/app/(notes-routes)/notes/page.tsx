@@ -62,9 +62,9 @@ export default function Notes() {
             </section>
 
             <section className="max-w-5xl mx-auto px-4 flex flex-col items-center justify-start gap-5">
-                {testeCards?.map((card) => (
+                {testeCards?.map((card, index) => (
                     <>
-                        <Card className='w-full'>
+                        <Card key={index} className='w-full'>
                             <CardHeader className="w-full flex flex-row justify-between items-center">
                                 <Link href="#">
                                     <CardTitle>{card.title}</CardTitle>
