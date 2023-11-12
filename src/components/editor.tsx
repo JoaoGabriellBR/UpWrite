@@ -27,11 +27,13 @@ import {
 } from "@/components/ui/alert-dialog";
 
 interface EditorProps {
-    defaultValue: any;
-    onChange: (newValue: JSONContent) => void;
+    title: any;
+    setTitle: () => void;
+    content: any;
+    setContent: (newValue: JSONContent) => void;
 }
 
-export default function Editor({ defaultValue, onChange }: EditorProps) {
+export default function Editor({ title, setTitle, content, setContent }: any) {
 
     const editor = useEditor({
         editorProps: {
@@ -65,8 +67,8 @@ export default function Editor({ defaultValue, onChange }: EditorProps) {
             Text,
             TextStyle,
         ],
-        content: defaultValue,
-        onUpdate: ({ editor }) => onChange(editor.getJSON())
+        content: content,
+        onUpdate: ({ editor }) => setContent(editor.getHTML())
     });
 
     if (!editor) return null;
@@ -275,7 +277,14 @@ export default function Editor({ defaultValue, onChange }: EditorProps) {
                 </AlertDialog>
             </div>
 
-            <Input outline placeholder="Título" className="border-none py-7 placeholder:opacity-70 scroll-m-20 text-2xl tracking-tight lg:text-3xl" />
+            <Input
+                value={title}
+                onChange={(e: any) => setTitle(e.target.value)}
+                outline
+                placeholder="Título"
+                className="border-none py-7 placeholder:opacity-70 scroll-m-20 text-2xl tracking-tight lg:text-3xl"
+            />
+
             <div className='w-full px-3 flex flex-row justify-start items-center'>
                 <EditorContent
                     className="prose prose-sm prose-stone max-w-full dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"

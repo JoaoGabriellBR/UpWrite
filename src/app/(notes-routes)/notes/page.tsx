@@ -70,13 +70,12 @@ export default async function Notes() {
                     <Card key={index} className='w-full'>
                         <CardHeader className="w-full flex flex-row justify-between items-center">
                             <Link href="#">
-                                <CardTitle>{notes.title}</CardTitle>
+                                <CardTitle>{notes.title.toLowerCase()}</CardTitle>
                             </Link>
                             <CardDescription>{moment(notes?.updated_at, "DDMMYYYY").fromNow()}</CardDescription>
                         </CardHeader>
                     </Card>
                 ))}
-
             </section>
 
         </>
