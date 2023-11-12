@@ -1,3 +1,5 @@
+"use client"
+
 import { Github, Laptop, LogOut, Moon, Sun } from 'lucide-react';
 import { Avatar } from '@/components/ui/avatar';
 import { Icons } from '@/components/icons';
@@ -32,8 +34,8 @@ export default function DropdownAvatar() {
             <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">João Gabriel</p>
-                        <p className="text-xs leading-none text-muted-foreground">joaoname9@gmail.com</p>
+                        <p className="text-sm font-medium leading-none">{user?.name}</p>
+                        <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />

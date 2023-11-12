@@ -1,6 +1,3 @@
-"use client"
-
-// import { signOut, useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
 import {
@@ -11,26 +8,33 @@ import {
 } from "@/components/ui/card";
 import Link from 'next/link';
 import DropdownAvatar from '@/components/dropdown-avatar';
+import { getServerSession } from "next-auth";
+import { prisma } from '@/lib/prisma';
+import { authOptions } from '@/lib/authOptions';
+import moment from "moment";
+import { Session } from '@/lib/types';
 
-export default function Notes() {
+const getUserNotes = async () => {
 
-    const testeCards = [
-        {
-            title: "Title 1",
-            description: "Description of your note",
-            updated_at: "Criado em 25/04/2022"
+    const session: Session | null = await getServerSession(authOptions);
+
+    if (!session) return null;
+
+    const notes = await prisma.notes.findMany({
+        where: {
+            id_author: session.user?.id
         },
-        {
-            title: "Title 1",
-            description: "Description of your note",
-            updated_at: "Criado em 25/04/2022"
-        },
-        {
-            title: "Title 1",
-            description: "Description of your note",
-            updated_at: "Criado em 25/04/2022"
-        },
-    ];
+        orderBy: {
+            updated_at: 'desc'
+        }
+    });
+
+    return notes;
+};
+
+export default async function Notes() {
+
+    const notes = await getUserNotes();
 
     return (
         <>
@@ -62,17 +66,15 @@ export default function Notes() {
             </section>
 
             <section className="max-w-5xl mx-auto px-4 flex flex-col items-center justify-start gap-5">
-                {testeCards?.map((card, index) => (
-                    <>
-                        <Card key={index} className='w-full'>
-                            <CardHeader className="w-full flex flex-row justify-between items-center">
-                                <Link href="#">
-                                    <CardTitle>{card.title}</CardTitle>
-                                </Link>
-                                <CardDescription>{card.updated_at}</CardDescription>
-                            </CardHeader>
-                        </Card>
-                    </>
+                {notes?.map((notes, index) => (
+                    <Card key={index} className='w-full'>
+                        <CardHeader className="w-full flex flex-row justify-between items-center">
+                            <Link href="#">
+                                <CardTitle>{notes.title}</CardTitle>
+                            </Link>
+                            <CardDescription>{moment(notes?.updated_at, "DDMMYYYY").fromNow()}</CardDescription>
+                        </CardHeader>
+                    </Card>
                 ))}
 
             </section>
