@@ -4,7 +4,7 @@ import './globals.css'
 import { ThemeProvider } from '@/contexts/theme-provider';
 import localFont from 'next/font/local';
 import { cn } from '@/lib/utils';
-import { NextAuthProvider } from "./providers";
+import { NextAuthProvider } from "@/contexts/next-auth-provider";
 
 export const metadata: Metadata = {
   title: 'Create Next App',

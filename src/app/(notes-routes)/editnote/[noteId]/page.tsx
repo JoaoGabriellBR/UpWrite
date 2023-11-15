@@ -1,10 +1,10 @@
-import { EditorComponent } from "@/components/editor-component";
 import HeaderNotes from "@/components/header-notes";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { Session } from "@/lib/types";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import Editor from "@/components/editor";
 
 interface Params {
     params: { noteId: string };
@@ -40,7 +40,7 @@ export default async function EditNote({ params }: Params) {
             <section className="w-full flex items-center">
                 <div className="flex flex-col items-start w-full max-w-8xl mx-auto px-4">
                     <h1>{note?.title}</h1>
-                    <EditorComponent
+                    <Editor
                     // defaultValue={text}
                     // onChange={(e: any) => setText(e.target.value)}
                     />
