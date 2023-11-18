@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/contexts/theme-provider';
 import localFont from 'next/font/local';
 import { cn } from '@/lib/utils';
 import { NextAuthProvider } from "@/contexts/next-auth-provider";
+import { ReactQueryProvider } from '@/contexts/react-query-provider';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -27,15 +28,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body
         className={cn('min-h-[100dvh] bg-background font-sans antialiased', fontSans.variable, fontHeading.variable)}
       >
-        <NextAuthProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
-          </ThemeProvider>
-        </NextAuthProvider>
+        <ReactQueryProvider>
+          <NextAuthProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              {children}
+            </ThemeProvider>
+          </NextAuthProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   )

@@ -1,37 +1,29 @@
-import HeaderNotes from "@/components/header-notes";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/authOptions";
-import { Session } from "@/lib/types";
-import { prisma } from "@/lib/prisma";
-import { notFound } from "next/navigation";
-import Editor from "@/components/editor";
+"use client"
 
-interface Params {
-    params: { noteId: string };
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import HeaderNotes from "@/components/header-notes";
+import Editor from "@/components/editor";
+import { Params, NoteProps } from "@/lib/types";
+
+const getNoteById = async (noteId: any, setNote: any) => {
+    const response = await fetch(`/api/notes/noteId?id=${noteId}`)
+    setNote(response.json())
 }
 
-const getNoteById = async (noteId: string) => {
+export default function EditNote({ params }: Params) {
 
-    const session: Session | null = await getServerSession(authOptions);
+    const [note, setNote] = useState<NoteProps>();
 
-    if (!session) return null;
+    const noteId = params.noteId;
 
-    const note = await prisma.notes.findFirst({
-        where: {
-            id: parseInt(noteId),
-            id_author: session.user?.id
-        },
+    const { data, isLoading } = useQuery({
+        queryKey: ['note', noteId],
+        queryFn: () => getNoteById(noteId, setNote),
     });
 
-    return note;
-};
-
-export default async function EditNote({ params }: Params) {
-
-    const note = await getNoteById(params.noteId)
-
-    if (!note) {
-        return notFound();
+    if(isLoading){
+        return <h1>Carregando</h1>
     }
 
     return (

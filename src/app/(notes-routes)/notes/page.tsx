@@ -1,3 +1,4 @@
+"use client"
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
 import {
@@ -8,33 +9,20 @@ import {
 } from "@/components/ui/card";
 import Link from 'next/link';
 import DropdownAvatar from '@/components/dropdown-avatar';
-import { getServerSession } from "next-auth";
-import { prisma } from '@/lib/prisma';
-import { authOptions } from '@/lib/authOptions';
 import moment from "moment";
-import { Session } from '@/lib/types';
+import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 const getUserNotes = async () => {
-
-    const session: Session | null = await getServerSession(authOptions);
-
-    if (!session) return null;
-
-    const notes = await prisma.notes.findMany({
-        where: {
-            id_author: session.user?.id
-        },
-        orderBy: {
-            updated_at: 'desc'
-        }
-    });
-
-    return notes;
+    const notes = await fetch("/api/notes")
+    const data = await notes.json()
+    return data;
 };
 
-export default async function Notes() {
+export default function Notes() {
 
-    const notes = await getUserNotes();
+    const router = useRouter();
+    const { data } = useQuery({ queryKey: ['notes'], queryFn: getUserNotes })
 
     return (
         <>
@@ -50,7 +38,6 @@ export default async function Notes() {
 
             <hr className='w-full' />
             <section className="max-w-5xl mx-auto px-4 py-8 md:py-10 flex flex-row items-center justify-between">
-
                 <div className="space-y-2">
                     <h1 className="font-heading text-3xl md:text-4xl">Notas</h1>
                     <p className="text-lg text-muted-foreground">Criar e gerenciar notas</p>
@@ -62,22 +49,20 @@ export default async function Notes() {
                         Nova nota
                     </Button>
                 </Link>
-
             </section>
 
             <section className="max-w-5xl mx-auto px-4 flex flex-col items-center justify-start gap-5">
-                {notes?.map((notes, index) => (
+                {data?.map((note: any, index: any) => (
                     <Card key={index} className='w-full'>
                         <CardHeader className="w-full flex flex-row justify-between items-center">
-                            <Link href="#">
-                                <CardTitle>{notes.title.toLowerCase()}</CardTitle>
+                            <Link href={`/editnote/${note.id}`}>
+                                <CardTitle>{note.title.toLowerCase()}</CardTitle>
                             </Link>
-                            <CardDescription>{moment(notes?.updated_at, "DDMMYYYY").fromNow()}</CardDescription>
+                            <CardDescription>{moment(note?.updated_at).fromNow()}</CardDescription>
                         </CardHeader>
                     </Card>
                 ))}
             </section>
-
         </>
     )
 }

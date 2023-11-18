@@ -27,3 +27,21 @@ export async function POST(request: Request){
 
     return NextResponse.json({ response });
 }
+
+export async function GET() {
+
+    const session: Session | null = await getServerSession(authOptions);
+
+    if (!session) return null;
+
+    const response = await prisma.notes.findMany({
+        where: {
+            id_author: session.user?.id
+        },
+        orderBy: {
+            updated_at: 'desc'
+        }
+    });
+
+    return NextResponse.json(response)
+}
