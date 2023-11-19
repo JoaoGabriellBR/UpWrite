@@ -8,7 +8,8 @@ import { Params, NoteProps } from "@/lib/types";
 
 const getNoteById = async (noteId: any, setNote: any) => {
     const response = await fetch(`/api/notes/noteId?id=${noteId}`)
-    setNote(response.json())
+    const data = await response.json()
+    setNote(data)
 }
 
 export default function EditNote({ params }: Params) {
@@ -23,7 +24,7 @@ export default function EditNote({ params }: Params) {
     });
 
     if(isLoading){
-        return <h1>Carregando</h1>
+        return null
     }
 
     return (
