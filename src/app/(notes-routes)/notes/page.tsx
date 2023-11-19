@@ -10,6 +10,7 @@ import {
 import Link from 'next/link';
 import DropdownAvatar from '@/components/dropdown-avatar';
 import moment from "moment";
+import 'moment/locale/pt-br';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
@@ -27,7 +28,7 @@ export default function Notes() {
     return (
         <>
             <header className=" w-full py-7">
-                <div className="max-w-5xl mx-auto px-4 flex flex-row justify-between items-center">
+                <div className="max-w-4xl mx-auto px-4 flex flex-row justify-between items-center">
                     <div className="flex flex-row justify-between items-center gap-1">
                         <Icons.logo className='w-6 h-6 text-primary' />
                         <h1 className="font-heading text-xl font-extrabold">Note up</h1>
@@ -37,7 +38,7 @@ export default function Notes() {
             </header>
 
             <hr className='w-full' />
-            <section className="max-w-5xl mx-auto px-4 py-8 md:py-10 flex flex-row items-center justify-between">
+            <section className="max-w-4xl mx-auto px-4 py-8 md:py-10 flex flex-row items-center justify-between">
                 <div className="space-y-2">
                     <h1 className="font-heading text-3xl md:text-4xl">Notas</h1>
                     <p className="text-lg text-muted-foreground">Criar e gerenciar notas</p>
@@ -51,12 +52,12 @@ export default function Notes() {
                 </Link>
             </section>
 
-            <section className="max-w-5xl mx-auto px-4 flex flex-col items-center justify-start gap-5">
+            <section className="max-w-4xl mx-auto px-4 flex flex-col items-center justify-start gap-5">
                 {data?.map((note: any, index: any) => (
                     <Card key={index} className='w-full'>
                         <CardHeader className="w-full flex flex-row justify-between items-center">
                             <Link href={`/editnote/${note.id}`}>
-                                <CardTitle>{note.title.toLowerCase()}</CardTitle>
+                                <CardTitle className='text-md font-normal'>{note.title.toLowerCase()}</CardTitle>
                             </Link>
                             <CardDescription>{moment(note?.updated_at).fromNow()}</CardDescription>
                         </CardHeader>

@@ -106,6 +106,7 @@ export default function Register() {
                                     type={input.type}
                                     placeholder={input.placeholder}
                                     value={formData[input.id as keyof FormDataType]}
+                                    onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
                                     onChange={(e) => handleChange(e, input.id as keyof FormDataType)}
                                 />
                             </div>

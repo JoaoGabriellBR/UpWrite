@@ -16,6 +16,7 @@ import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
 import { inputFields } from '@/lib/inputFields';
 import { signIn } from "next-auth/react";
+import { getToken } from 'next-auth/jwt';
 
 interface FormDataType {
     email: string;
@@ -50,11 +51,11 @@ export default function Login() {
 
             setLoading(false);
             console.log(res);
-            
+
             if (!res?.error) {
                 router.replace("/notes");
             } else {
-                setError("invalid email or password.");
+                setError("Email ou senha inválida.");
             }
         } catch (error: any) {
             setLoading(false);
@@ -62,11 +63,18 @@ export default function Login() {
         }
     };
 
+    const handleBack = async (req: any) => {
+        const token = await getToken({ req });
+        if (!token) {
+            return router.push("/")
+        }
+    }
+
     return (
         <>
             <header className=" w-full py-7">
                 <div className="max-w-7xl mx-auto px-4">
-                    <Button variant="ghost" onClick={() => router.back()} >
+                    <Button variant="ghost" onClick={handleBack}>
                         <Icons.chevronLeft className="mr-2 h-4 w-4" />
                         Voltar
                     </Button>
@@ -83,7 +91,7 @@ export default function Login() {
                         </CardDescription>
                     </CardHeader>
 
-                    <CardContent className="grid gap-4">
+                    <CardContent className="grid gap-4" >
                         <div className="relative">
                             <div className="absolute inset-0 flex items-center">
                                 <span className="w-full border-t" />
@@ -103,6 +111,7 @@ export default function Login() {
                                     type={input.type}
                                     placeholder={input.placeholder}
                                     value={formData[input.id as keyof FormDataType]}
+                                    onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
                                     onChange={(e) => handleChange(e, input.id as keyof FormDataType)}
                                 />
                             </div>
