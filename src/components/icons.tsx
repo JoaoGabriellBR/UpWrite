@@ -71,7 +71,9 @@ import {
     Heading4,
     Heading5,
     TextQuote,
-    Pilcrow
+    Pilcrow,
+    Eye,
+    EyeOff
   } from 'lucide-react';
   
   export const Icons = {
@@ -87,6 +89,8 @@ import {
     settings: Settings,
     billing: CreditCard,
     ellipsis: MoreVertical,
+    eye: Eye,
+    eyeOff: EyeOff,
     add: Plus,
     warning: AlertTriangle,
     user: UserCircle2,

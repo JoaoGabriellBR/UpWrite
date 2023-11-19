@@ -102,6 +102,7 @@ export default function Register() {
                             <div key={input.id} className="grid gap-2">
                                 <Label htmlFor={input.htmlFor}>{input.label}</Label>
                                 <Input
+                                    senha
                                     id={input.id}
                                     type={input.type}
                                     placeholder={input.placeholder}
