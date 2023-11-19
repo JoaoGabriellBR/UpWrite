@@ -1,5 +1,5 @@
 import Placeholder from '@tiptap/extension-placeholder';
-import { EditorContent, JSONContent, useEditor } from '@tiptap/react';
+import { EditorContent, useEditor } from '@tiptap/react';
 import TextAlign from '@tiptap/extension-text-align';
 import StarterKit from '@tiptap/starter-kit';
 import { Input } from "@/components/ui/input";
@@ -25,15 +25,47 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "@/components/ui/use-toast";
 
-interface EditorProps {
-    title: any;
-    setTitle: () => void;
-    content: any;
-    setContent: (newValue: JSONContent) => void;
-}
+const deleteNote = async (noteId: any) => {
+    await fetch(`/api/notes/noteId?id=${noteId}`, {
+        method: 'DELETE'
+    });
+};
 
-export default function Editor({ title, setTitle, content, setContent }: any) {
+export default function Editor({note, title, setTitle, content, setContent }: any) {
+
+    const router = useRouter();
+    const queryClient = useQueryClient();
+
+    const onSuccess = useCallback(() => {
+        router.refresh();
+        router.push('/notes');
+    }, [router]);
+
+    const onError = useCallback(() => {
+        toast({
+            title: 'Algo deu errado.',
+            description: 'Sua nota não foi deletada. Tente novamente.',
+            variant: 'destructive'
+        });
+    }, []);
+
+    const { mutate } = useMutation({
+        mutationFn: deleteNote,
+        onSuccess,
+        onError,
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['notes'] });
+        },
+    });
+
+    const handleClickDelete = useCallback(() => {
+        mutate(note?.id);
+    }, [mutate, note?.id]);
 
     const editor = useEditor({
         editorProps: {
@@ -144,7 +176,7 @@ export default function Editor({ title, setTitle, content, setContent }: any) {
                         {button.icon}
                     </Toggle>
                 ))}
-                
+
                 {headingButtons.map(button => (
                     <Toggle
                         variant="outline"
@@ -191,27 +223,6 @@ export default function Editor({ title, setTitle, content, setContent }: any) {
                     onClick={() => editor.chain().focus().setTextAlign('justify').run()}
                 >
                     <Icons.alignJustify className="h-4 w-4" />
-                </Toggle>
-
-                {/* <Toggle
-                    variant="outline"
-                    aria-label="Text Color"
-                    onInput={e => editor.chain().focus().setColor(e.target.value).run()}
-                    value={editor.getAttributes('textStyle').color}
-                    data-testid="setColor"
-                >
-                    <Icons.baseline className="h-4 w-4" />
-                </Toggle>
-
-                <input
-                    type="color"
-                    onInput={e => editor.chain().focus().setColor(e.target.value).run()}
-                    value={editor.getAttributes('textStyle').color}
-                    data-testid="setColor"
-                /> */}
-
-                <Toggle variant="outline" aria-label="Image">
-                    <Icons.image className="h-4 w-4" />
                 </Toggle>
 
                 <Toggle
@@ -271,7 +282,9 @@ export default function Editor({ title, setTitle, content, setContent }: any) {
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                            <AlertDialogAction>Excluir</AlertDialogAction>
+                            <AlertDialogAction onClick={handleClickDelete}>
+                                Excluir
+                            </AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>

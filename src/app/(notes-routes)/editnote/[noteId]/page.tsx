@@ -18,22 +18,19 @@ export default function EditNote({ params }: Params) {
 
     const noteId = params.noteId;
 
-    const { data, isLoading } = useQuery({
+    const { } = useQuery({
         queryKey: ['note', noteId],
         queryFn: () => getNoteById(noteId, setNote),
     });
-
-    if(isLoading){
-        return null
-    }
 
     return (
         <>
             <HeaderNotes />
             <section className="w-full flex items-center">
                 <div className="flex flex-col items-start w-full max-w-8xl mx-auto px-4">
-                    <h1>{note?.title}</h1>
+                    {/* <h1>{note}</h1> */}
                     <Editor
+                        note={note}
                     // defaultValue={text}
                     // onChange={(e: any) => setText(e.target.value)}
                     />

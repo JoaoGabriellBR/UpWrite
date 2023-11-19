@@ -18,3 +18,21 @@ export async function GET(request: Request) {
         return NextResponse.json({ message: "Não foi possível capturar a nota" }, { status: 500 })
     }
 }
+
+export async function DELETE(request: Request) {
+
+    const { searchParams } = new URL(request.url);
+    const noteId = searchParams.get('id');
+
+    try {
+        await prisma.notes.delete({
+            where: {
+                id: Number(noteId)
+            }
+        });
+
+        return NextResponse.json({ success: "Nota excluida com sucesso." }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ message: "Não foi possível excluir a nota." }, { status: 500 })
+    }
+}
