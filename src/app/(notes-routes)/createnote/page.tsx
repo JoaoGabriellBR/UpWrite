@@ -1,54 +1,62 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Editor from "@/components/editor";
 import HeaderNotes from "@/components/header-notes";
-import { redirect } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 
 export default function CreateNote() {
 
-    const toaster = useToast();
+    const router = useRouter();
+    const queryClient = useQueryClient();
+
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState();
     const [content, setContent] = useState();
 
-    const createNewNote = async () => {
-
+    const createNote = async () => {
         setLoading(true);
-
-        try {
-
-            const response = await fetch('/api/notes', {
-                method: 'POST',
-                body: JSON.stringify({
-                    title,
-                    content
-                })
-            });
-
-            toaster.toast({
-                variant: 'default',
-                title: "Sucesso",
-                description: "A sua nota foi criada com sucesso.",
+        await fetch('/api/notes', {
+            method: 'POST',
+            body: JSON.stringify({
+                title,
+                content
             })
-            redirect('/notes')
+        });
+        setLoading(false);
+    };
 
-        } catch (error) {
-            console.log(error)
-            toaster.toast({
-                variant: 'destructive',
-                title: "Erro",
-                description: "Não foi possível criar a sua nota.",
-            })
-        } finally {
-            setLoading(false);
-        }
-    }
+    const onSuccess = useCallback(() => {
+        router.refresh();
+        router.push('/notes');
+    }, [router]);
+
+    const onError = useCallback(() => {
+        toast({
+            title: 'Algo deu errado.',
+            description: 'Não foi possível criar a sua nota. Tente novamente.',
+            variant: 'destructive'
+        });
+    }, []);
+
+    const { mutate } = useMutation({
+        mutationFn: createNote,
+        onSuccess,
+        onError,
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['notes'] });
+        },
+    });
+
+    const handleClickCreateNote = useCallback(() => {
+        mutate();
+    }, [mutate]);
 
     return (
         <>
-            <HeaderNotes createNewNote={createNewNote} loading={loading}/>
+            <HeaderNotes createNewNote={handleClickCreateNote} loading={loading}/>
             <section className="w-full">
                 <div className="flex flex-col items-start w-[100%] max-w-8xl mx-auto px-4">
                     <Editor
