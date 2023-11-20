@@ -26,7 +26,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 
@@ -104,6 +104,12 @@ export default function Editor({note, title, content, handleChangeTitle, handleC
         content: content,
         onUpdate: ({ editor }) => handleChangeContent({ editor })
     });
+
+    useEffect(() => {
+        if (content && editor) {
+            editor.commands.setContent(content);
+        }
+    }, [content, editor]);
 
     if (!editor) return null;
 
@@ -304,6 +310,7 @@ export default function Editor({note, title, content, handleChangeTitle, handleC
                 <EditorContent
                     className="prose prose-sm prose-stone max-w-full dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"
                     editor={editor}
+                    defaultValue={content}
                 />
             </div>
         </>

@@ -32,7 +32,7 @@ export default function EditNote({ params }: Params) {
 
     const handleChangeContent = ({ editor }: any) => {
         if (note) {
-            const updatedNote = { ...note, content: editor.getHTML() };
+            const updatedNote = { ...note, content: editor.getJSON() };
             setNote(updatedNote);
         }
     };

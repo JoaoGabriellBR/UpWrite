@@ -59,7 +59,7 @@ export default function CreateNote() {
     }
 
     const handleChangeContent = ({ editor }: any) => {
-        setContent(editor.getHTML())
+        setContent(editor.getJSON())
     }
 
     return (

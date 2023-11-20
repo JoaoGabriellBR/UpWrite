@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -25,9 +22,9 @@ model Notes {
   id         Int       @id @default(autoincrement())
   id_author  Int
   title      String
-  content    String
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
   deleted_at DateTime?
+  content    Json?
   author     User      @relation(fields: [id_author], references: [id])
 }
