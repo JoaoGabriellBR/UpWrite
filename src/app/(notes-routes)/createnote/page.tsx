@@ -54,6 +54,14 @@ export default function CreateNote() {
         mutate();
     }, [mutate]);
 
+    const handleChangeTitle = (e: any) => {
+        setTitle(e.target.value)
+    }
+
+    const handleChangeContent = ({ editor }: any) => {
+        setContent(editor.getHTML())
+    }
+
     return (
         <>
             <HeaderNotes createNewNote={handleClickCreateNote} loading={loading}/>
@@ -64,6 +72,9 @@ export default function CreateNote() {
                         setTitle={setTitle}
                         content={content}
                         setContent={setContent}
+
+                        handleChangeTitle={handleChangeTitle}
+                        handleChangeContent={handleChangeContent}
                     />
                 </div>
             </section>

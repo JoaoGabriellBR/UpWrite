@@ -36,10 +36,12 @@ const deleteNote = async (noteId: any) => {
     });
 };
 
-export default function Editor({note, title, setTitle, content, setContent }: any) {
+export default function Editor({note, title, content, handleChangeTitle, handleChangeContent }: any) {
 
     const router = useRouter();
     const queryClient = useQueryClient();
+
+    console.log(typeof(content))
 
     const onSuccess = useCallback(() => {
         router.refresh();
@@ -98,9 +100,9 @@ export default function Editor({note, title, setTitle, content, setContent }: an
             }),
             Text,
             TextStyle,
-        ],
+        ], 
         content: content,
-        onUpdate: ({ editor }) => setContent(editor.getHTML())
+        onUpdate: ({ editor }) => handleChangeContent({ editor })
     });
 
     if (!editor) return null;
@@ -292,7 +294,7 @@ export default function Editor({note, title, setTitle, content, setContent }: an
 
             <Input
                 value={title}
-                onChange={(e: any) => setTitle(e.target.value)}
+                onChange={handleChangeTitle}
                 outline
                 placeholder="Título"
                 className="border-none py-7 placeholder:opacity-70 scroll-m-20 text-2xl tracking-tight lg:text-3xl"

@@ -23,16 +23,31 @@ export default function EditNote({ params }: Params) {
         queryFn: () => getNoteById(noteId, setNote),
     });
 
+    const handleChangeTitle = (e: any) => {
+        if (note) {
+            const updatedNote = { ...note, content: e.target.value };
+            setNote(updatedNote);
+        }
+    };
+
+    const handleChangeContent = ({ editor }: any) => {
+        if (note) {
+            const updatedNote = { ...note, content: editor.getHTML() };
+            setNote(updatedNote);
+        }
+    };
+
     return (
         <>
             <HeaderNotes />
             <section className="w-full flex items-center">
                 <div className="flex flex-col items-start w-full max-w-8xl mx-auto px-4">
-                    {/* <h1>{note}</h1> */}
                     <Editor
                         note={note}
-                    // defaultValue={text}
-                    // onChange={(e: any) => setText(e.target.value)}
+                        title={note?.title}
+                        content={note?.content}
+                        handleChangeTitle={handleChangeTitle}
+                        handleChangeContent={handleChangeContent}
                     />
                 </div>
             </section>
