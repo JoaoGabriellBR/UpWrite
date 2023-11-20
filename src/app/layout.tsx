@@ -8,7 +8,7 @@ import { NextAuthProvider } from "@/contexts/next-auth-provider";
 import { ReactQueryProvider } from '@/contexts/react-query-provider';
 
 export const metadata: Metadata = {
-  title: 'Note Up',
+  title: 'UpWrite',
   description: 'Simplifique sua vida e aumente sua produtividade',
 };
 

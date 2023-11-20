@@ -31,7 +31,7 @@ export default function Notes() {
                 <div className="max-w-4xl mx-auto px-4 flex flex-row justify-between items-center">
                     <div className="flex flex-row justify-between items-center gap-1">
                         <Icons.logo className='w-6 h-6 text-primary' />
-                        <h1 className="font-heading text-xl font-extrabold">Note up</h1>
+                        <h1 className="font-heading text-xl font-extrabold">UpWrite</h1>
                     </div>
                     <DropdownAvatar />
                 </div>

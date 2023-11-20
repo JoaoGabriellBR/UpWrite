@@ -9,7 +9,7 @@ export default function Header() {
             <div className="max-w-7xl mx-auto px-4 flex flex-row justify-between items-center">
                 <div className="flex flex-row justify-between items-center gap-1">
                     <Icons.logo className='w-6 h-6 text-primary font-bold'/>
-                    <h1 className="font-heading text-xl font-extrabold">Note up</h1>
+                    <h1 className="font-heading text-xl font-extrabold">UpWrite</h1>
                 </div>
 
                 <div className="flex flex-row items-center space-x-1">
