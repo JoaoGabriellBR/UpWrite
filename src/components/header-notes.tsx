@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { useRouter } from "next/navigation";
 
-export default function HeaderNotes({ createNewNote, loading }: any) {
+export default function HeaderNotes({ noteFunction, loading }: any) {
 
     const router = useRouter();
 
@@ -20,7 +20,7 @@ export default function HeaderNotes({ createNewNote, loading }: any) {
 
                         <Button
                             disabled={loading}
-                            onClick={createNewNote}
+                            onClick={noteFunction}
                             variant="outline"
                             type="submit"
                             className="h-9 border-none"

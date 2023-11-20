@@ -6,6 +6,7 @@ import localFont from 'next/font/local';
 import { cn } from '@/lib/utils';
 import { NextAuthProvider } from "@/contexts/next-auth-provider";
 import { ReactQueryProvider } from '@/contexts/react-query-provider';
+import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
   title: 'UpWrite',
@@ -37,6 +38,7 @@ export default function RootLayout({
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {children}
             </ThemeProvider>
+            <Toaster/>
           </NextAuthProvider>
         </ReactQueryProvider>
       </body>

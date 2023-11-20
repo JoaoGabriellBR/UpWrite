@@ -37,7 +37,8 @@ export default function CreateNote() {
         toast({
             title: 'Algo deu errado.',
             description: 'Não foi possível criar a sua nota. Tente novamente.',
-            variant: 'destructive'
+            variant: 'destructive',
+            duration: 3000,
         });
     }, []);
 
@@ -64,7 +65,7 @@ export default function CreateNote() {
 
     return (
         <>
-            <HeaderNotes createNewNote={handleClickCreateNote} loading={loading}/>
+            <HeaderNotes noteFunction={handleClickCreateNote} loading={loading}/>
             <section className="w-full">
                 <div className="flex flex-col items-start w-[100%] max-w-8xl mx-auto px-4">
                     <Editor
@@ -72,7 +73,6 @@ export default function CreateNote() {
                         setTitle={setTitle}
                         content={content}
                         setContent={setContent}
-
                         handleChangeTitle={handleChangeTitle}
                         handleChangeContent={handleChangeContent}
                     />

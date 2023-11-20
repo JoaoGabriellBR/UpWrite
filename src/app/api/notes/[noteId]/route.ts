@@ -19,6 +19,30 @@ export async function GET(request: Request) {
     }
 }
 
+export async function PATCH(request: Request){
+
+    const { searchParams } = new URL(request.url);
+    const noteId = searchParams.get('id');
+
+    const { title, content } = await request.json();
+
+    try {
+        const response = await prisma.notes.update({
+            where: {
+                id: Number(noteId)
+            },
+            data: {
+                title,
+                content,
+            }
+        });
+
+        return NextResponse.json({ response });
+    } catch (error) {
+        return NextResponse.json({ message: "Não foi possível atualizar a nota." }, { status: 500 })
+    }
+}
+
 export async function DELETE(request: Request) {
 
     const { searchParams } = new URL(request.url);
