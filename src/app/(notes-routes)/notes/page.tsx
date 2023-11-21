@@ -25,6 +25,17 @@ export default function Notes() {
     const router = useRouter();
     const { data } = useQuery({ queryKey: ['notes'], queryFn: getUserNotes })
 
+    const getNoteTimestamp = (note: any) => {
+        const createdAt = moment(note.created_at);
+        const updatedAt = moment(note.updated_at);
+    
+        if (updatedAt.isValid() && updatedAt.isAfter(createdAt)) {
+            return `Atualizado ${updatedAt.fromNow()}`;
+        } else {
+            return `Criado ${createdAt.fromNow()}`;
+        }
+    }
+
     return (
         <>
             <header className=" w-full py-7">
@@ -59,7 +70,9 @@ export default function Notes() {
                             <Link href={`/editnote/${note.id}`}>
                                 <CardTitle className='text-md font-normal'>{note.title.toLowerCase()}</CardTitle>
                             </Link>
-                            <CardDescription>{moment(note?.updated_at).fromNow()}</CardDescription>
+                            <CardDescription>
+                                {getNoteTimestamp(note)}
+                            </CardDescription>
                         </CardHeader>
                     </Card>
                 ))}
