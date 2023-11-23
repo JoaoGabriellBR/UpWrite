@@ -49,17 +49,15 @@ export default function Login() {
                 password: formData.password,
             });
 
-            setLoading(false);
-            console.log(res);
-
             if (!res?.error) {
                 router.replace("/notes");
             } else {
                 setError("Email ou senha inválida.");
             }
         } catch (error: any) {
-            setLoading(false);
             setError(error);
+        } finally {
+            setLoading(false);
         }
     };
 

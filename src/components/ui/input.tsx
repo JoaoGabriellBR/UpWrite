@@ -36,10 +36,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {senha && type === "password" && (
           <button
             type="button"
-            className="absolute top-2 right-3 focus:outline-none"
+            className="absolute top-3 right-3 focus:outline-none"
             onClick={togglePasswordVisibility}
           >
-            {inputType === "password" ? <Icons.eyeOff className="h-5 w-5 text-primary" /> : <Icons.eye className="h-5 w-5 text-primary" />}
+            {inputType === "password" ? <Icons.eyeOff className="h-5 w-5 text-secondary" /> : <Icons.eye className="h-5 w-5 text-secondary" />}
           </button>
         )}
       </div>

@@ -23,7 +23,7 @@ export default function EditNote({ params }: Params) {
 
     const noteId = params.noteId;
 
-    const { } = useQuery({
+    const { isLoading } = useQuery({
         queryKey: ['note', noteId],
         queryFn: () => getNoteById(noteId, setNote),
     });
@@ -84,6 +84,10 @@ export default function EditNote({ params }: Params) {
             setNote(updatedNote);
         }
     };
+
+    if(isLoading){
+        return null;
+    }
 
     return (
         <>
