@@ -5,7 +5,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import HeaderNotes from "@/components/header-notes";
 import Editor from "@/components/editor";
 import { Params, NoteProps } from "@/lib/types";
-import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { useMutation } from "@tanstack/react-query";
 
@@ -17,7 +16,6 @@ const getNoteById = async (noteId: any, setNote: any) => {
 
 export default function EditNote({ params }: Params) {
 
-    const router = useRouter();
     const queryClient = useQueryClient();
 
     const [note, setNote] = useState<NoteProps>();
@@ -89,18 +87,16 @@ export default function EditNote({ params }: Params) {
 
     return (
         <>
-            <HeaderNotes noteFunction={handleClickEditNote} loading={loading}/>
-            <section className="w-full flex items-center">
-                <div className="flex flex-col items-start w-full max-w-8xl mx-auto px-4">
-                    <Editor
-                        note={note}
-                        title={note?.title}
-                        content={note?.content}
-                        handleChangeTitle={handleChangeTitle}
-                        handleChangeContent={handleChangeContent}
-                    />
-                </div>
-            </section>
+            <HeaderNotes noteFunction={handleClickEditNote} loading={loading} />
+            <div className="flex flex-col items-start max-w-8xl mx-auto px-4">
+                <Editor
+                    note={note}
+                    title={note?.title}
+                    content={note?.content}
+                    handleChangeTitle={handleChangeTitle}
+                    handleChangeContent={handleChangeContent}
+                />
+            </div>
         </>
     )
 }

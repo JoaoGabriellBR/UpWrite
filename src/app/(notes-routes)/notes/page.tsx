@@ -68,7 +68,7 @@ export default function Notes() {
                     <Card key={index} className='w-full'>
                         <CardHeader className="w-full flex flex-row justify-between items-center">
                             <Link href={`/editnote/${note.id}`}>
-                                <CardTitle className='text-md font-normal'>{note.title.toLowerCase()}</CardTitle>
+                                <CardTitle className='hover:underline text-md font-normal'>{note.title.toLowerCase()}</CardTitle>
                             </Link>
                             <CardDescription>
                                 {getNoteTimestamp(note)}

@@ -36,12 +36,10 @@ const deleteNote = async (noteId: any) => {
     });
 };
 
-export default function Editor({note, title, content, handleChangeTitle, handleChangeContent }: any) {
+export default function Editor({ note, title, content, handleChangeTitle, handleChangeContent }: any) {
 
     const router = useRouter();
     const queryClient = useQueryClient();
-
-    console.log(typeof(content))
 
     const onSuccess = useCallback(() => {
         router.refresh();
@@ -72,7 +70,7 @@ export default function Editor({note, title, content, handleChangeTitle, handleC
     const editor = useEditor({
         editorProps: {
             attributes: {
-                class: "w-full outline-none",
+                class: "min-h-[15rem] outline-none",
             },
         },
         extensions: [
@@ -100,7 +98,7 @@ export default function Editor({note, title, content, handleChangeTitle, handleC
             }),
             Text,
             TextStyle,
-        ], 
+        ],
         content: content,
         onUpdate: ({ editor }) => handleChangeContent({ editor })
     });
@@ -303,16 +301,13 @@ export default function Editor({note, title, content, handleChangeTitle, handleC
                 onChange={handleChangeTitle}
                 outline
                 placeholder="Título"
-                className="border-none py-7 placeholder:opacity-70 scroll-m-20 text-2xl tracking-tight lg:text-3xl"
+                className="px-[-4] border-none py-7 placeholder:opacity-70 scroll-m-20 text-2xl tracking-tight lg:text-3xl"
             />
 
-            <div className='w-full px-3 flex flex-row justify-start items-center'>
-                <EditorContent
-                    className="prose prose-sm prose-stone max-w-full dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"
-                    editor={editor}
-                    defaultValue={content}
-                />
-            </div>
+            <EditorContent
+                editor={editor}
+                className='w-full py-4'
+            />
         </>
     )
 }
