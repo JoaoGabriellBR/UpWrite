@@ -1,10 +1,15 @@
 import { Icons } from "@/components/icons";
 import { Toggle } from "@/components/ui/toggle";
+import { BubbleMenu } from "@tiptap/react";
 
 export default function TiptapMenuBar({ editor }: any) {
     return (
         <>
-            <div className="flex flex-row justify-start items-center flex-wrap gap-2 py-3">
+            <BubbleMenu
+                editor={editor}
+                updateDelay={0}
+                className="flex flex-row justify-start items-center py-3 bg-card"
+            >
                 <Toggle
                     size="sm"
                     className="h-8 rounded-none"
@@ -70,43 +75,6 @@ export default function TiptapMenuBar({ editor }: any) {
 
                 <Toggle
                     variant="outline"
-                    aria-label="Align Left"
-                    pressed={editor.isActive({ textAlign: 'left' })}
-                    onClick={() => editor.chain().focus().setTextAlign('left').run()}
-                >
-                    <Icons.alignLeft className="h-4 w-4" />
-                </Toggle>
-
-                <Toggle
-                    variant="outline"
-                    aria-label="Align Center"
-                    onClick={() => editor.chain().focus().setTextAlign('center').run()}
-                    pressed={editor.isActive({ textAlign: 'center' })}
-                >
-                    <Icons.alignCenter className="h-4 w-4" />
-                </Toggle>
-
-                <Toggle
-                    variant="outline"
-                    aria-label="Align Right"
-                    onClick={() => editor.chain().focus().setTextAlign('right').run()}
-                    pressed={editor.isActive({ textAlign: 'right' })}
-                >
-                    <Icons.alignRight className="h-4 w-4" />
-                </Toggle>
-
-                <Toggle
-                    variant="outline"
-                    aria-label="Align Justify"
-                    pressed={editor.isActive({ textAlign: 'justify' })}
-                    onClick={() => editor.chain().focus().setTextAlign('justify').run()}
-
-                >
-                    <Icons.alignJustify className="h-4 w-4" />
-                </Toggle>
-
-                <Toggle
-                    variant="outline"
                     aria-label="Paragraph"
                     onClick={() => editor.chain().focus().setParagraph().run()}
                     className={editor.isActive('paragraph') ? 'is-active' : ''}
@@ -150,7 +118,7 @@ export default function TiptapMenuBar({ editor }: any) {
                     <Icons.listOrdered className="h-4 w-4" />
                 </Toggle>
 
-            </div>
+            </BubbleMenu>
         </>
     )
 }
