@@ -72,7 +72,8 @@ import {
     Pilcrow,
     Eye,
     EyeOff,
-    Quote
+    Quote,
+    BookOpen
   } from 'lucide-react';
   
   export const Icons = {
@@ -128,6 +129,7 @@ import {
     tag: Tag,
     plus: Plus,
     paragraph: Pilcrow,
+    bookOpen: BookOpen,
     sendHorizontal: SendHorizontal,
     pencil: Pencil,
     bold: Bold,

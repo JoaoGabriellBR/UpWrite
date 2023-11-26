@@ -12,7 +12,7 @@ import DropdownAvatar from '@/components/dropdown-avatar';
 import moment from "moment";
 import 'moment/locale/pt-br';
 import { useQuery } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import EmptyNotes from '@/components/empty-notes';
 
 const getUserNotes = async () => {
     const notes = await fetch("/api/notes")
@@ -65,20 +65,25 @@ export default function Notes() {
                 </Link>
             </section>
 
-            <section className="max-w-4xl mx-auto px-4 flex flex-col items-center justify-start gap-5">
-                {data?.map((note: any, index: any) => (
-                    <Card key={index} className='w-full'>
-                        <CardHeader className="w-full flex flex-row justify-between items-center">
-                            <Link href={`/editnote/${note.id}`}>
-                                <CardTitle className='hover:underline text-md font-normal'>{note.title.toLowerCase()}</CardTitle>
-                            </Link>
-                            <CardDescription>
-                                {getNoteTimestamp(note)}
-                            </CardDescription>
-                        </CardHeader>
-                    </Card>
-                ))}
-            </section>
+            {data?.length ? (
+                <EmptyNotes/>
+            ) : (
+                <section className="max-w-4xl mx-auto px-4 flex flex-col items-center justify-start gap-5">
+                    {data?.map((note: any, index: any) => (
+                        <Card key={index} className='w-full'>
+                            <CardHeader className="w-full flex flex-row justify-between items-center">
+                                <Link href={`/editnote/${note.id}`}>
+                                    <CardTitle className='hover:underline text-md font-normal'>{note.title.toLowerCase()}</CardTitle>
+                                </Link>
+                                <CardDescription>
+                                    {getNoteTimestamp(note)}
+                                </CardDescription>
+                            </CardHeader>
+                        </Card>
+                    ))}
+                </section>
+            )}
+
         </>
     )
 }
