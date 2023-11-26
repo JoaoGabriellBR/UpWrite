@@ -11,9 +11,10 @@ interface EditorProps {
     content: any;
     placeholder?: string;
     handleChangeContent: (newValue: JSONContent) => void;
+    handleChangeTitle?: (e: any) => void;
 }
 
-export default function Editor({ content, handleChangeContent, placeholder }: EditorProps) {
+export default function Editor({ note, content, handleChangeContent, handleChangeTitle }: EditorProps) {
 
     const editor = useEditor({
         editorProps: {
@@ -37,7 +38,7 @@ export default function Editor({ content, handleChangeContent, placeholder }: Ed
                 types: ['heading', 'paragraph'],
             }),
             Placeholder.configure({
-                placeholder: placeholder ?? 'Escreva algo...',
+                placeholder: 'Escreva algo...',
                 emptyEditorClass:
                     'before:select-none before:pointer-events-none before:float-left before:h-0 before:text-muted-foreground before:content-[attr(data-placeholder)]'
             })
@@ -51,7 +52,13 @@ export default function Editor({ content, handleChangeContent, placeholder }: Ed
     return (
         <>
             <TiptapMenuBar editor={editor} />
-            <Input outline placeholder="Sem título" className="font-bold py-7 px-0 border-none placeholder:font-normal scroll-m-20 text-5xl tracking-tight lg:text-4xl" />
+            <Input
+                outline
+                value={note?.title}
+                onChange={handleChangeTitle}
+                placeholder="Sem título"
+                className="py-7 px-0 border-none font-bold placeholder:font-normal placeholder:opacity-40 scroll-m-20 tracking-tight text-2xl md:text-3xl lg:text-4xl"
+            />
             <EditorContent
                 className="prose prose-sm prose-stone max-w-full dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"
                 editor={editor}

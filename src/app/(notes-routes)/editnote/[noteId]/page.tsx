@@ -94,8 +94,10 @@ export default function EditNote({ params }: Params) {
             <HeaderNotes note={note} noteFunction={handleClickEditNote} loading={loading} />
             <div className="flex flex-col items-start max-w-3xl mx-auto px-4 py-10">
                 <Editor
+                    note={note}
                     content={note?.content}
                     handleChangeContent={handleChangeContent}
+                    handleChangeTitle={handleChangeTitle}
                 />
             </div>
         </>
