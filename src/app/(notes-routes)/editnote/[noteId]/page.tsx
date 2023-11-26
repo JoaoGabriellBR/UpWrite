@@ -92,12 +92,12 @@ export default function EditNote({ params }: Params) {
     return (
         <>
             <HeaderNotes note={note} noteFunction={handleClickEditNote} loading={loading} />
-            <div className="flex flex-col items-start max-w-8xl mx-auto px-4">
+            {/* <div className="flex flex-col items-start max-w-8xl mx-auto px-4"> */}
                 <Editor
                     content={note?.content}
                     handleChangeContent={handleChangeContent}
                 />
-            </div>
+            {/* </div> */}
         </>
     )
 }
