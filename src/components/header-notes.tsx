@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
-import { useRouter } from "next/navigation";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -20,10 +19,50 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useRouter } from "next/navigation";
+import { useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
+import { toast } from "@/components/ui/use-toast";
+import { useMutation } from '@tanstack/react-query';
 
-export default function HeaderNotes({ noteFunction, loading }: any) {
+export default function HeaderNotes({ note, noteFunction, loading }: any) {
 
     const router = useRouter();
+    const queryClient = useQueryClient();
+
+    const deleteNote = async () => {
+        await fetch(`/api/notes/noteId?id=${note?.id}`, {
+            method: 'DELETE'
+        });
+    };
+
+    const onSuccess = useCallback(() => {
+        router.refresh();
+        router.push('/notes');
+    }, [router]);
+
+    const onError = useCallback(() => {
+        toast({
+            title: 'Algo deu errado.',
+            description: 'Sua nota não foi deletada. Tente novamente.',
+            variant: 'destructive'
+        });
+    }, []);
+
+    const onSettled = useCallback(() => {
+        queryClient.invalidateQueries({ queryKey: ['notes'] });
+    }, [queryClient])
+
+    const { mutate } = useMutation({
+        mutationFn: deleteNote,
+        onSuccess,
+        onError,
+        onSettled,
+    });
+
+    const handleClickDelete = useCallback(() => {
+        mutate(note?.id);
+    }, [mutate, note?.id]);
 
     return (
         <>
@@ -73,7 +112,7 @@ export default function HeaderNotes({ noteFunction, loading }: any) {
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
                                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                    <AlertDialogAction>Excluir</AlertDialogAction>
+                                    <AlertDialogAction onClick={handleClickDelete}>Excluir</AlertDialogAction>
                                 </AlertDialogFooter>
                             </AlertDialogContent>
                         </AlertDialog>

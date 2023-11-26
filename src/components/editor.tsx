@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import TiptapMenuBar from './tiptap-menubar';
 
 interface EditorProps {
+    note?: any;
     content: any;
     placeholder?: string;
     handleChangeContent: (newValue: JSONContent) => void;
@@ -43,7 +44,7 @@ export default function Editor({ content, handleChangeContent, placeholder }: Ed
 
     return (
         <>
-            <TiptapMenuBar editor={editor} />
+            <TiptapMenuBar editor={editor}/>
             <Input outline placeholder="Título" className="border-none py-7 placeholder:opacity-70 scroll-m-20 text-2xl tracking-tight lg:text-3xl" />
             <EditorContent
                 className="prose prose-sm prose-stone max-w-full dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"
