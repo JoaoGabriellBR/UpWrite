@@ -31,7 +31,6 @@ import {
     Image,
     Italic,
     Underline,
-    StrikethroughIcon,
     Kanban,
     KanbanSquare,
     Laptop,
@@ -70,10 +69,10 @@ import {
     PackageCheck,
     Heading4,
     Heading5,
-    TextQuote,
     Pilcrow,
     Eye,
-    EyeOff
+    EyeOff,
+    Quote
   } from 'lucide-react';
   
   export const Icons = {
@@ -103,7 +102,7 @@ import {
     kanban: Kanban,
     kanbanSquare: KanbanSquare,
     bookmark: Bookmark,
-    blockquote: TextQuote,
+    blockquote: Quote,
     clock: Clock,
     check: Check,
     flag: Flag,

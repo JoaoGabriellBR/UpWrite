@@ -8,7 +8,7 @@ export default function TiptapMenuBar({ editor }: any) {
             <BubbleMenu
                 editor={editor}
                 updateDelay={0}
-                className="flex flex-row justify-start items-center py-3 bg-card"
+                className="flex flex-row flex-wrap justify-start items-center py-3 bg-card"
             >
                 <Toggle
                     size="sm"
