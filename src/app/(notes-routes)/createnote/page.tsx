@@ -68,11 +68,7 @@ export default function CreateNote() {
             <HeaderNotes noteFunction={handleClickCreateNote} loading={loading} />
             <div className="flex flex-col items-start max-w-8xl mx-auto px-4">
                 <Editor
-                    title={title}
-                    setTitle={setTitle}
                     content={content}
-                    setContent={setContent}
-                    handleChangeTitle={handleChangeTitle}
                     handleChangeContent={handleChangeContent}
                 />
             </div>

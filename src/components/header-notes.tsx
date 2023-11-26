@@ -3,6 +3,23 @@
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { useRouter } from "next/navigation";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function HeaderNotes({ noteFunction, loading }: any) {
 
@@ -12,11 +29,13 @@ export default function HeaderNotes({ noteFunction, loading }: any) {
         <>
             <header className=" w-full py-3">
                 <div className="max-w-8xl mx-auto px-4 flex flex-row justify-between items-center">
+
                     <Button variant="ghost" onClick={() => router.back()} >
                         <Icons.chevronLeft className="mr-2 h-4 w-4" />
                         Voltar
                     </Button>
-                    <div className="flex flex-row items-center gap-3">
+
+                    <div className="flex flex-row items-center justify-between gap-3">
 
                         <Button
                             disabled={loading}
@@ -28,6 +47,36 @@ export default function HeaderNotes({ noteFunction, loading }: any) {
                             <Icons.check className="mr-2 h-5 w-5" />
                             {loading ? "Salvando" : "Salvar"}
                         </Button>
+
+                        <AlertDialog>
+                            <AlertDialogTrigger>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger>
+                                        <Button variant="outline">
+                                            <Icons.moreHorizontal className="h-5 w-5" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end" className="w-48">
+                                        <DropdownMenuItem className="cursor-pointer">
+                                            <Icons.trash className="mr-2 h-4 w-4" />
+                                            <p>Excluir nota</p>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        Essa ação não pode ser desfeita. Isso excluirá permanentemente sua nota.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                    <AlertDialogAction>Excluir</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </div>
                 </div>
             </header>

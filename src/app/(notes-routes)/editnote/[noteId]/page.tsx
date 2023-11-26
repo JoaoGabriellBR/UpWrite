@@ -94,10 +94,7 @@ export default function EditNote({ params }: Params) {
             <HeaderNotes noteFunction={handleClickEditNote} loading={loading} />
             <div className="flex flex-col items-start max-w-8xl mx-auto px-4">
                 <Editor
-                    note={note}
-                    title={note?.title}
                     content={note?.content}
-                    handleChangeTitle={handleChangeTitle}
                     handleChangeContent={handleChangeContent}
                 />
             </div>
