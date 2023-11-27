@@ -12,7 +12,7 @@ export default function Editor({ title, content, handleChangeTitle, handleChange
     const editor = useEditor({
         editorProps: {
             attributes: {
-                class: 'outline-none w-full h-full border border-red-500'
+                class: 'outline-none w-full h-full'
             }
         },
         extensions: [
