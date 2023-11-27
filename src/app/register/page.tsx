@@ -1,7 +1,7 @@
 "use client"
 
 import { signIn } from "next-auth/react";
-import { useState, ChangeEvent } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
@@ -9,59 +9,72 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { inputFields } from "@/lib/inputFields";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
+import { toast } from "@/components/ui/use-toast";
 
-interface FormDataType {
-    name: string;
-    email: string;
-    password: string;
-}
+const FormSchema = z.object({
+    name: z.string().min(2, {
+        message: "O nome de usuário deve ter pelo menos 2 caracteres.",
+    }),
+    email: z.string().email({
+        message: "Por favor, insira um endereço de e-mail válido.",
+    }),
+    password: z.string().min(8, {
+        message: "A senha deve ter pelo menos 8 caracteres.",
+    }),
+});
 
 export default function Register() {
+
     const router = useRouter();
+
     const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: ""
+
+    const form = useForm<z.infer<typeof FormSchema>>({
+        resolver: zodResolver(FormSchema),
+        defaultValues: {
+            name: "",
+            email: "",
+            password: ""
+        },
     });
-    const [error, setError] = useState("");
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>, field: keyof FormDataType) => {
-        setFormData({ ...formData, [field]: e.target.value })
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const onSubmit = async () => {
         setLoading(true);
-        setFormData({ name: "", email: "", password: "" });
+        const res = await fetch("/api/register", {
+            method: "POST",
+            body: JSON.stringify(form.getValues()),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
-        try {
-            const res = await fetch("/api/register", {
-                method: "POST",
-                body: JSON.stringify(formData),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
+        if (res.ok) {
             setLoading(false);
-            if (!res.ok) {
-                setError((await res.json()).message);
-                return;
-            }
-
             signIn(undefined, { callbackUrl: "/login" });
-        } catch (error: any) {
+        } else {
             setLoading(false);
-            setError(error.message);
-            console.log(error)
+            toast({
+                title: 'Erro.',
+                description: 'Não foi possível criar a sua conta.',
+                variant: 'destructive',
+                duration: 3000,
+            });
         }
     };
 
@@ -94,39 +107,39 @@ export default function Register() {
                             </div>
                         </div>
 
-                        {error && (
-                            <p className="text-center bg-red-300 py-4 mb-6 rounded">{error}</p>
-                        )}
-
-                        {inputFields?.map((input) => (
-                            <div key={input.id} className="grid gap-2">
-                                <Label htmlFor={input.htmlFor}>{input.label}</Label>
-                                <Input
-                                    senha
-                                    id={input.id}
-                                    type={input.type}
-                                    placeholder={input.placeholder}
-                                    value={formData[input.id as keyof FormDataType]}
-                                    onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
-                                    onChange={(e) => handleChange(e, input.id as keyof FormDataType)}
-                                />
-                            </div>
-                        ))}
-
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
+                                {inputFields?.map((input) => (
+                                    <FormField
+                                        key={input.id}
+                                        control={form.control}
+                                        name={input.id}
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>{input.label}</FormLabel>
+                                                <FormControl>
+                                                    <Input senha={true} placeholder={input.placeholder} {...field} />
+                                                </FormControl>
+                                                <FormMessage className="text-xs" />
+                                            </FormItem>
+                                        )}
+                                    />
+                                ))}
+                                <Button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="w-full"
+                                >
+                                    {loading ? (
+                                        <>
+                                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                            Criando conta
+                                        </>
+                                    ) : <> Criar Conta </>}
+                                </Button>
+                            </form>
+                        </Form>
                     </CardContent>
-                    <CardFooter>
-                        <Button
-                            disabled={loading}
-                            onClick={handleSubmit}
-                            className="w-full">
-                            {loading ? (
-                                <>
-                                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                                    Criando conta
-                                </>
-                            ) : <> Criar Conta </>}
-                        </Button>
-                    </CardFooter>
                 </Card>
             </section>
         </>
