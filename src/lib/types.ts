@@ -1,3 +1,5 @@
+import { JSONContent } from "@tiptap/react";
+
 export interface User {
     id: number,
     name: string,
@@ -21,4 +23,12 @@ export interface NoteProps {
     created_at: Date;
     updated_at: Date;
     deleted_at: Date;
+}
+
+export interface EditorProps {
+    title?: any;
+    content: any;
+    placeholder?: string;
+    handleChangeTitle?: (e: any) => void;
+    handleChangeContent: (newValue: JSONContent) => void;
 }

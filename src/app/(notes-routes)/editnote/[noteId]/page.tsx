@@ -8,24 +8,23 @@ import { Params, NoteProps } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
 import { useMutation } from "@tanstack/react-query";
 
-const getNoteById = async (noteId: any, setNote: any) => {
-    const response = await fetch(`/api/notes/noteId?id=${noteId}`)
-    const data = await response.json()
-    setNote(data)
-}
-
 export default function EditNote({ params }: Params) {
 
+    const noteId = params.noteId;
     const queryClient = useQueryClient();
 
     const [note, setNote] = useState<NoteProps>();
     const [loading, setLoading] = useState(false);
 
-    const noteId = params.noteId;
+    const getNoteById = async () => {
+        const response = await fetch(`/api/notes/noteId?id=${noteId}`)
+        const data = await response.json()
+        setNote(data)
+    }
 
     const { isLoading } = useQuery({
         queryKey: ['note', noteId],
-        queryFn: () => getNoteById(noteId, setNote),
+        queryFn: getNoteById,
     });
 
     const updateNote = async () => {
@@ -85,7 +84,7 @@ export default function EditNote({ params }: Params) {
         }
     };
 
-    if(isLoading){
+    if (isLoading) {
         return null;
     }
 
@@ -94,10 +93,10 @@ export default function EditNote({ params }: Params) {
             <HeaderNotes note={note} noteFunction={handleClickEditNote} loading={loading} />
             <div className="flex flex-col items-start max-w-3xl mx-auto px-4 py-10">
                 <Editor
-                    note={note}
+                    title={note?.title}
                     content={note?.content}
-                    handleChangeContent={handleChangeContent}
                     handleChangeTitle={handleChangeTitle}
+                    handleChangeContent={handleChangeContent}
                 />
             </div>
         </>
