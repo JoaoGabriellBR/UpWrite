@@ -28,17 +28,18 @@ import {
 } from "@/components/ui/form"
 
 const FormSchema = z.object({
-    email: z.string().nonempty({
+    email: z.string().min(1, {
         message: "O campo de e-mail não pode estar vazio.",
     }).email({
         message: "Por favor, insira um endereço de e-mail válido.",
     }),
-    password: z.string().nonempty({
+    password: z.string().min(1, {
         message: "O campo de senha não pode estar vazio.",
     }).min(8, {
         message: "A senha deve ter pelo menos 8 caracteres.",
     }),
 });
+
 
 export default function Login() {
 
