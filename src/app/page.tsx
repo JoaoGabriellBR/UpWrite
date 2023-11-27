@@ -9,7 +9,7 @@ export default function Home() {
       <section className="py-8 md:py-20 w-full flex flex-col justify-center items-center">
         <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
           <Link
-            href=""
+            href="https://github.com/JoaoGabriellBR/UpWrite"
             className="rounded-2xl bg-muted px-4 py-1.5 text-sm font-medium"
             target="_blank"
           >

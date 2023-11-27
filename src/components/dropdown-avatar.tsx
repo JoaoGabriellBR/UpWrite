@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useTheme } from 'next-themes';
 import { signOut, useSession } from "next-auth/react";
+import Link from 'next/link';
 
 export default function DropdownAvatar() {
 
@@ -64,10 +65,10 @@ export default function DropdownAvatar() {
                 </DropdownMenuSub>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="cursor-pointer" asChild>
-                    <a href="/" target="_blank" rel="noreferrer">
+                    <Link href="https://github.com/JoaoGabriellBR/UpWrite">
                         <Github className="mr-2 h-4 w-4" />
                         <span>GitHub</span>
-                    </a>
+                    </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer">
