@@ -2,28 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { toast } from "@/components/ui/use-toast";
 import { useMutation } from '@tanstack/react-query';
+import AlertDeleteNote from "./alert-delete-note";
 
 export default function HeaderNotes({ note, noteFunction, loading }: any) {
 
@@ -49,15 +33,13 @@ export default function HeaderNotes({ note, noteFunction, loading }: any) {
         });
     }, []);
 
-    const onSettled = useCallback(() => {
-        queryClient.invalidateQueries({ queryKey: ['notes'] });
-    }, [queryClient])
-
     const { mutate } = useMutation({
         mutationFn: deleteNote,
         onSuccess,
         onError,
-        onSettled,
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['notes'] });
+        },
     });
 
     const handleClickDelete = useCallback(() => {
@@ -87,35 +69,7 @@ export default function HeaderNotes({ note, noteFunction, loading }: any) {
                             {loading ? "Salvando" : "Salvar"}
                         </Button>
 
-                        <AlertDialog>
-                            <AlertDialogTrigger>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger>
-                                        <Button variant="outline">
-                                            <Icons.moreHorizontal className="h-5 w-5" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="w-48">
-                                        <DropdownMenuItem className="cursor-pointer">
-                                            <Icons.trash className="mr-2 h-4 w-4" />
-                                            <p>Excluir nota</p>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        Essa ação não pode ser desfeita. Isso excluirá permanentemente sua nota.
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                    <AlertDialogAction onClick={handleClickDelete}>Excluir</AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
+                        <AlertDeleteNote handleClickDelete={handleClickDelete}/>
                     </div>
                 </div>
             </header>

@@ -65,7 +65,7 @@ export default function Notes() {
                 </Link>
             </section>
 
-            {data?.length ? (
+            {!data?.length ? (
                 <EmptyNotes/>
             ) : (
                 <section className="max-w-4xl mx-auto px-4 flex flex-col items-center justify-start gap-5">
