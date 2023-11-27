@@ -35,8 +35,14 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
-        if (!user || !(await compare(credentials.password, user.password!))) {
-          return null;
+        if (!user) {
+          throw new Error('Email incorreto');
+        }
+
+        const passwordMatch = await compare(credentials.password, user.password!);
+
+        if (!passwordMatch) {
+          throw new Error('Senha incorreta');
         }
 
         return {

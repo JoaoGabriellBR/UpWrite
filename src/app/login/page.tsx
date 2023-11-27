@@ -1,63 +1,86 @@
 "use client"
 
-import { useState, ChangeEvent } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
 import { inputFields } from '@/lib/inputFields';
 import { signIn } from "next-auth/react";
 import { getToken } from 'next-auth/jwt';
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
 
-interface FormDataType {
-    email: string;
-    password: string;
-}
+const FormSchema = z.object({
+    email: z.string().nonempty({
+        message: "O campo de e-mail não pode estar vazio.",
+    }).email({
+        message: "Por favor, insira um endereço de e-mail válido.",
+    }),
+    password: z.string().nonempty({
+        message: "O campo de senha não pode estar vazio.",
+    }).min(8, {
+        message: "A senha deve ter pelo menos 8 caracteres.",
+    }),
+});
 
 export default function Login() {
 
     const router = useRouter();
     const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState({
-        email: "",
-        password: ""
+
+    const form = useForm<z.infer<typeof FormSchema>>({
+        resolver: zodResolver(FormSchema),
+        defaultValues: {
+            email: "",
+            password: ""
+        },
     });
-    const [error, setError] = useState("");
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>, field: keyof FormDataType) => {
-        setFormData({ ...formData, [field]: e.target.value })
-    };
+    const onSubmit = async () => {
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            setLoading(true);
-            setFormData({ email: "", password: "" });
+        setLoading(true);
+        const email = form.getValues("email")
+        const password = form.getValues("password");
 
-            const res = await signIn("credentials", {
-                redirect: false,
-                email: formData.email,
-                password: formData.password,
-            });
+        const res = await signIn("credentials", {
+            redirect: false,
+            email,
+            password,
+        });
 
-            if (!res?.error) {
-                router.replace("/notes");
-            } else {
-                setError("Email ou senha inválida.");
-            }
-        } catch (error: any) {
-            setError(error);
-        } finally {
+        if (!res?.error) {
             setLoading(false);
+            router.replace("/notes");
+        } else {
+            setLoading(false);
+            if (res.error === 'Email incorreto') {
+                form.setError('email', {
+                    type: 'manual',
+                    message: 'O e-mail inserido está incorreto.',
+                });
+            } else if (res.error === 'Senha incorreta') {
+                form.setError('password', {
+                    type: 'manual',
+                    message: 'A senha inserida está incorreta.',
+                });
+            }
         }
     };
 
@@ -98,37 +121,39 @@ export default function Login() {
                             </div>
                         </div>
 
-                        {error && (
-                            <p className="text-center bg-red-300 py-4 mb-6 rounded">{error}</p>
-                        )}
-                        {inputFields?.slice(1).map((input) => (
-                            <div key={input.id} className="grid gap-2">
-                                <Label htmlFor={input.htmlFor}>{input.label}</Label>
-                                <Input
-                                    senha
-                                    id={input.id}
-                                    type={input.type}
-                                    placeholder={input.placeholder}
-                                    value={formData[input.id as keyof FormDataType]}
-                                    onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
-                                    onChange={(e) => handleChange(e, input.id as keyof FormDataType)}
-                                />
-                            </div>
-                        ))}
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
+                                {inputFields?.slice(1).map((input) => (
+                                    <FormField
+                                        key={input.id}
+                                        control={form.control}
+                                        name={input.id}
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>{input.label}</FormLabel>
+                                                <FormControl>
+                                                    <Input senha={true} placeholder={input.placeholder} {...field} />
+                                                </FormControl>
+                                                <FormMessage className="text-xs" />
+                                            </FormItem>
+                                        )}
+                                    />
+                                ))}
+                                <Button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="w-full"
+                                >
+                                    {loading ? (
+                                        <>
+                                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                            Entrando
+                                        </>
+                                    ) : <> Entrar </>}
+                                </Button>
+                            </form>
+                        </Form>
                     </CardContent>
-                    <CardFooter>
-                        <Button
-                            disabled={loading}
-                            onClick={handleSubmit}
-                            className="w-full">
-                            {loading ? (
-                                <>
-                                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                                    Entrando
-                                </>
-                            ) : <> Entrar </>}
-                        </Button>
-                    </CardFooter>
                 </Card>
             </section>
         </>
