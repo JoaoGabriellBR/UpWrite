@@ -66,14 +66,12 @@ export default function CreateNote() {
     return (
         <>
             <HeaderNotes noteFunction={handleClickCreateNote} loading={loading} />
-            <div className="flex flex-col items-start max-w-3xl mx-auto px-4 py-10">
-                <Editor
-                    title={title}
-                    content={content}
-                    handleChangeTitle={handleChangeTitle}
-                    handleChangeContent={handleChangeContent}
-                />
-            </div>
+            <Editor
+                title={title}
+                content={content}
+                handleChangeTitle={handleChangeTitle}
+                handleChangeContent={handleChangeContent}
+            />
         </>
     )
 }

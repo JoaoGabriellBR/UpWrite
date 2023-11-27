@@ -12,7 +12,7 @@ export default function Editor({ title, content, handleChangeTitle, handleChange
     const editor = useEditor({
         editorProps: {
             attributes: {
-                class: 'outline-none w-full'
+                class: 'outline-none w-full h-full border border-red-500'
             }
         },
         extensions: [
@@ -44,18 +44,20 @@ export default function Editor({ title, content, handleChangeTitle, handleChange
 
     return (
         <>
-            <TiptapMenuBar editor={editor} />
-            <Input
-                outline
-                value={title}
-                onChange={handleChangeTitle}
-                placeholder="Sem título"
-                className="py-7 px-0 border-none font-bold placeholder:font-normal placeholder:opacity-40 scroll-m-20 tracking-tight text-2xl md:text-3xl lg:text-4xl"
-            />
-            <EditorContent
-                className="prose prose-sm prose-stone max-w-full dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"
-                editor={editor}
-            />
+            <section className="flex flex-col items-start max-w-3xl mx-auto px-4 py-10">
+                <TiptapMenuBar editor={editor} />
+                <Input
+                    outline
+                    value={title}
+                    onChange={handleChangeTitle}
+                    placeholder="Sem título"
+                    className="py-7 px-0 border-none font-bold placeholder:font-normal placeholder:opacity-40 scroll-m-20 tracking-tight text-2xl md:text-3xl lg:text-4xl"
+                />
+                <EditorContent
+                    className="prose prose-sm prose-stone w-full max-w-full dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"
+                    editor={editor}
+                />
+            </section>
         </>
     )
 }
