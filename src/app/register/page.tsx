@@ -119,7 +119,12 @@ export default function Register() {
                             disabled={loading}
                             onClick={handleSubmit}
                             className="w-full">
-                            {loading ? "Criando conta..." : "Criar Conta"}
+                            {loading ? (
+                                <>
+                                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                    Criando conta
+                                </>
+                            ) : <> Criar Conta </>}
                         </Button>
                     </CardFooter>
                 </Card>

@@ -121,7 +121,12 @@ export default function Login() {
                             disabled={loading}
                             onClick={handleSubmit}
                             className="w-full">
-                            {loading ? "Entrando..." : "Entrar"}
+                            {loading ? (
+                                <>
+                                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                    Entrando
+                                </>
+                            ) : <> Entrar </>}
                         </Button>
                     </CardFooter>
                 </Card>

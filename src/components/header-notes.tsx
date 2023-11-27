@@ -65,8 +65,17 @@ export default function HeaderNotes({ note, noteFunction, loading }: any) {
                             type="submit"
                             className="h-9 border-none"
                         >
-                            <Icons.check className="mr-2 h-5 w-5" />
-                            {loading ? "Salvando" : "Salvar"}
+                            {loading ? (
+                                <>
+                                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                    Salvando
+                                </>
+                            ) : (
+                                <>
+                                    <Icons.check className="mr-2 h-5 w-5" />
+                                    Salvar
+                                </>
+                            )}
                         </Button>
 
                         <AlertDeleteNote handleClickDelete={handleClickDelete}/>
