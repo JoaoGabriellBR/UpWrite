@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     try {
         const response = await prisma.notes.findFirst({
             where: {
-                id: Number(noteId)
+                id: String(noteId)
             }
         });
 
@@ -29,7 +29,7 @@ export async function PATCH(request: Request){
     try {
         const response = await prisma.notes.update({
             where: {
-                id: Number(noteId)
+                id: String(noteId)
             },
             data: {
                 title,
@@ -51,7 +51,7 @@ export async function DELETE(request: Request) {
     try {
         await prisma.notes.delete({
             where: {
-                id: Number(noteId)
+                id: String(noteId)
             }
         });
 

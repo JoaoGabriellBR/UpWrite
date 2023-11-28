@@ -1,7 +1,7 @@
 import { JSONContent } from "@tiptap/react";
 
 export interface User {
-    id: number,
+    id: string,
     name: string,
     email: string,
     randomKey: string
@@ -17,7 +17,7 @@ export interface Params {
 }
 
 export interface NoteProps {
-    id: number;
+    id: string;
     title: string;
     content: any;
     created_at: Date;
