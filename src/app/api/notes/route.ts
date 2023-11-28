@@ -2,13 +2,12 @@ import { authOptions } from "@/lib/authOptions";
 import { prisma } from "@/lib/prisma";
 import { Session } from "@/lib/types";
 import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
 
-export async function POST(request: Request) {
+export async function POST(request: Request): Promise<Response | void> {
     const session: Session | null = await getServerSession(authOptions);
 
     if (!session) {
-        return NextResponse.json('Unauthorized', { status: 401 });
+        return new Response('Unauthorized', { status: 401 });
     }
 
     const { title, content } = await request.json();
@@ -25,14 +24,16 @@ export async function POST(request: Request) {
         }
     });
 
-    return NextResponse.json({ response });
+    return new Response(JSON.stringify(response), { status: 201, headers: { 'Content-Type': 'application/json' } });
 }
 
-export async function GET() {
+export async function GET(request: Request): Promise<Response | void> {
 
     const session: Session | null = await getServerSession(authOptions);
 
-    if (!session) return null;
+    if (!session) {
+        return new Response('Unauthorized', { status: 401 });
+    }
 
     const response = await prisma.notes.findMany({
         where: {
@@ -43,9 +44,5 @@ export async function GET() {
         }
     });
 
-    const nextResponseData = {
-        notes: response,
-    };
-
-    return NextResponse.json(nextResponseData);
+    return new Response(JSON.stringify(response), { status: 200, headers: { 'Content-Type': 'application/json' } });
 }

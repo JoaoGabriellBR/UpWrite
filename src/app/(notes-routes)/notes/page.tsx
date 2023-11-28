@@ -65,11 +65,11 @@ export default function Notes() {
                 </Link>
             </section>
 
-            {!data?.notes?.length ? (
+            {!data?.length ? (
                 <EmptyNotes/>
             ) : (
                 <section className="max-w-4xl mx-auto px-4 flex flex-col items-center justify-start gap-5">
-                    {data?.notes?.map((note: any, index: any) => (
+                    {data?.map((note: any, index: any) => (
                         <Card key={index} className='w-full'>
                             <CardHeader className="w-full flex flex-row justify-between items-center">
                                 <Link href={`/editnote/${note.id}`}>
