@@ -128,7 +128,7 @@ export default function Login() {
                                     <FormField
                                         key={input.id}
                                         control={form.control}
-                                        name={input.id}
+                                        name={input.id as "email" | "password"}
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>{input.label}</FormLabel>
