@@ -4,7 +4,7 @@ import { Session } from "@/lib/types";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-export async function POST(request: Request){
+export async function POST(request: Request) {
     const session: Session | null = await getServerSession(authOptions);
 
     if (!session) {
@@ -19,7 +19,7 @@ export async function POST(request: Request){
             content,
             author: {
                 connect: {
-                 id: session?.user?.id
+                    id: session?.user?.id
                 }
             }
         }
@@ -43,5 +43,8 @@ export async function GET() {
         }
     });
 
-    return NextResponse.json(response)
+    return new Response(JSON.stringify(response), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+    });
 }
