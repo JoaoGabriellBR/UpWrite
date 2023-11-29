@@ -7,6 +7,11 @@ import Editor from "@/components/editor";
 import { Params, NoteProps } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
 import { useMutation } from "@tanstack/react-query";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
+import { Icons } from "@/components/icons";
+import { createTitleSchema } from "@/lib/createTitleSchema";
 
 export default function EditNote({ params }: Params) {
 
@@ -16,10 +21,19 @@ export default function EditNote({ params }: Params) {
     const [note, setNote] = useState<NoteProps>();
     const [loading, setLoading] = useState(false);
 
+    const form = useForm<z.infer<typeof createTitleSchema>>({
+        mode: "onChange",
+        resolver: zodResolver(createTitleSchema),
+        defaultValues: {
+            title: note?.title ?? "",
+        },
+    });
+
     const getNoteById = async () => {
         const response = await fetch(`/api/notes/noteId?id=${noteId}`)
         const data = await response.json()
         setNote(data)
+        form.setValue('title', data?.title || '');
     }
 
     const { isLoading } = useQuery({
@@ -29,11 +43,15 @@ export default function EditNote({ params }: Params) {
 
     const updateNote = async () => {
         setLoading(true);
+
+        const title = form.getValues("title");
+        const content = note?.content;
+
         await fetch(`/api/notes/noteId?id=${noteId}`, {
             method: 'PATCH',
             body: JSON.stringify({
-                title: note?.title,
-                content: note?.content
+                title,
+                content
             })
         });
         setLoading(false);
@@ -70,13 +88,6 @@ export default function EditNote({ params }: Params) {
         mutate();
     }, [mutate]);
 
-    const handleChangeTitle = (e: any) => {
-        if (note) {
-            const updatedNote = { ...note, title: e.target.value };
-            setNote(updatedNote);
-        }
-    };
-
     const handleChangeContent = ({ editor }: any) => {
         if (note) {
             const updatedNote = { ...note, content: editor.getJSON() };
@@ -85,16 +96,24 @@ export default function EditNote({ params }: Params) {
     };
 
     if (isLoading) {
-        return null;
-    }
+        return (
+            <div className="h-screen flex justify-center items-center">
+                <Icons.spinner className="h-10 w-10 animate-spin" />
+            </div>
+        )
+    };
 
     return (
         <>
-            <HeaderNotes note={note} noteFunction={handleClickEditNote} loading={loading} />
+            <HeaderNotes
+                form={form}
+                note={note}
+                handleClick={handleClickEditNote}
+                loading={loading}
+            />
             <Editor
-                title={note?.title}
+                form={form}
                 content={note?.content}
-                handleChangeTitle={handleChangeTitle}
                 handleChangeContent={handleChangeContent}
             />
         </>

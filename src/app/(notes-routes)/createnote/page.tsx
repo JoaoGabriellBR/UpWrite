@@ -6,6 +6,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Editor from "@/components/editor";
 import HeaderNotes from "@/components/header-notes";
 import { toast } from "@/components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
+import { createTitleSchema } from "@/lib/createTitleSchema";
 
 export default function CreateNote() {
 
@@ -13,11 +17,19 @@ export default function CreateNote() {
     const queryClient = useQueryClient();
 
     const [loading, setLoading] = useState(false);
-    const [title, setTitle] = useState();
     const [content, setContent] = useState();
+
+    const form = useForm<z.infer<typeof createTitleSchema>>({
+        mode: "onChange",
+        resolver: zodResolver(createTitleSchema),
+        defaultValues: {
+            title: "",
+        },
+    });
 
     const createNote = async () => {
         setLoading(true);
+        const title = form.getValues("title");
         await fetch('/api/notes', {
             method: 'POST',
             body: JSON.stringify({
@@ -55,21 +67,20 @@ export default function CreateNote() {
         mutate();
     }, [mutate]);
 
-    const handleChangeTitle = (e: any) => {
-        setTitle(e.target.value)
-    }
-
     const handleChangeContent = ({ editor }: any) => {
         setContent(editor.getJSON())
     }
 
     return (
         <>
-            <HeaderNotes noteFunction={handleClickCreateNote} loading={loading} />
+            <HeaderNotes
+                form={form}
+                handleClick={handleClickCreateNote}
+                loading={loading}
+            />
             <Editor
-                title={title}
+                form={form}
                 content={content}
-                handleChangeTitle={handleChangeTitle}
                 handleChangeContent={handleChangeContent}
             />
         </>

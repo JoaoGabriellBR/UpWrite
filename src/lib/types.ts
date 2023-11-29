@@ -26,9 +26,7 @@ export interface NoteProps {
 }
 
 export interface EditorProps {
-    title?: any;
+    form?: any;
     content: any;
-    placeholder?: string;
-    handleChangeTitle?: (e: any) => void;
     handleChangeContent: (newValue: JSONContent) => void;
 }

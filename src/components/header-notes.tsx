@@ -9,7 +9,7 @@ import { toast } from "@/components/ui/use-toast";
 import { useMutation } from '@tanstack/react-query';
 import AlertDeleteNote from "./alert-delete-note";
 
-export default function HeaderNotes({ note, noteFunction, loading }: any) {
+export default function HeaderNotes({ form, note, handleClick, loading }: any) {
 
     const router = useRouter();
     const queryClient = useQueryClient();
@@ -45,6 +45,9 @@ export default function HeaderNotes({ note, noteFunction, loading }: any) {
     const handleClickDelete = useCallback(() => {
         mutate(note?.id);
     }, [mutate, note?.id]);
+    
+    const hasTitle = form.getValues("title");
+    const isTitleValid = hasTitle && hasTitle.length <= 100;
 
     return (
         <>
@@ -59,8 +62,8 @@ export default function HeaderNotes({ note, noteFunction, loading }: any) {
                     <div className="flex flex-row items-center justify-between gap-3">
 
                         <Button
-                            disabled={loading}
-                            onClick={noteFunction}
+                            disabled={!isTitleValid || loading}
+                            onClick={handleClick}
                             variant="outline"
                             type="submit"
                             className="h-9 border-none"
@@ -78,7 +81,7 @@ export default function HeaderNotes({ note, noteFunction, loading }: any) {
                             )}
                         </Button>
 
-                        <AlertDeleteNote handleClickDelete={handleClickDelete}/>
+                        <AlertDeleteNote handleClickDelete={handleClickDelete} />
                     </div>
                 </div>
             </header>
