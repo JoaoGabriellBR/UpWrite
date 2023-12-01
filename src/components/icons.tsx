@@ -66,18 +66,18 @@ import {
     Baseline,
     List,
     ListOrdered,
-    PackageCheck,
     Heading4,
     Heading5,
     Pilcrow,
     Eye,
     EyeOff,
     Quote,
-    BookOpen
+    BookOpen,
+    ChevronUpSquare
   } from 'lucide-react';
   
   export const Icons = {
-    logo: PackageCheck,
+    logo: ChevronUpSquare,
     close: X,
     spinner: Loader2,
     chevronLeft: ChevronLeft,
