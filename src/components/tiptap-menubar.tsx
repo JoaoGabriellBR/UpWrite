@@ -118,6 +118,39 @@ export default function TiptapMenuBar({ editor }: any) {
                     <Icons.listOrdered className="h-4 w-4" />
                 </Toggle>
 
+                <Toggle
+                    variant="outline"
+                    aria-label="Align Left"
+                    onClick={() => editor.chain().focus().setTextAlign('left').run()}
+                    className={editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''}
+                >
+                    <Icons.alignLeft className="h-4 w-4" />
+                </Toggle>
+                <Toggle
+                    variant="outline"
+                    aria-label="Align Center"
+                    onClick={() => editor.chain().focus().setTextAlign('center').run()}
+                    className={editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''}
+                >
+                    <Icons.alignCenter className="h-4 w-4" />
+                </Toggle>
+                <Toggle
+                    variant="outline"
+                    aria-label="Align Right"
+                    onClick={() => editor.chain().focus().setTextAlign('right').run()}
+                    className={editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''}
+                >
+                    <Icons.alignRight className="h-4 w-4" />
+                </Toggle>
+                <Toggle
+                    variant="outline"
+                    aria-label="Align Justify"
+                    onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+                    className={editor.isActive({ textAlign: 'justify' }) ? 'is-active' : ''}
+                >
+                    <Icons.alignJustify className="h-4 w-4" />
+                </Toggle>
+
             </BubbleMenu>
         </>
     )
