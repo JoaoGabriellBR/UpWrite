@@ -94,7 +94,7 @@ export default function Login() {
 
     return (
         <>
-            <header className=" w-full py-7">
+            <header className=" w-full pt-7">
                 <div className="max-w-7xl mx-auto px-4">
                     <Button variant="ghost" onClick={handleBack}>
                         <Icons.chevronLeft className="mr-2 h-4 w-4" />
@@ -123,7 +123,7 @@ export default function Login() {
                         </div>
 
                         <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
                                 {inputFields?.slice(1).map((input) => (
                                     <FormField
                                         key={input.id}
