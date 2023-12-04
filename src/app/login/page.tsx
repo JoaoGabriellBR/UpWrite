@@ -133,7 +133,7 @@ export default function Login() {
                                             <FormItem>
                                                 <FormLabel>{input.label}</FormLabel>
                                                 <FormControl>
-                                                    <Input senha={true} placeholder={input.placeholder} {...field} />
+                                                    <Input type={input.id} placeholder={input.placeholder} {...field} />
                                                 </FormControl>
                                                 <FormMessage className="text-xs" />
                                             </FormItem>
