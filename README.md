@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# 📆 Olá, Bem vindo(a) ao UpWrite
 
-First, run the development server:
+UpWrite se trata de um criador de notas fácil e intuito com recursos avançados de edição de texto.
+
+
+
+
+## 🛠 Tecnologias utilizadas
+
+- [React](https://reactjs.org/)
+- [Next.js](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org)
+- [Tailwind CSS](https://tailwindcss.com)
+- [Shadcn UI](https://ui.shadcn.com)
+- [React Query](https://ui.shadcn.com)
+- [Next Auth](https://next-auth.js.org)
+## Rodando localmente
+
+Clone o projeto
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  git clone https://link-para-o-projeto
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Entre no diretório do projeto
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+  cd my-project
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Instale as dependências
 
-## Learn More
+```bash
+  npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+Configure suas váriaveis de ambiente `.env`
+   ```js
+   NEXTAUTH_URL = 'ENTER YOUR URL';
+   NEXTAUTH_SECRET = 'ENTER YOUR SECRET';
+   POSTGRES_URL_NON_POOLING = 'YOUR DATABASE URL';
+   POSTGRES_PRISMA_URL = 'YOUR DATABASE URL';
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Inicie o servidor
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+  npm run dev
+```
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🔗 Links
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://joaogabrielsilva.vercel.app)
+
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/joaogabriel-silva)
+
+[![email](https://img.shields.io/badge/-gmail-black.svg?style=for-the-badge&logo=gmail&colorB=555)]( joaoname9@gmail.com)
