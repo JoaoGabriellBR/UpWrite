@@ -3,8 +3,7 @@
 
 UpWrite se trata de um criador de notas fácil e intuito com recursos avançados de edição de texto.
 
-
-
+https://github.com/JoaoGabriellBR/UpWrite/assets/88870257/9d27b069-5903-4f9d-8b26-1dfd528d3f1c
 
 ## 🛠 Tecnologias utilizadas
 
@@ -20,13 +19,13 @@ UpWrite se trata de um criador de notas fácil e intuito com recursos avançados
 Clone o projeto
 
 ```bash
-  git clone https://link-para-o-projeto
+  git clone https://github.com/JoaoGabriellBR/UpWrite.git
 ```
 
 Entre no diretório do projeto
 
 ```bash
-  cd my-project
+  cd upwrite
 ```
 
 Instale as dependências
@@ -53,7 +52,5 @@ Inicie o servidor
 ## 🔗 Links
 
 [![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://joaogabrielsilva.vercel.app)
-
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/joaogabriel-silva)
-
 [![email](https://img.shields.io/badge/-gmail-black.svg?style=for-the-badge&logo=gmail&colorB=555)]( joaoname9@gmail.com)
