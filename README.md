@@ -1,9 +1,14 @@
 
-# 📆 Olá, Bem vindo(a) ao UpWrite
+# 📆 Olá, Bem-vindo(a) ao UpWrite
 
 UpWrite se trata de um criador de notas fácil e intuito com recursos avançados de edição de texto.
 
+[![Website][Website]][Website-url]
+
+<br>
+
 https://github.com/JoaoGabriellBR/UpWrite/assets/88870257/9d27b069-5903-4f9d-8b26-1dfd528d3f1c
+
 
 ## 🛠 Tecnologias utilizadas
 
@@ -51,6 +56,20 @@ Inicie o servidor
 
 ## 🔗 Links
 
-[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://joaogabrielsilva.vercel.app)
-[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/joaogabriel-silva)
-[![email](https://img.shields.io/badge/-gmail-black.svg?style=for-the-badge&logo=gmail&colorB=555)]( joaoname9@gmail.com)
+[![Porfolio][Porfolio]][Porfolio-url]
+[![Linkedin][Linkedin]][Linkedin-url]
+[![Email][Email]][Email-url]
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+[Website]: https://img.shields.io/badge/site%20oficial-22C55E?style=for-the-badge
+[Website-url]: https://up-write.vercel.app
+
+[Email]: https://img.shields.io/badge/-gmail-white.svg?style=for-the-badge&logo=gmail
+[Email-url]: joaoname9@gmail.com
+
+[Porfolio]: https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white
+[Porfolio-url]: https://joaogabrielsilva.vercel.app
+
+[Linkedin]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=blue
+[Linkedin-url]: https://www.linkedin.com/in/joaogabriel-silva
