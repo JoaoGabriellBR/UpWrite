@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Preserve from "@/components/preserve";
 import DeUmUp from "@/components/de-um-up";
+import Footer from "@/components/footer";
 import { Icons } from "@/components/icons";
 
 export default function Home() {
@@ -50,6 +51,7 @@ export default function Home() {
       <Preserve />
       <PerguntasRespostas />
       <DeUmUp />
+      <Footer/>
     </>
   );
 }
