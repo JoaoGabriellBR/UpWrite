@@ -27,7 +27,7 @@ const ComponentSchema = ({
     <section id={id} className="py-8 md:py-20 w-full">
       <div
         className={cn(
-          "max-w-7xl container flex flex-col justify-between items-center gap-4",
+          "max-w-7xl px-4 mx-auto sm:px-6 lg:px-8 container flex flex-col justify-between items-center gap-4",
           imagePosition === "left" ? "lg:flex-row" : "lg:flex-row-reverse"
         )}
       >

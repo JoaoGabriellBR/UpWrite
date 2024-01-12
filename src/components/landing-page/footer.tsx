@@ -27,11 +27,11 @@ export default function Footer() {
     },
     {
       name: "Política de privacidade",
-      href: "",
+      href: "/politica-de-privacidade",
     },
     {
       name: "Termos e condições",
-      href: "",
+      href: "/termos-e-condiçoes",
     },
   ];
 
@@ -39,6 +39,7 @@ export default function Footer() {
     <footer className="py-10 sm:pt-16 lg:pt-24">
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
         <div className="grid grid-cols-2 md:col-span-3 lg:grid-cols-8 gap-y-16 gap-x-12">
+          
           <div className="col-span-2 md:col-span-3 lg:col-span-4 lg:pr-8 space-y-4">
             <Link as="/" href="/">
               <div className="flex flex-row gap-1">
@@ -84,7 +85,7 @@ export default function Footer() {
           </div>
 
           <div className="col-span-2 md:col-span-3 lg:col-span-2">
-            <h1 className="font-heading text-xl">Termos</h1>
+            <h1 className="font-heading text-xl">Sobre</h1>
 
             <ul className="mt-6 space-y-4">
               {links.slice(5).map((link) => (
