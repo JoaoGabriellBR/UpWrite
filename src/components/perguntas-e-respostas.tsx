@@ -8,7 +8,7 @@ import {
 
 const PerguntasRespostas = () => {
   return (
-    <section className="py-8 md:py-20 w-full flex flex-col justify-center items-center">
+    <section id="faq" className="py-8 md:py-20 w-full flex flex-col justify-center items-center">
       <div className="container flex max-w-6xl flex-col items-center gap-4 text-center">
         <h1 className="font-heading text-2xl sm:text-4xl md:text-5xl lg:text-6xl">
           Perguntas e Respostas

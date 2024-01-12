@@ -1,9 +1,5 @@
 import Link from "next/link";
-import { ModeToggle } from "@/contexts/mode-toggle";
-import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
-import bannerFooter from "../../public/footer-banner.png";
-import Image from "next/image";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -11,19 +7,23 @@ export default function Footer() {
   const links = [
     {
       name: "Home",
-      href: "",
+      href: "#home",
     },
     {
       name: "Por que UpWrite?",
-      href: "",
+      href: "#porqueupwrite",
     },
     {
       name: "Características",
-      href: "",
+      href: "#caracteristicas",
+    },
+    {
+      name: "Novidades",
+      href: "#novidades",
     },
     {
       name: "FAQ",
-      href: "",
+      href: "#faq",
     },
     {
       name: "Política de privacidade",
@@ -48,15 +48,20 @@ export default function Footer() {
             </Link>
 
             <p className="w-full md:w-[60%] lg:w-[60%] leading-normal text-muted-foreground text-md">
-              Seus pensamentos, suas notas, um local para organizar suas ideias e inspirações.
+              Seus pensamentos, suas notas, um local para organizar suas ideias
+              e inspirações.
             </p>
 
             <ul className="flex items-center space-x-3">
               <li>
-                <Icons.github className="leading-normal text-muted-foreground cursor-pointer h-5 w-5 transition-all duration-200 hover:text-primary focus:text-primary" />
+                <Link href="https://github.com/JoaoGabriellBR" target="blank">
+                  <Icons.github className="leading-normal text-muted-foreground cursor-pointer h-5 w-5 transition-all duration-200 hover:text-primary focus:text-primary" />
+                </Link>
               </li>
               <li>
-                <Icons.linkedin className="leading-normal text-muted-foreground cursor-pointer h-5 w-5 transition-all duration-200 hover:text-primary focus:text-primary" />
+                <Link href="https://www.linkedin.com/in/joaogabriel-silva" target="blank">
+                  <Icons.linkedin className="leading-normal text-muted-foreground cursor-pointer h-5 w-5 transition-all duration-200 hover:text-primary focus:text-primary" />
+                </Link>
               </li>
             </ul>
           </div>
@@ -65,7 +70,7 @@ export default function Footer() {
             <h1 className="font-heading text-xl">Links</h1>
 
             <ul className="mt-6 space-y-4">
-              {links.slice(0, 4).map((link) => (
+              {links.slice(0, 5).map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
@@ -82,7 +87,7 @@ export default function Footer() {
             <h1 className="font-heading text-xl">Termos</h1>
 
             <ul className="mt-6 space-y-4">
-              {links.slice(4).map((link) => (
+              {links.slice(5).map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}

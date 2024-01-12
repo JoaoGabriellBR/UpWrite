@@ -6,6 +6,7 @@ const Organizaçao = () => {
   return (
     <>
       <ComponentSchema
+        id="caracteristicas"
         title="Organização flexível"
         description="O UpWrite oferece liberdade total na organização. Você pode criar um sistema de cadernos ou simplesmente dispensar a organização. Todas as suas notas estão a apenas uma pesquisa de distância, sem a necessidade de uma estrutura prévia."
         imageSrc={man}

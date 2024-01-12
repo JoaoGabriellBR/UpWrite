@@ -14,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const ComponentSchema = ({
+  id,
   title,
   description,
   imageSrc,
@@ -25,7 +26,7 @@ const ComponentSchema = ({
   textButton,
 }: any) => {
   return (
-    <section className="py-8 md:py-20 w-full">
+    <section id={id} className="py-8 md:py-20 w-full">
       <div
         className={cn(
           "max-w-7xl container flex flex-col justify-between items-center gap-4",
@@ -43,9 +44,9 @@ const ComponentSchema = ({
           />
         </div>
 
-        <Card className="w-full lg:w-1/2 border-none px-0 mx-0">
+        <Card className="w-full lg:w-1/2 border-none p-0 m-0">
           <CardHeader>
-            <CardTitle>{title}</CardTitle>
+            <CardTitle className="font-heading text-3xl">{title}</CardTitle>
           </CardHeader>
 
           <CardContent>
