@@ -7,7 +7,7 @@ const Garanta = () => {
     <>
       <ComponentSchema
         id="porqueupwrite"
-        title="Garanta a conclusão de todos os prazos. "
+        title="Garanta a conclusão de todos os prazos"
         description="Utilize recursos avançados de edição de texto para criar notas e páginas, otimizando sua eficiência e simplificando suas tarefas diárias."
         imageSrc={mockup}
         imageWidth={1080}

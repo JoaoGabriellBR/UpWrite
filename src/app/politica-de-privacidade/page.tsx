@@ -8,17 +8,17 @@ export default function PoliticaDePrivacidade() {
       <section className=" w-full py-7">
         <div className="max-w-4xl mx-auto px-4 flex flex-col space-y-5">
           <h1 className="font-heading text-4xl sm:text-4xl md:text-5xl lg:text-6xl">
-            Política de privacidade da{" "}
+            Política de privacidade do{" "}
             <span className="text-primary">UpWrite</span>
           </h1>
 
           <div className="space-y-5 text-justify leading-normal text-muted-foreground sm:text-lg sm:leading-8">
             <p>
               <span>
-                A sua privacidade é importante para nós. É política da UpWrite
+                A sua privacidade é importante para nós. É política do UpWrite
                 respeitar a sua privacidade em relação a qualquer informação sua
                 que possamos coletar no site{" "}
-                <a href="https://up-write.vercel.app">UpWrite</a>, e outros
+                <a className="text-primary" href="/">UpWrite</a>, e outros
                 sites que possuímos e operamos.
               </span>
             </p>

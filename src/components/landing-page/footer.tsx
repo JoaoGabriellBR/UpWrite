@@ -31,7 +31,7 @@ export default function Footer() {
     },
     {
       name: "Termos e condições",
-      href: "/termos-e-condiçoes",
+      href: "/termos-e-condicoes",
     },
   ];
 
