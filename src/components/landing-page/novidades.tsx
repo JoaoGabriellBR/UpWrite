@@ -1,5 +1,5 @@
 import React from "react";
-import novidades from "../../public/novidades.png"
+import novidades from "../../../public/novidades.png"
 import ComponentSchema from "./component-schema";
 
 const Novidades = () => {

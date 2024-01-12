@@ -1,5 +1,5 @@
 import React from "react";
-import mockup from "../../public/mockup.png";
+import mockup from "../../../public/mockup.png";
 import ComponentSchema from "./component-schema";
 
 const Garanta = () => {

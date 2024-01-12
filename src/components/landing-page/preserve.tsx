@@ -1,5 +1,5 @@
 import React from "react";
-import woman from "../../public/woman.png";
+import woman from "../../../public/woman.png";
 import ComponentSchema from "./component-schema";
 
 const Preserve = () => {

@@ -1,5 +1,5 @@
 import React from "react";
-import man from "../../public/man.png";
+import man from "../../../public/man.png";
 import ComponentSchema from "./component-schema";
 
 const Organizaçao = () => {
