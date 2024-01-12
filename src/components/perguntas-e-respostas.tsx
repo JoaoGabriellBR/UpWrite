@@ -1,8 +1,4 @@
-import Image from "next/image";
 import React from "react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import mockup from "../../public/mockup.png";
 import {
   Accordion,
   AccordionContent,
@@ -40,10 +36,12 @@ const PerguntasRespostas = () => {
           </AccordionItem>
 
           <AccordionItem value="item-3">
-            <AccordionTrigger>Is it animated?</AccordionTrigger>
+            <AccordionTrigger>
+              Consigo recuperar notas excluídas?
+            </AccordionTrigger>
             <AccordionContent>
-              Yes. It&apos;s animated by default, but you can disable it if you
-              prefer.
+              Não. Após excluída, a sua nota será automaticamente retirada de
+              nosso banco de dados.
             </AccordionContent>
           </AccordionItem>
         </Accordion>

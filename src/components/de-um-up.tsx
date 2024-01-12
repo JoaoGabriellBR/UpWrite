@@ -16,8 +16,8 @@ export default function DeUmUp() {
             Dê um <span className="text-primary">Up</span> na sua vida{" "}
           </h1>
           <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-            Crie notas e páginas com recursos avançados de edição de texto,
-            melhorando sua produtividade e simplificando sua rotina.
+            Organize sua vida, liberte sua mente: UpWrite, o site que faz suas
+            ideias brilharem!
           </p>
           <div className="space-x-4">
             <Button asChild size="default">

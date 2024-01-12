@@ -8,6 +8,7 @@ import Preserve from "@/components/preserve";
 import DeUmUp from "@/components/de-um-up";
 import Footer from "@/components/footer";
 import { Icons } from "@/components/icons";
+import Novidades from "@/components/novidades";
 
 export default function Home() {
   return (
@@ -49,6 +50,7 @@ export default function Home() {
       <Garanta />
       <Organizaçao />
       <Preserve />
+      <Novidades/>
       <PerguntasRespostas />
       <DeUmUp />
       <Footer/>
