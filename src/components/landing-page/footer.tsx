@@ -5,41 +5,19 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   const links = [
-    {
-      name: "Home",
-      href: "#home",
-    },
-    {
-      name: "Por que UpWrite?",
-      href: "#porqueupwrite",
-    },
-    {
-      name: "Características",
-      href: "#caracteristicas",
-    },
-    {
-      name: "Novidades",
-      href: "#novidades",
-    },
-    {
-      name: "FAQ",
-      href: "#faq",
-    },
-    {
-      name: "Política de privacidade",
-      href: "/politica-de-privacidade",
-    },
-    {
-      name: "Termos e condições",
-      href: "/termos-e-condicoes",
-    },
+    { name: "Home", id: "/#home" },
+    { name: "Por que UpWrite?", id: "/#porqueupwrite" },
+    { name: "Características", id: "/#caracteristicas" },
+    { name: "Novidades", id: "/#novidades" },
+    { name: "FAQ", id: "/#faq" },
+    { name: "Política de privacidade", id: "/politica-de-privacidade" },
+    { name: "Termos e condições", id: "/termos-e-condicoes" },
   ];
 
   return (
     <footer className="py-10 sm:pt-16 lg:pt-24">
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
         <div className="grid grid-cols-2 md:col-span-3 lg:grid-cols-8 gap-y-16 gap-x-12">
-          
           <div className="col-span-2 md:col-span-3 lg:col-span-4 lg:pr-8 space-y-4">
             <Link as="/" href="/">
               <div className="flex flex-row gap-1">
@@ -60,7 +38,10 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="https://www.linkedin.com/in/joaogabriel-silva" target="blank">
+                <Link
+                  href="https://www.linkedin.com/in/joaogabriel-silva"
+                  target="blank"
+                >
                   <Icons.linkedin className="leading-normal text-muted-foreground cursor-pointer h-5 w-5 transition-all duration-200 hover:text-primary focus:text-primary" />
                 </Link>
               </li>
@@ -72,14 +53,14 @@ export default function Footer() {
 
             <ul className="mt-6 space-y-4">
               {links.slice(0, 5).map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="leading-normal text-muted-foreground text-md flex transition-all duration-200 hover:text-primary focus:text-primary"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
+                <Link
+                  key={link.name}
+                  href={link.id}
+                  passHref
+                  className="leading-normal text-muted-foreground text-md flex transition-all duration-200 hover:text-primary focus:text-primary"
+                >
+                  <li>{link.name}</li>
+                </Link>
               ))}
             </ul>
           </div>
@@ -89,14 +70,13 @@ export default function Footer() {
 
             <ul className="mt-6 space-y-4">
               {links.slice(5).map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="leading-normal text-muted-foreground text-md flex transition-all duration-200 hover:text-primary focus:text-primary"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
+                <Link
+                  key={link.name}
+                  href={link.id}
+                  className="leading-normal text-muted-foreground text-md flex transition-all duration-200 hover:text-primary focus:text-primary"
+                >
+                  <li>{link.name}</li>
+                </Link>
               ))}
             </ul>
           </div>
