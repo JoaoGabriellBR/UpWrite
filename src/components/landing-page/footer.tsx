@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { Icons } from "@/components/icons";
+import { TooltipComponent } from "@/components/ui/tooltip";
+import Image from "next/image";
+import logoPortfolio from "../../../public/logo-portfolio.png";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -32,19 +35,24 @@ export default function Footer() {
             </p>
 
             <ul className="flex items-center space-x-3">
-              <li>
-                <Link href="https://github.com/JoaoGabriellBR" target="blank">
-                  <Icons.github className="leading-normal text-muted-foreground cursor-pointer h-5 w-5 transition-all duration-200 hover:text-primary focus:text-primary" />
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="https://www.linkedin.com/in/joaogabriel-silva"
-                  target="blank"
-                >
-                  <Icons.linkedin className="leading-normal text-muted-foreground cursor-pointer h-5 w-5 transition-all duration-200 hover:text-primary focus:text-primary" />
-                </Link>
-              </li>
+              <TooltipComponent text="GitHub">
+                <li>
+                  <Link href="https://github.com/JoaoGabriellBR" target="blank">
+                    <Icons.github className="leading-normal text-muted-foreground cursor-pointer h-5 w-5 transition-all duration-200 hover:text-primary focus:text-primary" />
+                  </Link>
+                </li>
+              </TooltipComponent>
+
+              <TooltipComponent text="Linkedin">
+                <li>
+                  <Link
+                    href="https://www.linkedin.com/in/joaogabriel-silva"
+                    target="blank"
+                  >
+                    <Icons.linkedin className="leading-normal text-muted-foreground cursor-pointer h-5 w-5 transition-all duration-200 hover:text-primary focus:text-primary" />
+                  </Link>
+                </li>
+              </TooltipComponent>
             </ul>
           </div>
 
