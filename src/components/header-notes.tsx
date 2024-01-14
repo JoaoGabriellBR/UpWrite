@@ -9,7 +9,7 @@ import { toast } from "@/components/ui/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import AlertDeleteNote from "./alert-delete-note";
 
-export default function HeaderNotes({ form, note, handleClick, loading }: any) {
+export default function HeaderNotes({ form, note, handleClick, loading, ...props }: any) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -50,8 +50,8 @@ export default function HeaderNotes({ form, note, handleClick, loading }: any) {
 
   return (
     <>
-      <header className=" w-full py-3">
-        <div className="max-w-8xl mx-auto px-4 flex flex-row justify-between items-center">
+      <header {...props}>
+        <div className="flex flex-row justify-between items-center">
           <Button variant="ghost" onClick={() => router.back()}>
             <Icons.chevronLeft className="mr-2 h-4 w-4" />
             Voltar
