@@ -36,6 +36,8 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
 import DropdownAvatar from "@/components/dropdown-avatar"
 import { useQuery } from "@tanstack/react-query"
+import Editor from "@/components/block-note"
+import { useRouter } from "next/navigation"
 
 interface MailProps {
   accounts: {
@@ -57,8 +59,8 @@ export function Mail({
 
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed)
 
+  const router = useRouter();
   const [ note ] = useMail()
-  console.log(note);
 
   const getUserNotes = async () => {
     const notes = await fetch("/api/notes");
@@ -102,6 +104,7 @@ export function Mail({
                 label: "",
                 icon: Plus,
                 variant: "default",
+                onClick: () => router.push("/createnote")
               },
               {
                 title: "Notas",
@@ -170,12 +173,14 @@ export function Mail({
         <ResizableHandle withHandle />
 
         <ResizablePanel defaultSize={defaultLayout[2]}>
-          <MailDisplay
+          {/* <MailDisplay
             note={notes?.find((item: any) => item.id === note.selected) || null}
-          />
+          /> */}
+          <Editor/>
         </ResizablePanel>
 
       </ResizablePanelGroup>
+
     </TooltipProvider>
   )
 }

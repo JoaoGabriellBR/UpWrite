@@ -18,6 +18,7 @@ interface NavProps {
     label?: string
     icon: LucideIcon
     variant: "default" | "ghost"
+    onClick?: () => void
   }[]
 }
 
@@ -53,8 +54,9 @@ export function Nav({ links, isCollapsed }: NavProps) {
             </Tooltip>
           ) : (
             <Link
+              onClick={link.onClick}
               key={index}
-              href="#"
+              href="/createnote"
               className={cn(
                 buttonVariants({ variant: link.variant, size: "sm" }),
                 link.variant === "default" &&
