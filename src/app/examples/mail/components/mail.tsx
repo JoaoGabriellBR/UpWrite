@@ -35,6 +35,7 @@ import {
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
 import DropdownAvatar from "@/components/dropdown-avatar"
+import { useQuery } from "@tanstack/react-query"
 
 interface MailProps {
   accounts: {
@@ -42,7 +43,6 @@ interface MailProps {
     email: string
     icon: React.ReactNode
   }[]
-  mails: MailData[]
   defaultLayout?: number[] | undefined
   defaultCollapsed?: boolean
   navCollapsedSize: number
@@ -50,13 +50,24 @@ interface MailProps {
 
 export function Mail({
   accounts,
-  mails,
   defaultLayout = [265, 440, 655],
   defaultCollapsed = false,
   navCollapsedSize,
-}: MailProps) {
+}: MailProps | any) {
+
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed)
-  const [mail] = useMail()
+
+  const [ note ] = useMail()
+  console.log(note);
+
+  const getUserNotes = async () => {
+    const notes = await fetch("/api/notes");
+    const data = await notes.json();
+    return data;
+  };
+
+  const { data } = useQuery({ queryKey: ["notes"], queryFn: getUserNotes });
+  const notes = data;
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -147,11 +158,12 @@ export function Mail({
               </form>
             </div>
             <TabsContent value="all" className="m-0">
-              <MailList items={mails} />
+              <MailList items={notes} />
             </TabsContent>
-            <TabsContent value="unread" className="m-0">
-              <MailList items={mails.filter((item) => !item.read)} />
-            </TabsContent>
+            
+            {/* <TabsContent value="unread" className="m-0">
+              <MailList items={notes.filter((item: any) => !item.read)} />
+            </TabsContent> */}
           </Tabs>
         </ResizablePanel>
         
@@ -159,7 +171,7 @@ export function Mail({
 
         <ResizablePanel defaultSize={defaultLayout[2]}>
           <MailDisplay
-            mail={mails.find((item) => item.id === mail.selected) || null}
+            note={notes?.find((item: any) => item.id === note.selected) || null}
           />
         </ResizablePanel>
 

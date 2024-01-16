@@ -17,7 +17,6 @@ export default function MailPage() {
       <div className="hidden flex-col md:flex">
         <Mail
           accounts={accounts}
-          mails={mails}
           defaultLayout={defaultLayout}
           defaultCollapsed={false}
           navCollapsedSize={4}
