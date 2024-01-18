@@ -1,16 +1,85 @@
 import { Icons } from "@/components/icons";
 import { Toggle } from "@/components/ui/toggle";
 import { BubbleMenu } from "@tiptap/react";
+import {
+  BoldIcon,
+  ItalicIcon,
+  UnderlineIcon,
+  StrikethroughIcon,
+  CodeIcon,
+} from "lucide-react";
+import { NodeSelector } from "./node-selector";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 export default function TiptapMenuBar({ editor }: any) {
+  const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState(false);
+  const [isColorSelectorOpen, setIsColorSelectorOpen] = useState(false);
+  const [isLinkSelectorOpen, setIsLinkSelectorOpen] = useState(false);
+
+  const items: any = [
+    {
+      name: "bold",
+      isActive: () => editor.isActive("bold"),
+      command: () => editor.chain().focus().toggleBold().run(),
+      icon: BoldIcon,
+    },
+    {
+      name: "italic",
+      isActive: () => editor.isActive("italic"),
+      command: () => editor.chain().focus().toggleItalic().run(),
+      icon: ItalicIcon,
+    },
+    {
+      name: "underline",
+      isActive: () => editor.isActive("underline"),
+      command: () => editor.chain().focus().toggleUnderline().run(),
+      icon: UnderlineIcon,
+    },
+    {
+      name: "strike",
+      isActive: () => editor.isActive("strike"),
+      command: () => editor.chain().focus().toggleStrike().run(),
+      icon: StrikethroughIcon,
+    },
+  ];
+
   return (
     <>
       <BubbleMenu
         editor={editor}
         updateDelay={0}
-        className="flex flex-row flex-wrap justify-start items-center py-3 bg-card"
+        className="bg-card flex w-fit divide-x divide-secondary rounded border border-secondary shadow-xl"
+        // className="w-fit flex flex-row flex-wrap justify-start items-center py-3 bg-card"
       >
-        <Toggle
+        <NodeSelector
+          editor={editor}
+          isOpen={isNodeSelectorOpen}
+          setIsOpen={() => {
+            setIsNodeSelectorOpen(!isNodeSelectorOpen);
+            setIsColorSelectorOpen(false);
+            setIsLinkSelectorOpen(false);
+          }}
+        />
+
+        <div className="flex">
+          {items.map((item: any, index: any) => (
+            <button
+              key={index}
+              onClick={item.command}
+              className="p-2 text-sm bg-card hover:bg-accent"
+              type="button"
+            >
+              <item.icon
+                className={cn("h-4 w-4", {
+                  "text-primary": item.isActive(),
+                })}
+              />
+            </button>
+          ))}
+        </div>
+
+        {/* <Toggle
           size="sm"
           className="h-8 rounded-none"
           pressed={editor.isActive("bold")}
@@ -48,45 +117,6 @@ export default function TiptapMenuBar({ editor }: any) {
 
         <Toggle
           variant="outline"
-          aria-label="Heading 1"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 1 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 1 }) ? "is-active" : ""
-          }
-        >
-          <Icons.heading1 className="h-4 w-4" />
-        </Toggle>
-
-        <Toggle
-          variant="outline"
-          aria-label="Heading 2"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 2 }) ? "is-active" : ""
-          }
-        >
-          <Icons.heading2 className="h-4 w-4" />
-        </Toggle>
-
-        <Toggle
-          variant="outline"
-          aria-label="Heading 3"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
-          className={
-            editor.isActive("heading", { level: 3 }) ? "is-active" : ""
-          }
-        >
-          <Icons.heading3 className="h-4 w-4" />
-        </Toggle>
-
-        <Toggle
-          variant="outline"
           aria-label="Paragraph"
           onClick={() => editor.chain().focus().setParagraph().run()}
           className={editor.isActive("paragraph") ? "is-active" : ""}
@@ -110,24 +140,6 @@ export default function TiptapMenuBar({ editor }: any) {
           className={editor.isActive("codeBlock") ? "is-active" : ""}
         >
           <Icons.code className="h-4 w-4" />
-        </Toggle>
-
-        <Toggle
-          variant="outline"
-          aria-label="List Unordered"
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={editor.isActive("bulletList") ? "is-active" : ""}
-        >
-          <Icons.list className="h-4 w-4" />
-        </Toggle>
-
-        <Toggle
-          variant="outline"
-          aria-label="List Ordered"
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={editor.isActive("orderedList") ? "is-active" : ""}
-        >
-          <Icons.listOrdered className="h-4 w-4" />
         </Toggle>
 
         <Toggle
@@ -165,7 +177,7 @@ export default function TiptapMenuBar({ editor }: any) {
           }
         >
           <Icons.alignJustify className="h-4 w-4" />
-        </Toggle>
+        </Toggle> */}
       </BubbleMenu>
     </>
   );
