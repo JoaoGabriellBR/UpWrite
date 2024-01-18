@@ -7,6 +7,10 @@ import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
+import TextStyle from "@tiptap/extension-text-style";
+import { Color } from "@tiptap/extension-color";
+import Highlight from "@tiptap/extension-highlight";
+import { Markdown } from "tiptap-markdown";
 import { EditorProps } from "@/lib/types";
 import {
   Form,
@@ -15,13 +19,13 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import "../components/colors.css";
 
 export default function Editor({
   form,
   content,
   handleChangeContent,
 }: EditorProps) {
-
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -29,17 +33,66 @@ export default function Editor({
       },
     },
     extensions: [
+      // StarterKit.configure({
+      //   bulletList: {
+      //     keepMarks: true,
+      //     keepAttributes: false,
+      //   },
+      //   orderedList: {
+      //     keepMarks: true,
+      //     keepAttributes: false,
+      //   },
+      // }),
       StarterKit.configure({
         bulletList: {
-          keepMarks: true,
-          keepAttributes: false,
+          HTMLAttributes: {
+            class: "list-disc list-outside leading-3 -mt-2",
+          },
         },
         orderedList: {
-          keepMarks: true,
-          keepAttributes: false,
+          HTMLAttributes: {
+            class:
+              "list-decimal list-outside leading-3 -mt-2",
+          },
         },
+        listItem: {
+          HTMLAttributes: {
+            class: "leading-normal -mb-2",
+          },
+        },
+        blockquote: {
+          HTMLAttributes: {
+            class: "border-l-4",
+          },
+        },
+        codeBlock: {
+          HTMLAttributes: {
+            class:
+              "rounded-sm p-5 font-medium",
+          },
+        },
+        code: {
+          HTMLAttributes: {
+            class:
+              "rounded-md px-1.5 py-1 font-mono font-medium",
+            spellcheck: "false",
+          },
+        },
+        horizontalRule: false,
+        dropcursor: {
+          color: "#DBEAFE",
+          width: 4,
+        },
+        gapcursor: false,
       }),
+      TextStyle,
       Underline,
+      Color.configure({
+        types: ['textStyle'],
+      }),
+      Highlight.configure({
+        multicolor: true,
+      }),
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
@@ -59,6 +112,11 @@ export default function Editor({
         },
         nested: true,
       }),
+      Markdown.configure({
+        html: false,
+        transformCopiedText: true,
+        transformPastedText: true,
+      }),
     ],
     content: content,
     onUpdate: ({ editor }) => handleChangeContent({ editor }),
@@ -69,7 +127,7 @@ export default function Editor({
   return (
     <>
       <TiptapMenuBar editor={editor} />
-      
+
       {/* <Form {...form}>
         <FormField
           control={form.control}
@@ -94,11 +152,9 @@ export default function Editor({
         className="h-full w-full max-w-none prose prose-sm prose-stone dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"
         editor={editor}
       />
-
     </>
   );
 }
-
 
 // import { Editor as NovelEditor } from "novel";
 
@@ -107,4 +163,3 @@ export default function Editor({
 //      <NovelEditor className="dark dark-theme" />
 //   )
 // }
-

@@ -11,6 +11,7 @@ import {
 import { NodeSelector } from "./node-selector";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { ColorSelector } from "./color-selector";
 
 export default function TiptapMenuBar({ editor }: any) {
   const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState(false);
@@ -78,6 +79,16 @@ export default function TiptapMenuBar({ editor }: any) {
             </button>
           ))}
         </div>
+
+        <ColorSelector
+          editor={editor}
+          isOpen={isColorSelectorOpen}
+          setIsOpen={() => {
+            setIsColorSelectorOpen(!isColorSelectorOpen);
+            setIsNodeSelectorOpen(false);
+            setIsLinkSelectorOpen(false);
+          }}
+        />
 
         {/* <Toggle
           size="sm"
