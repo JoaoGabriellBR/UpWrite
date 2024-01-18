@@ -28,11 +28,11 @@ const TooltipContent = React.forwardRef<
 
 TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
-const TooltipComponent = ({ children, text, ...props }: any) => (
+const TooltipComponent = ({ children, text, side, ...props }: any) => (
   <TooltipProvider {...props}>
     <Tooltip>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
-      <TooltipContent>
+      <TooltipContent side={side}>
         <p>{text}</p>
       </TooltipContent>
     </Tooltip>

@@ -18,11 +18,9 @@ import {
   Users2,
 } from "lucide-react"
 
-import { MailDisplay } from "@/app/examples/mail/components/mail-display"
-import { MailList } from "@/app/examples/mail/components/mail-list"
-import { Nav } from "@/app/examples/mail/components/nav"
-import { Mail as MailData } from "@/app/examples/mail/data"
-import { useMail } from "@/app/examples/mail/use-mail"
+import { MailDisplay } from "@/app/(notes-routes)/mail/components/mail-display"
+import { NotesList } from "@/app/(notes-routes)/mail/components/notes-list"
+import { Nav } from "@/app/(notes-routes)/mail/components/nav"
 import { cn } from "@/lib/utils"
 import { Separator } from "@/components/ui/separator"
 import { Input } from "@/components/ui/input"
@@ -60,7 +58,6 @@ export function Mail({
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed)
 
   const router = useRouter();
-  const [ note ] = useMail()
 
   const getUserNotes = async () => {
     const notes = await fetch("/api/notes");
@@ -160,8 +157,9 @@ export function Mail({
                 </div>
               </form>
             </div>
+
             <TabsContent value="all" className="m-0">
-              <MailList items={notes} />
+              <NotesList items={notes} />
             </TabsContent>
             
             {/* <TabsContent value="unread" className="m-0">

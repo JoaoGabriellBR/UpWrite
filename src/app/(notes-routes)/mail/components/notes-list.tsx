@@ -1,21 +1,32 @@
-import { ComponentProps } from "react"
-import { formatDistanceToNow } from "date-fns"
+"use client";
+import React from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { ComponentProps } from "react";
+import { formatDistanceToNow } from "date-fns";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
-import { cn } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import { Mail } from "@/app/examples/mail/data"
-import { useMail } from "@/app/examples/mail/use-mail"
+export function NotesList({ items }: any) {
+  const [selectedNoteId, setSelectedNoteId] = useState(null);
 
-interface MailListProps {
-  items: Mail[]
-}
+  const handleNoteClick = (noteId: any) => {
+    setSelectedNoteId(noteId);
+  };
 
-export function MailList({ items }: any) {
-  
-  console.log(items)
-  const [note, setNote] = useMail()
+  const getUserNotes = async () => {
+    const notes = await fetch("/api/notes");
+    const data = await notes.json();
+    return data;
+  };
+
+  const { data: notes } = useQuery({
+    queryKey: ["notes"],
+    queryFn: getUserNotes,
+  });
+  const noteId = notes?.map((note: any) => note.id);
 
   return (
     <ScrollArea className="h-screen">
@@ -25,14 +36,10 @@ export function MailList({ items }: any) {
             key={item.id}
             className={cn(
               "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
-              note.selected === item.id && "bg-muted"
+              selectedNoteId === item.id && "bg-muted",
+              noteId === item.id && "bg-muted"
             )}
-            onClick={() =>
-              setNote({
-                ...note,
-                selected: item.id,
-              })
-            }
+            onClick={() => handleNoteClick(item.id)}
           >
             <div className="flex w-full flex-col gap-1">
               <div className="flex items-center">
@@ -45,7 +52,7 @@ export function MailList({ items }: any) {
                 <div
                   className={cn(
                     "ml-auto text-xs",
-                    note.selected === item.id
+                    selectedNoteId === item.id
                       ? "text-foreground"
                       : "text-muted-foreground"
                   )}
@@ -60,10 +67,14 @@ export function MailList({ items }: any) {
                 <p>teste</p>
               </div>
             </div>
-            <div className="line-clamp-2 text-xs text-muted-foreground">
-              {/* {item.text.substring(0, 300)} */}
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo quos saepe praesentium molestias, autem ipsam quis ab doloribus excepturi. Voluptatem?
-            </div>
+
+            {/* <div className="line-clamp-2 text-xs text-muted-foreground">
+           {item.text.substring(0, 300)} 
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo quos
+              saepe praesentium molestias, autem ipsam quis ab doloribus
+              excepturi. Voluptatem?
+            </div> */}
+
             {/* {item.labels.length ? (
               <div className="flex items-center gap-2">
                 {item.labels.map((label: any) => (
@@ -77,19 +88,5 @@ export function MailList({ items }: any) {
         ))}
       </div>
     </ScrollArea>
-  )
-}
-
-function getBadgeVariantFromLabel(
-  label: string
-): ComponentProps<typeof Badge>["variant"] {
-  if (["work"].includes(label.toLowerCase())) {
-    return "default"
-  }
-
-  if (["personal"].includes(label.toLowerCase())) {
-    return "outline"
-  }
-
-  return "secondary"
+  );
 }
