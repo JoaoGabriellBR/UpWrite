@@ -5,11 +5,15 @@ import {
   Heading1,
   Heading2,
   Heading3,
-  TextQuote,
   ListOrdered,
   TextIcon,
   Code,
   CheckSquare,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
+  Quote,
 } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
 import { Dispatch, FC, SetStateAction } from "react";
@@ -31,7 +35,6 @@ export const NodeSelector: FC<NodeSelectorProps> = ({
       icon: TextIcon,
       command: () =>
         editor.chain().focus().toggleNode("paragraph", "paragraph").run(),
-      // I feel like there has to be a more efficient way to do this – feel free to PR if you know how!
       isActive: () =>
         editor.isActive("paragraph") &&
         !editor.isActive("bulletList") &&
@@ -75,7 +78,7 @@ export const NodeSelector: FC<NodeSelectorProps> = ({
     },
     {
       name: "Citação",
-      icon: TextQuote,
+      icon: Quote,
       command: () =>
         editor
           .chain()
@@ -101,7 +104,7 @@ export const NodeSelector: FC<NodeSelectorProps> = ({
     <Popover.Root open={isOpen}>
       <div className="relative h-full">
         <Popover.Trigger
-          className="bg-card flex h-full items-center gap-1 whitespace-nowrap p-2 text-sm font-medium hover:bg-accent active:bg-secondary"
+          className="w-auto bg-card flex h-full items-center gap-1 whitespace-nowrap p-2 text-sm font-medium hover:bg-accent active:bg-secondary"
           onClick={() => setIsOpen(!isOpen)}
         >
           <span>{activeItem?.name}</span>
@@ -129,9 +132,7 @@ export const NodeSelector: FC<NodeSelectorProps> = ({
                 </div>
                 <span>{item.name}</span>
               </div>
-              {activeItem.name === item.name && (
-                <Check className="h-4 w-4" />
-              )}
+              {activeItem.name === item.name && <Check className="h-4 w-4" />}
             </button>
           ))}
         </Popover.Content>
