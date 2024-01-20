@@ -17,9 +17,10 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { ColorSelector } from "./color-selector";
 import { LinkSelector } from "./link-selector";
-import { TooltipComponent } from "./ui/tooltip";
+import { TooltipComponent } from "../ui/tooltip";
 
 export default function TiptapMenuBar({ editor }: any) {
+  
   const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState(false);
   const [isColorSelectorOpen, setIsColorSelectorOpen] = useState(false);
   const [isLinkSelectorOpen, setIsLinkSelectorOpen] = useState(false);

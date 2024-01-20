@@ -21,8 +21,8 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import "../components/colors.css";
-import "../components/prosemirror.css";
+import "./prosemirror.css";
+import "./colors.css";
 
 export default function Editor({
   form,
@@ -44,8 +44,7 @@ export default function Editor({
         },
         orderedList: {
           HTMLAttributes: {
-            class:
-              "list-decimal list-outside leading-3 -mt-2",
+            class: "list-decimal list-outside leading-3 -mt-2",
           },
         },
         listItem: {
@@ -60,14 +59,12 @@ export default function Editor({
         },
         codeBlock: {
           HTMLAttributes: {
-            class:
-              "rounded-sm p-5 font-medium",
+            class: "rounded-sm p-5 font-medium",
           },
         },
         code: {
           HTMLAttributes: {
-            class:
-              "rounded-md px-1.5 py-1 font-mono font-medium",
+            class: "rounded-md px-1.5 py-1 font-mono font-medium",
             spellcheck: "false",
           },
         },
@@ -82,7 +79,7 @@ export default function Editor({
       Text,
       TextStyle,
       Color.configure({
-        types: ['textStyle'],
+        types: ["textStyle"],
       }),
       Highlight.configure({
         multicolor: true,
@@ -128,7 +125,7 @@ export default function Editor({
     <>
       <TiptapMenuBar editor={editor} />
 
-      {/* <Form {...form}>
+      <Form {...form}>
         <FormField
           control={form.control}
           name="title"
@@ -146,7 +143,7 @@ export default function Editor({
             </FormItem>
           )}
         />
-      </Form> */}
+      </Form>
 
       <EditorContent
         className="tight-padding h-full w-full max-w-none prose prose-sm prose-stone dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"

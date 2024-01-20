@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import HeaderNotes from "@/components/header-notes";
-import Editor from "@/components/editor";
+import Editor from "@/components/editor/editor";
 import { Params, NoteProps } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
 import { useMutation } from "@tanstack/react-query";

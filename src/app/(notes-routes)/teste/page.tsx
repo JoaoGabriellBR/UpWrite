@@ -23,7 +23,7 @@ import Navigation from "@/components/navigation";
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Editor from "@/components/editor";
+import Editor from "@/components/editor/editor";
 import HeaderNotes from "@/components/header-notes";
 import { toast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";

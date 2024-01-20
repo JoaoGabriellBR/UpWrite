@@ -4,7 +4,7 @@ import { getUrlFromString } from "@/lib/utils";
 import { Editor } from "@tiptap/core";
 import { ExternalLink } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
 
 interface LinkSelectorProps {
@@ -61,6 +61,7 @@ export const LinkSelector: FC<LinkSelectorProps> = ({
               ref={inputRef}
               placeholder="Cole um link"
               defaultValue={editor.getAttributes("link").href || ""}
+              className="flex-1 p-1 text-xs outline-none h-7"
             />
           </form>
         </Popover.Content>
