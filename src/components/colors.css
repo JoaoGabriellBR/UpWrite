@@ -1,6 +1,6 @@
 :root {
-    --black: rgb(0 0 0);
-    --white: rgb(255 255 255);
+    --black: rgb(255 255 255);
+    --white: rgb(25 25 25);
     --highlight-default: #ffffff;
     --highlight-purple: #f6f3f8;
     --highlight-red: #fdebeb;

@@ -88,7 +88,7 @@ export default function TiptapMenuBar({ editor }: any) {
       <BubbleMenu
         editor={editor}
         updateDelay={0}
-        className="bg-card flex w-fit divide-x divide-secondary rounded border border-secondary shadow-xl"
+        className="bg-card flex w-auto divide-x divide-secondary rounded border border-secondary shadow-xl"
         // className="w-fit flex flex-row flex-wrap justify-start items-center py-3 bg-card"
       >
         <NodeSelector
@@ -106,11 +106,11 @@ export default function TiptapMenuBar({ editor }: any) {
             <TooltipComponent text={item.label} key={index} delayDuration={0}>
             <button
               onClick={item.command}
-              className="p-2 text-sm bg-card hover:bg-accent"
+              className="p-2 text-xs bg-card hover:bg-accent"
               type="button"
             >
               <item.icon
-                className={cn("h-4 w-4", {
+                className={cn("h-3.5 w-3.5", {
                   "text-primary": item.isActive(),
                 })}
               />

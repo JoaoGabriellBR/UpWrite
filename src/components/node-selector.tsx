@@ -104,7 +104,7 @@ export const NodeSelector: FC<NodeSelectorProps> = ({
     <Popover.Root open={isOpen}>
       <div className="relative h-full">
         <Popover.Trigger
-          className="w-auto bg-card flex h-full items-center gap-1 whitespace-nowrap p-2 text-sm font-medium hover:bg-accent active:bg-secondary"
+          className="w-auto bg-card flex h-full items-center gap-1 whitespace-nowrap p-2 text-xs font-medium hover:bg-accent active:bg-secondary"
           onClick={() => setIsOpen(!isOpen)}
         >
           <span>{activeItem?.name}</span>
@@ -122,7 +122,7 @@ export const NodeSelector: FC<NodeSelectorProps> = ({
                 item.command();
                 setIsOpen(false);
               }}
-              className="flex items-center justify-between rounded-sm px-2 py-1 text-sm bg-card hover:bg-accent"
+              className="flex items-center justify-between rounded-sm px-2 py-1 text-xs bg-card hover:bg-accent"
               type="button"
             >
               <div className="flex items-center space-x-2">

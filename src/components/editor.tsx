@@ -7,6 +7,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
+import Text from "@tiptap/extension-text";
 import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
@@ -20,6 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import "../components/colors.css";
+import "../components/prosemirror.css";
 
 export default function Editor({
   form,
@@ -33,16 +35,6 @@ export default function Editor({
       },
     },
     extensions: [
-      // StarterKit.configure({
-      //   bulletList: {
-      //     keepMarks: true,
-      //     keepAttributes: false,
-      //   },
-      //   orderedList: {
-      //     keepMarks: true,
-      //     keepAttributes: false,
-      //   },
-      // }),
       StarterKit.configure({
         bulletList: {
           HTMLAttributes: {
@@ -85,6 +77,7 @@ export default function Editor({
         },
         gapcursor: false,
       }),
+      Text,
       TextStyle,
       Underline,
       Color.configure({
@@ -149,17 +142,9 @@ export default function Editor({
       </Form> */}
 
       <EditorContent
-        className="h-full w-full max-w-none prose prose-sm prose-stone dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"
+        className="tight-padding h-full w-full max-w-none prose prose-sm prose-stone dark:prose-invert md:prose-base dark:prose-pre:bg-secondary/70"
         editor={editor}
       />
     </>
   );
 }
-
-// import { Editor as NovelEditor } from "novel";
-
-// export default function Editor() {
-//   return (
-//      <NovelEditor className="dark dark-theme" />
-//   )
-// }

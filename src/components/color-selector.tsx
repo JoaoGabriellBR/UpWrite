@@ -109,7 +109,7 @@ export const ColorSelector: FC<ColorSelectorProps> = ({
     <Popover.Root open={isOpen}>
       <div className="relative h-full">
         <Popover.Trigger
-          className="flex h-full items-center gap-1 p-2 text-sm font-medium text-stone-600 hover:bg-accent active:bg-secondary"
+          className="flex h-full items-center gap-1 p-2 text-xs font-medium text-stone-600 hover:bg-accent active:bg-secondary"
           onClick={() => setIsOpen(!isOpen)}
         >
           <span
@@ -127,9 +127,9 @@ export const ColorSelector: FC<ColorSelectorProps> = ({
 
         <Popover.Content
           align="start"
-          className="z-[99999] my-1 flex max-h-80 w-48 flex-col overflow-hidden overflow-y-auto rounded border border-secondary p-1 shadow-xl animate-in fade-in slide-in-from-top-1"
+          className="bg-card z-[99999] my-1 flex max-h-80 w-48 flex-col overflow-hidden overflow-y-auto rounded border border-secondary p-1 shadow-xl animate-in fade-in slide-in-from-top-1"
         >
-          <div className="my-1 px-2 text-sm">Cor</div>
+          <div className="my-1 px-2 text-xs">Cor</div>
           {TEXT_COLORS.map(({ name, color }, index) => (
             <button
               key={index}
@@ -145,7 +145,7 @@ export const ColorSelector: FC<ColorSelectorProps> = ({
                 }
                 setIsOpen(false);
               }}
-              className="flex items-center justify-between rounded-sm px-2 py-1 text-sm bg-card hover:bg-accent"
+              className="flex items-center justify-between rounded-sm px-2 py-1 text-xs bg-card hover:bg-accent"
               type="button"
             >
               <div className="flex items-center space-x-2">
@@ -163,7 +163,7 @@ export const ColorSelector: FC<ColorSelectorProps> = ({
             </button>
           ))}
 
-          <div className="mb-1 mt-2 px-2 text-sm">Fundo</div>
+          <div className="mb-1 mt-2 px-2 text-xs">Fundo</div>
 
           {HIGHLIGHT_COLORS.map(({ name, color }, index) => (
             <button
@@ -173,7 +173,7 @@ export const ColorSelector: FC<ColorSelectorProps> = ({
                 name !== "Padrão" && editor.commands.setHighlight({ color });
                 setIsOpen(false);
               }}
-              className="flex items-center justify-between rounded-sm px-2 py-1 text-sm bg-card hover:bg-accent"
+              className="flex items-center justify-between rounded-sm px-2 py-1 text-xs bg-card hover:bg-accent"
               type="button"
             >
               <div className="flex items-center space-x-2">
