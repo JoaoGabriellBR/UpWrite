@@ -1,12 +1,9 @@
-import { Icons } from "@/components/icons";
-import { Toggle } from "@/components/ui/toggle";
 import { BubbleMenu } from "@tiptap/react";
 import {
   BoldIcon,
   ItalicIcon,
   UnderlineIcon,
   StrikethroughIcon,
-  CodeIcon,
   AlignCenter,
   AlignRight,
   AlignJustify,
@@ -89,8 +86,7 @@ export default function TiptapMenuBar({ editor }: any) {
       <BubbleMenu
         editor={editor}
         updateDelay={0}
-        className="bg-card flex w-auto divide-x divide-secondary rounded border border-secondary shadow-xl"
-        // className="w-fit flex flex-row flex-wrap justify-start items-center py-3 bg-card"
+        className="bg-card flex w-fit divide-x divide-secondary rounded border border-secondary shadow-xl"
       >
         <NodeSelector
           editor={editor}

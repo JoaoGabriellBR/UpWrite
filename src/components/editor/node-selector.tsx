@@ -9,10 +9,6 @@ import {
   TextIcon,
   Code,
   CheckSquare,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  AlignJustify,
   Quote,
 } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";

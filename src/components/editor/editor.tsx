@@ -12,6 +12,7 @@ import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
 import TiptapLink from "@tiptap/extension-link";
+import Dropcursor from '@tiptap/extension-dropcursor';
 import { Markdown } from "tiptap-markdown";
 import { EditorProps } from "@/lib/types";
 import {
@@ -21,8 +22,8 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import "./prosemirror.css";
-import "./colors.css";
+import "./styles/prosemirror.css";
+import "./styles/colors.css";
 
 export default function Editor({
   form,
@@ -78,6 +79,7 @@ export default function Editor({
       Underline,
       Text,
       TextStyle,
+      Dropcursor,
       Color.configure({
         types: ["textStyle"],
       }),
