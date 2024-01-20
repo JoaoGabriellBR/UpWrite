@@ -1,14 +1,12 @@
-/* .ProseMirror {
-  @apply novel-p-12 novel-px-8 sm:novel-px-12;
-} */
-
 .tight-padding p,
 .tight-padding ul,
 .tight-padding ol,
 .tight-padding li,
+.tight-padding strong,
 .tight-padding blockquote {
   margin-top: 0.2rem !important;
   margin-bottom: 0.2rem !important;
+  color: var(--font-sans);
 }
 
 .tight-padding h1,
@@ -16,24 +14,23 @@
 .tight-padding h3 {
   margin-top: 0.5rem !important;
   margin-bottom: 0.5rem !important;
-}
-
-.ProseMirror-softBreak {
-  padding-top: 5px;
-  padding-bottom: 5px;
+  color: var(--font-heading);
 }
 
 .ProseMirror .is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   float: left;
-  color: var(--novel-stone-400);
+  color: var(--font-sans);
+  opacity: 40%;
   pointer-events: none;
   height: 0;
 }
+
 .ProseMirror .is-empty::before {
   content: attr(data-placeholder);
   float: left;
-  color: var(--novel-stone-400);
+  color: var(--font-sans);
+  opacity: 40%;
   pointer-events: none;
   height: 0;
 }

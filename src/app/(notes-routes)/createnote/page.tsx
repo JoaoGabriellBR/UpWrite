@@ -83,12 +83,11 @@ export default function CreateNote() {
 
       <div className="col-span-2 row-span-5">
         <div className="w-4/6 h-full mx-auto flex flex-col items-start gap-y-1">
-          {/* <Editor
+          <Editor
             form={form}
             content={content}
             handleChangeContent={handleChangeContent}
-          /> */}
-          <Editor/>
+          />
         </div>
       </div>
     </section>

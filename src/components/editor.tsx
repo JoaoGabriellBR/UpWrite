@@ -11,6 +11,7 @@ import Text from "@tiptap/extension-text";
 import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
+import Bold from "@tiptap/extension-bold";
 import { Markdown } from "tiptap-markdown";
 import { EditorProps } from "@/lib/types";
 import {
@@ -77,9 +78,9 @@ export default function Editor({
         },
         gapcursor: false,
       }),
+      Underline,
       Text,
       TextStyle,
-      Underline,
       Color.configure({
         types: ['textStyle'],
       }),
@@ -91,8 +92,8 @@ export default function Editor({
       }),
       Placeholder.configure({
         placeholder: "Escreva algo...",
-        emptyEditorClass:
-          "before:select-none before:pointer-events-none before:float-left before:h-0 before:text-muted-foreground before:content-[attr(data-placeholder)]",
+        // emptyEditorClass:
+        //   "before:select-none before:pointer-events-none before:float-left before:h-0 before:text-muted-foreground before:content-[attr(data-placeholder)]",
       }),
       TaskList.configure({
         HTMLAttributes: {
