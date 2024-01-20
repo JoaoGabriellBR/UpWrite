@@ -11,7 +11,7 @@ import Text from "@tiptap/extension-text";
 import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
-import Bold from "@tiptap/extension-bold";
+import TiptapLink from "@tiptap/extension-link";
 import { Markdown } from "tiptap-markdown";
 import { EditorProps } from "@/lib/types";
 import {
@@ -110,6 +110,12 @@ export default function Editor({
         html: false,
         transformCopiedText: true,
         transformPastedText: true,
+      }),
+      TiptapLink.configure({
+        HTMLAttributes: {
+          class:
+            "text-stone-400 underline underline-offset-[3px] hover:text-stone-600 transition-colors cursor-pointer",
+        },
       }),
     ],
     content: content,
