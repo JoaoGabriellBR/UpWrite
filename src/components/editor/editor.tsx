@@ -14,6 +14,7 @@ import Highlight from "@tiptap/extension-highlight";
 import TiptapLink from "@tiptap/extension-link";
 import Dropcursor from '@tiptap/extension-dropcursor';
 import { Markdown } from "tiptap-markdown";
+import SlashCommand from "./slash-command";
 import { EditorProps } from "@/lib/types";
 import {
   Form,
@@ -80,6 +81,7 @@ export default function Editor({
       Text,
       TextStyle,
       Dropcursor,
+      SlashCommand,
       Color.configure({
         types: ["textStyle"],
       }),
@@ -90,9 +92,13 @@ export default function Editor({
         types: ["heading", "paragraph"],
       }),
       Placeholder.configure({
-        placeholder: "Escreva algo...",
-        // emptyEditorClass:
-        //   "before:select-none before:pointer-events-none before:float-left before:h-0 before:text-muted-foreground before:content-[attr(data-placeholder)]",
+        placeholder: ({ node }) => {
+          if (node.type.name === "heading") {
+            return `Título ${node.attrs.level}`;
+          }
+          return "Escreva algo, ou pressione '/' para comandos.";
+        },
+        includeChildren: true,
       }),
       TaskList.configure({
         HTMLAttributes: {
