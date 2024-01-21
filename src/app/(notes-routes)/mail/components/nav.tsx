@@ -10,7 +10,7 @@ import { TooltipComponent } from "@/components/ui/tooltip";
 interface NavProps {
   isCollapsed: boolean;
   links: {
-    title: string;
+    title: string | any;
     label?: string;
     icon: LucideIcon;
     variant: "default" | "ghost";

@@ -27,10 +27,8 @@ import { useTheme } from "next-themes";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { TooltipComponent } from "./ui/tooltip";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "./ui/button";
 
-export default function DropdownAvatar() {
+export default function DropdownAvatar({ isCollapsed }: any) {
   const { setTheme } = useTheme();
   const { data: session } = useSession();
   const user = session?.user;
@@ -38,8 +36,17 @@ export default function DropdownAvatar() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="flex flex-row items-center w-full">
-          <TooltipComponent text={user?.name} side="right" delayDuration={0}>
+        {isCollapsed ? (
+          <div>
+            <TooltipComponent text={user?.name} side="right" delayDuration={0}>
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <Icons.user className="h-5 w-5" />
+                <span className="sr-only">{user?.name}</span>
+              </Button>
+            </TooltipComponent>
+          </div>
+        ) : (
+          <div className="flex flex-row items-center w-full">
             <Button
               className="w-full gap-x-3 flex justify-start"
               variant="ghost"
@@ -51,8 +58,8 @@ export default function DropdownAvatar() {
               <p className="text-sm">{user?.name}</p>
               <ChevronsLeftRight className="ml-2 h-4 w-4 rotate-90 text-muted-foreground" />
             </Button>
-          </TooltipComponent>
-        </div>
+          </div>
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">

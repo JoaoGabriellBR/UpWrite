@@ -36,9 +36,9 @@ export function NotesList({ items }: any) {
           <button
             key={item.id}
             className={cn(
-              "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-card active:bg-card",
-              selectedNoteId === item.id && "bg-card",
-              noteId === item.id && "bg-card"
+              "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-secondary active:bg-secondary",
+              selectedNoteId === item.id && "bg-secondary",
+              noteId === item.id && "bg-secondary"
             )}
             onClick={() => handleNoteClick(item.id)}
           >

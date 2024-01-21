@@ -5,10 +5,12 @@ import { Icons } from "@/components/icons";
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   outline?: boolean;
   type?: string;
+  icon?: React.ReactNode; // Nova propriedade "icon"
+  side?: "left" | "right"; // Nova propriedade "side"
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+  ({ className, type, icon, side = "right", ...props }, ref) => {
     const [inputType, setInputType] = React.useState(type);
 
     const togglePasswordVisibility = () => {
@@ -19,6 +21,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div className="relative">
+        {icon && side === "left" && (
+          <div className="absolute top-3 left-3">
+            {icon}
+          </div>
+        )}
         <input
           type={inputFieldType}
           className={cn(
@@ -29,6 +36,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
         />
+        {icon && side === "right" && (
+          <div className="absolute top-3 right-3">
+            {icon}
+          </div>
+        )}
         {type === "password" && (
           <button
             type="button"

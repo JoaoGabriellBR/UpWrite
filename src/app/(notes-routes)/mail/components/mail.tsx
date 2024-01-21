@@ -15,6 +15,8 @@ import {
   Settings,
   ShoppingCart,
   Trash2,
+  User,
+  UserCircle,
   Users2,
 } from "lucide-react"
 
@@ -36,6 +38,7 @@ import DropdownAvatar from "@/components/dropdown-avatar"
 import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { useSession } from "next-auth/react"
 
 interface MailProps {
   accounts: {
@@ -57,6 +60,8 @@ export function Mail({
 
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed)
 
+  const { data: session } = useSession();
+  const user = session?.user;
   const router = useRouter();
 
   const getUserNotes = async () => {
@@ -75,7 +80,7 @@ export function Mail({
         onLayout={(sizes: number[]) => {
           document.cookie = `react-resizable-panels:layout=${JSON.stringify(
             sizes
-          )}`
+          )}`;
         }}
         className="h-full max-h-[800px] items-stretch"
       >
@@ -87,12 +92,15 @@ export function Mail({
           maxSize={20}
           onCollapse={() => setIsCollapsed(true)}
           onExpand={() => setIsCollapsed(false)}
-          className={cn(isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out")}
+          className={cn(
+            isCollapsed &&
+              "min-w-[50px] transition-all duration-300 ease-in-out"
+          )}
         >
           <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? 'h-[52px]': 'px-2')}>
-             <DropdownAvatar/>
+            <DropdownAvatar isCollapsed={isCollapsed}/>
           </div>
-          <Separator  className="mt-1"/>
+          <Separator />
           <Nav
             isCollapsed={isCollapsed}
             links={[
@@ -101,7 +109,7 @@ export function Mail({
                 label: "",
                 icon: Plus,
                 variant: "default",
-                onClick: () => router.push("/createnote")
+                onClick: () => router.push("/createnote"),
               },
               {
                 title: "Notas",
@@ -132,7 +140,7 @@ export function Mail({
                 label: "",
                 icon: LogOut,
                 variant: "ghost",
-                onClick: () => signOut()
+                onClick: () => signOut(),
               },
             ]}
           />
@@ -142,33 +150,29 @@ export function Mail({
 
         <ResizablePanel defaultSize={defaultLayout[1]} minSize={20}>
           <Tabs defaultValue="all">
-            <div className="flex items-center px-4 py-2">
+            <div className="flex items-center px-4 py-2 h-[52px]">
               <h1 className="text-xl font-bold">Notas</h1>
-              <TabsList className="ml-auto">
-                <TabsTrigger value="all" className="text-zinc-600 dark:text-zinc-200">All mail</TabsTrigger>
-                <TabsTrigger value="unread" className="text-zinc-600 dark:text-zinc-200">Unread</TabsTrigger>
-              </TabsList>
             </div>
             <Separator />
             <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
               <form>
-                <div className="relative">
-                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Search" className="pl-8" />
-                </div>
+                <Input
+                  icon={
+                    <Search className="h-4 w-4 text-sans text-muted-foreground" />
+                  }
+                  side="left"
+                  placeholder="Pesquisar..."
+                  className="pl-8"
+                />
               </form>
             </div>
 
             <TabsContent value="all" className="m-0">
               <NotesList items={notes} />
             </TabsContent>
-            
-            {/* <TabsContent value="unread" className="m-0">
-              <MailList items={notes.filter((item: any) => !item.read)} />
-            </TabsContent> */}
           </Tabs>
         </ResizablePanel>
-        
+
         <ResizableHandle withHandle />
 
         <ResizablePanel defaultSize={defaultLayout[2]}>
@@ -177,9 +181,7 @@ export function Mail({
           /> */}
           {/* <Editor/> */}
         </ResizablePanel>
-
       </ResizablePanelGroup>
-
     </TooltipProvider>
-  )
+  );
 }
