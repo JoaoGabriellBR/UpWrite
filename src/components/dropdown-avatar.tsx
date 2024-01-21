@@ -26,6 +26,9 @@ import { Button } from "./ui/button";
 import { useTheme } from "next-themes";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { TooltipComponent } from "./ui/tooltip";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "./ui/button";
 
 export default function DropdownAvatar() {
   const { setTheme } = useTheme();
@@ -36,14 +39,19 @@ export default function DropdownAvatar() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="flex flex-row items-center w-full">
-          <Button className="w-full gap-x-3 flex justify-start" variant="ghost">
-            <Avatar className="h-5 w-5 cursor-pointer">
-              <Icons.user className="h-5 w-5" />
-            </Avatar>
+          <TooltipComponent text={user?.name} side="right" delayDuration={0}>
+            <Button
+              className="w-full gap-x-3 flex justify-start"
+              variant="ghost"
+            >
+              <Avatar className="h-5 w-5 cursor-pointer">
+                <Icons.user className="h-5 w-5" />
+              </Avatar>
 
-            <p className="text-sm">{user?.name}</p>
-            <ChevronsLeftRight className="ml-2 h-4 w-4 rotate-90 text-muted-foreground" />
-          </Button>
+              <p className="text-sm">{user?.name}</p>
+              <ChevronsLeftRight className="ml-2 h-4 w-4 rotate-90 text-muted-foreground" />
+            </Button>
+          </TooltipComponent>
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>

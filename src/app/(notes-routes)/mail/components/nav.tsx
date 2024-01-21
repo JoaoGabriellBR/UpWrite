@@ -14,7 +14,7 @@ interface NavProps {
     label?: string;
     icon: LucideIcon;
     variant: "default" | "ghost";
-    onClick?: () => void;
+    onClick?: any;
   }[];
 }
 
@@ -37,8 +37,8 @@ export function Nav({ links, isCollapsed }: NavProps) {
               side="right"
               delayDuration={0}
             >
-              <Link
-                href="#"
+              <button
+                onClick={link?.onClick}
                 className={cn(
                   buttonVariants({ variant: link.variant, size: "icon" }),
                   "h-9 w-9",
@@ -48,13 +48,13 @@ export function Nav({ links, isCollapsed }: NavProps) {
               >
                 <link.icon className="h-4 w-4" />
                 <span className="sr-only">{link.title}</span>
-              </Link>
+              </button>
             </TooltipComponent>
           ) : (
-            <Link
-              onClick={link.onClick}
+            <button
+              // onClick={link.onClick}
               key={index}
-              href="/createnote"
+              onClick={link?.onClick}
               className={cn(
                 buttonVariants({ variant: link.variant, size: "sm" }),
                 link.variant === "default" &&
@@ -75,7 +75,7 @@ export function Nav({ links, isCollapsed }: NavProps) {
                   {link.label}
                 </span>
               )}
-            </Link>
+            </button>
           )
         )}
       </nav>

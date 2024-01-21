@@ -34,8 +34,8 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
 import DropdownAvatar from "@/components/dropdown-avatar"
 import { useQuery } from "@tanstack/react-query"
-import Editor from "@/components/block-note"
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 interface MailProps {
   accounts: {
@@ -92,7 +92,7 @@ export function Mail({
           <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? 'h-[52px]': 'px-2')}>
              <DropdownAvatar/>
           </div>
-          <Separator />
+          <Separator  className="mt-1"/>
           <Nav
             isCollapsed={isCollapsed}
             links={[
@@ -132,6 +132,7 @@ export function Mail({
                 label: "",
                 icon: LogOut,
                 variant: "ghost",
+                onClick: () => signOut()
               },
             ]}
           />
@@ -174,7 +175,7 @@ export function Mail({
           {/* <MailDisplay
             note={notes?.find((item: any) => item.id === note.selected) || null}
           /> */}
-          <Editor/>
+          {/* <Editor/> */}
         </ResizablePanel>
 
       </ResizablePanelGroup>

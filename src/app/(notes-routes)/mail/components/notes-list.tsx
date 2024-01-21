@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ComponentProps } from "react";
 import { formatDistanceToNow } from "date-fns";
+import { ptBR } from 'date-fns/locale/pt-BR';
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -35,9 +36,9 @@ export function NotesList({ items }: any) {
           <button
             key={item.id}
             className={cn(
-              "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
-              selectedNoteId === item.id && "bg-muted",
-              noteId === item.id && "bg-muted"
+              "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-card active:bg-card",
+              selectedNoteId === item.id && "bg-card",
+              noteId === item.id && "bg-card"
             )}
             onClick={() => handleNoteClick(item.id)}
           >
@@ -59,6 +60,7 @@ export function NotesList({ items }: any) {
                 >
                   {formatDistanceToNow(new Date(item.created_at), {
                     addSuffix: true,
+                    locale: ptBR,
                   })}
                 </div>
               </div>
