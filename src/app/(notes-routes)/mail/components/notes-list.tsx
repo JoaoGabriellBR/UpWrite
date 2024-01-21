@@ -10,37 +10,33 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 
-export function NotesList({ items }: any) {
-  const [selectedNoteId, setSelectedNoteId] = useState(null);
+export function NotesList({ notes, selectedNote, handleNoteClick }: any) {
 
-  const handleNoteClick = (noteId: any) => {
-    setSelectedNoteId(noteId);
-  };
+  // const getUserNotes = async () => {
+  //   const notes = await fetch("/api/notes");
+  //   const data = await notes.json();
+  //   return data;
+  // };
 
-  const getUserNotes = async () => {
-    const notes = await fetch("/api/notes");
-    const data = await notes.json();
-    return data;
-  };
+  // const { data: notes } = useQuery({
+  //   queryKey: ["notes"],
+  //   queryFn: getUserNotes,
+  // });
 
-  const { data: notes } = useQuery({
-    queryKey: ["notes"],
-    queryFn: getUserNotes,
-  });
   const noteId = notes?.map((note: any) => note.id);
 
   return (
     <ScrollArea className="h-screen">
       <div className="flex flex-col gap-2 p-4 pt-0">
-        {items?.map((item: any) => (
+        {notes?.map((item: any) => (
           <button
             key={item.id}
             className={cn(
               "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-secondary active:bg-secondary",
-              selectedNoteId === item.id && "bg-secondary",
+              selectedNote?.id === item.id && "bg-secondary",
               noteId === item.id && "bg-secondary"
             )}
-            onClick={() => handleNoteClick(item.id)}
+            onClick={() => handleNoteClick(item)}
           >
             <div className="flex w-full flex-col gap-1">
               <div className="flex items-center">
@@ -53,7 +49,7 @@ export function NotesList({ items }: any) {
                 <div
                   className={cn(
                     "ml-auto text-xs",
-                    selectedNoteId === item.id
+                    selectedNote?.id === item.id
                       ? "text-foreground"
                       : "text-muted-foreground"
                   )}

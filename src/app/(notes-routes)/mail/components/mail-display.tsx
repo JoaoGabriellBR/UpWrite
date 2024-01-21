@@ -39,12 +39,27 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Editor from "@/components/editor/editor";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Icons } from "@/components/icons";
+import { createTitleSchema } from "@/lib/createTitleSchema";
 
 interface MailDisplayProps {
   note: any;
 }
 
-export function MailDisplay({ note }: any) {
+export function MailDisplay({ notes, selectedNote }: any) {
+
+  const form = useForm<z.infer<typeof createTitleSchema>>({
+    mode: "onChange",
+    resolver: zodResolver(createTitleSchema),
+    defaultValues: {
+      title: selectedNote?.title ?? "",
+    },
+  });
+
   const today = new Date();
 
   return (
@@ -53,16 +68,16 @@ export function MailDisplay({ note }: any) {
         <div className="flex items-center gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" disabled={!note}>
+              <Button variant="ghost" size="icon" disabled={!selectedNote}>
                 <Archive className="h-4 w-4" />
                 <span className="sr-only">Arquivar</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Arquivar</TooltipContent>
+            <TooltipContent>Arquivar nota</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" disabled={!note}>
+              <Button variant="ghost" size="icon" disabled={!selectedNote}>
                 <Trash2 className="h-4 w-4" />
                 <span className="sr-only">Mover para lixeira</span>
               </Button>
@@ -75,7 +90,7 @@ export function MailDisplay({ note }: any) {
         <div className="ml-auto flex items-center gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" disabled={!note}>
+              <Button variant="ghost" size="icon" disabled={!selectedNote}>
                 <Reply className="h-4 w-4" />
                 <span className="sr-only">Reply</span>
               </Button>
@@ -84,7 +99,7 @@ export function MailDisplay({ note }: any) {
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" disabled={!note}>
+              <Button variant="ghost" size="icon" disabled={!selectedNote}>
                 <ReplyAll className="h-4 w-4" />
                 <span className="sr-only">Reply all</span>
               </Button>
@@ -93,7 +108,7 @@ export function MailDisplay({ note }: any) {
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" disabled={!note}>
+              <Button variant="ghost" size="icon" disabled={!selectedNote}>
                 <Forward className="h-4 w-4" />
                 <span className="sr-only">Forward</span>
               </Button>
@@ -104,7 +119,7 @@ export function MailDisplay({ note }: any) {
         <Separator orientation="vertical" className="mx-2 h-6" />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" disabled={!note}>
+            <Button variant="ghost" size="icon" disabled={!selectedNote}>
               <MoreVertical className="h-4 w-4" />
               <span className="sr-only">More</span>
             </Button>
@@ -118,9 +133,10 @@ export function MailDisplay({ note }: any) {
         </DropdownMenu>
       </div>
       <Separator />
-      {note ? (
+      {selectedNote ? (
         <div className="flex flex-1 flex-col">
-          <h1>{note.title}</h1>
+          <h1>{selectedNote?.title}</h1>
+          {/* <Editor form={form} content={selectedNote?.content}/> */}
         </div>
       ) : (
         <div className="p-8 text-center text-muted-foreground">

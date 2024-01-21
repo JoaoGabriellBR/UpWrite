@@ -1,5 +1,6 @@
 "use client"
 import * as React from "react"
+import { useState } from "react"
 import {
   AlertCircle,
   Archive,
@@ -58,7 +59,13 @@ export function Mail({
   navCollapsedSize,
 }: MailProps | any) {
 
-  const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed)
+  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed)
+
+  const [selectedNote, setSelectedNote] = useState(null);
+
+  const handleNoteClick = (note: any) => {
+    setSelectedNote(note);
+  };
 
   const { data: session } = useSession();
   const user = session?.user;
@@ -97,8 +104,13 @@ export function Mail({
               "min-w-[50px] transition-all duration-300 ease-in-out"
           )}
         >
-          <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? 'h-[52px]': 'px-2')}>
-            <DropdownAvatar isCollapsed={isCollapsed}/>
+          <div
+            className={cn(
+              "flex h-[52px] items-center justify-center",
+              isCollapsed ? "h-[52px]" : "px-2"
+            )}
+          >
+            <DropdownAvatar isCollapsed={isCollapsed} />
           </div>
           <Separator />
           <Nav
@@ -168,7 +180,11 @@ export function Mail({
             </div>
 
             <TabsContent value="all" className="m-0">
-              <NotesList items={notes} />
+              <NotesList
+                notes={notes}
+                selectedNote={selectedNote}
+                handleNoteClick={handleNoteClick}
+              />
             </TabsContent>
           </Tabs>
         </ResizablePanel>
@@ -176,9 +192,12 @@ export function Mail({
         <ResizableHandle withHandle />
 
         <ResizablePanel defaultSize={defaultLayout[2]}>
-          {/* <MailDisplay
-            note={notes?.find((item: any) => item.id === note.selected) || null}
-          /> */}
+
+          <MailDisplay
+            notes={notes}
+            selectedNote={selectedNote}
+          />
+
           {/* <Editor/> */}
         </ResizablePanel>
       </ResizablePanelGroup>
