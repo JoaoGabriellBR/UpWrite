@@ -10,7 +10,7 @@ export default function MailPage() {
 
   return (
     <>
-      <div className="hidden flex-col md:flex">
+      <div className="flex-col md:flex">
         <Mail
           defaultLayout={defaultLayout}
           defaultCollapsed={false}

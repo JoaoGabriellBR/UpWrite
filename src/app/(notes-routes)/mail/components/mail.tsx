@@ -40,6 +40,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react"
+import { useMediaQuery } from "usehooks-ts"
 
 interface MailProps {
   accounts: {
@@ -60,8 +61,8 @@ export function Mail({
 }: MailProps | any) {
 
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed)
-
   const [selectedNote, setSelectedNote] = useState(null);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const handleNoteClick = (note: any) => {
     setSelectedNote(note);
@@ -188,7 +189,7 @@ export function Mail({
             </TabsContent>
           </Tabs>
         </ResizablePanel>
-
+      {/* 
         <ResizableHandle withHandle />
 
         <ResizablePanel defaultSize={defaultLayout[2]}>
@@ -197,9 +198,8 @@ export function Mail({
             notes={notes}
             selectedNote={selectedNote}
           />
-
-          {/* <Editor/> */}
-        </ResizablePanel>
+        </ResizablePanel> */}
+        
       </ResizablePanelGroup>
     </TooltipProvider>
   );
