@@ -44,18 +44,15 @@ export function NotesList({ notes, selectedNote, handleNoteClick }: any) {
 
   return (
     <ScrollArea className="h-screen">
-      <div className="w-full h-full p-4 flex flex-col md:flex-row lg:flex-row justify-start items-center gap-3">
-        
-        <Card className="text-white bg-primary cursor-pointer hidden md:w-[12rem] md:h-[15rem] flex flex-col justify-center items-center gap-2">
-          
-          <div className="flex items-center justify-center rounded-full">
-            <Icons.bookOpen className={cn("h-10 w-10")} />
-          </div>
-
-          <h2 className={cn("text-md")}>
-            Nova nota
-          </h2>
-        </Card>
+      <div className="w-full h-full p-4 flex flex-col md:flex-row lg:flex-row flex-wrap justify-start items-center gap-3">
+        <Link href="/createnote">
+          <Card className="text-white bg-primary cursor-pointer hidden md:w-[12rem] md:h-[15rem] flex flex-col justify-center items-center gap-2">
+            <div className="flex items-center justify-center rounded-full">
+              <Icons.bookOpen className={cn("h-10 w-10")} />
+            </div>
+            <h2 className={cn("text-md")}>Nova nota</h2>
+          </Card>
+        </Link>
 
         {notes?.map((note: any) => (
           <Card
@@ -69,7 +66,7 @@ export function NotesList({ notes, selectedNote, handleNoteClick }: any) {
                   : note?.title}
               </CardTitle>
 
-              <DropdownMenu>
+              {/* <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="px-2">
                     <MoreVertical className="cursor-pointer h-4 w-4 text-secondary-foreground" />
@@ -89,7 +86,7 @@ export function NotesList({ notes, selectedNote, handleNoteClick }: any) {
                   </DropdownMenuCheckboxItem>
                   <DropdownMenuSeparator />
                 </DropdownMenuContent>
-              </DropdownMenu>
+              </DropdownMenu> */}
             </CardHeader>
 
             <CardFooter className="flex flex-row justify-between items-center">

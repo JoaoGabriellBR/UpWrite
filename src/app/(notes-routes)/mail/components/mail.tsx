@@ -167,7 +167,7 @@ export function Mail({
               <h1 className="text-xl font-bold">Notas</h1>
             </div>
             <Separator />
-            <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div className="w-fit bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
               <form>
                 <Input
                   icon={
@@ -189,8 +189,8 @@ export function Mail({
             </TabsContent>
           </Tabs>
         </ResizablePanel>
-      {/* 
-        <ResizableHandle withHandle />
+      
+        {/* <ResizableHandle withHandle />
 
         <ResizablePanel defaultSize={defaultLayout[2]}>
 
