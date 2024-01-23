@@ -88,11 +88,11 @@ export function Mail({
         className="h-full max-h-[800px] items-stretch"
       >
         <ResizablePanel
-          defaultSize={defaultLayout[0]}
+          defaultSize={defaultLayout[1]}
           collapsedSize={navCollapsedSize}
           collapsible={true}
           minSize={15}
-          maxSize={20}
+          maxSize={isMobile ? 40 : 20}
           onCollapse={() => setIsCollapsed(true)}
           onExpand={() => setIsCollapsed(false)}
           className={cn(
@@ -156,7 +156,7 @@ export function Mail({
 
         <ResizableHandle withHandle />
 
-        <ResizablePanel defaultSize={defaultLayout[1]} minSize={20}>
+        <ResizablePanel defaultSize={defaultLayout[2]} minSize={isMobile ? 10 : 20}>
           <Tabs defaultValue="all">
             <div className="flex items-center px-4 py-2 h-[52px]">
               <h1 className="text-xl font-bold">Notas</h1>
