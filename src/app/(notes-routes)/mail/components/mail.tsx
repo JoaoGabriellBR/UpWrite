@@ -61,12 +61,7 @@ export function Mail({
 }: MailProps | any) {
 
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed)
-  const [selectedNote, setSelectedNote] = useState(null);
   const isMobile = useMediaQuery("(max-width: 768px)");
-
-  const handleNoteClick = (note: any) => {
-    setSelectedNote(note);
-  };
 
   const { data: session } = useSession();
   const user = session?.user;
@@ -181,15 +176,11 @@ export function Mail({
             </div>
 
             <TabsContent value="all" className="m-0">
-              <NotesList
-                notes={notes}
-                selectedNote={selectedNote}
-                handleNoteClick={handleNoteClick}
-              />
+              <NotesList notes={notes} />
             </TabsContent>
           </Tabs>
         </ResizablePanel>
-      
+
         {/* <ResizableHandle withHandle />
 
         <ResizablePanel defaultSize={defaultLayout[2]}>
@@ -199,7 +190,6 @@ export function Mail({
             selectedNote={selectedNote}
           />
         </ResizablePanel> */}
-        
       </ResizablePanelGroup>
     </TooltipProvider>
   );
