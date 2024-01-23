@@ -8,9 +8,9 @@ export default function Header() {
         <header className=" w-full py-7">
             <div className="max-w-7xl mx-auto px-4 mx-auto sm:px-6 lg:px-8 flex flex-row justify-between items-center">
                 <Link as="/" href="/">
-                    <div className="flex flex-row gap-1">
+                    <div className="flex flex-row items-center gap-1">
                         <Icons.logo className='w-6 h-6 text-primary font-bold' />
-                        <h1 className="font-heading text-xl font-extrabold">UpWrite</h1>
+                        <h1 className="font-heading text-2xl font-black">upwrite</h1>
                     </div>
                 </Link>
 

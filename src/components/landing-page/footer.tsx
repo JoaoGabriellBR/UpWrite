@@ -23,9 +23,9 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:col-span-3 lg:grid-cols-8 gap-y-16 gap-x-12">
           <div className="col-span-2 md:col-span-3 lg:col-span-4 lg:pr-8 space-y-4">
             <Link as="/" href="/">
-              <div className="flex flex-row gap-1">
+              <div className="flex flex-row items-center gap-1">
                 <Icons.logo className="w-6 h-6 text-primary font-bold" />
-                <h1 className="font-heading text-xl font-extrabold">UpWrite</h1>
+                <h1 className="font-heading text-2xl font-extrabold">upwrite</h1>
               </div>
             </Link>
 

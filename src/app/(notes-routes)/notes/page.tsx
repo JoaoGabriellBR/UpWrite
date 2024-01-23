@@ -42,7 +42,7 @@ export default function Notes() {
                     <Link as="/" href="/">
                         <div className="flex flex-row gap-1 cursor-pointer">
                             <Icons.logo className='w-6 h-6 text-primary' />
-                            <h1 className="font-heading text-xl font-extrabold">UpWrite</h1>
+                            <h1 className="font-heading text-2xl font-extrabold">upwrite</h1>
                         </div>
                     </Link>
 

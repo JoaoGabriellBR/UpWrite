@@ -73,11 +73,11 @@ import {
   EyeOff,
   Quote,
   BookOpen,
-  ChevronUpSquare,
+  TrendingUp,
 } from "lucide-react";
 
 export const Icons = {
-  logo: ChevronUpSquare,
+  logo: TrendingUp,
   close: X,
   spinner: Loader2,
   chevronLeft: ChevronLeft,
