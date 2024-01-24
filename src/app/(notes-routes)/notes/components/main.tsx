@@ -1,70 +1,52 @@
-"use client"
-import * as React from "react"
-import { useState } from "react"
+"use client";
+import * as React from "react";
+import { useState } from "react";
 import {
-  AlertCircle,
   Archive,
-  ArchiveX,
   File,
-  Inbox,
   LogOut,
-  MessagesSquare,
-  PenBox,
   Plus,
   Search,
-  Send,
   Settings,
-  ShoppingCart,
   Trash2,
-  User,
-  UserCircle,
-  Users2,
-} from "lucide-react"
+} from "lucide-react";
 
-import { MailDisplay } from "@/app/(notes-routes)/mail/components/mail-display"
-import { NotesList } from "@/app/(notes-routes)/mail/components/notes-list"
-import { Nav } from "@/app/(notes-routes)/mail/components/nav"
-import { cn } from "@/lib/utils"
-import { Separator } from "@/components/ui/separator"
-import { Input } from "@/components/ui/input"
+import { NotesList } from "@/app/(notes-routes)/notes/components/notes-list";
+import { SideBar } from "@/app/(notes-routes)/notes/components/sidebar";
+import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { TooltipProvider } from "@/components/ui/tooltip"
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
-import DropdownAvatar from "@/components/dropdown-avatar"
-import { useQuery } from "@tanstack/react-query"
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
+import DropdownAvatar from "@/components/dropdown-avatar";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { useSession } from "next-auth/react"
-import { useMediaQuery } from "usehooks-ts"
+import { useMediaQuery } from "usehooks-ts";
 
 interface MailProps {
   accounts: {
-    label: string
-    email: string
-    icon: React.ReactNode
-  }[]
-  defaultLayout?: number[] | undefined
-  defaultCollapsed?: boolean
-  navCollapsedSize: number
+    label: string;
+    email: string;
+    icon: React.ReactNode;
+  }[];
+  defaultLayout?: number[] | undefined;
+  defaultCollapsed?: boolean;
+  navCollapsedSize: number;
 }
 
-export function Mail({
-  accounts,
-  defaultLayout = [265, 440, 655],
+export default function Main({
+  defaultLayout = [680, 680],
   defaultCollapsed = false,
   navCollapsedSize,
 }: MailProps | any) {
-
-  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed)
+  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
   const isMobile = useMediaQuery("(max-width: 768px)");
-
-  const { data: session } = useSession();
-  const user = session?.user;
   const router = useRouter();
 
   const getUserNotes = async () => {
@@ -73,8 +55,10 @@ export function Mail({
     return data;
   };
 
-  const { data } = useQuery({ queryKey: ["notes"], queryFn: getUserNotes });
-  const notes = data;
+  const { data: notes } = useQuery({
+    queryKey: ["notes"],
+    queryFn: getUserNotes,
+  });
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -109,7 +93,7 @@ export function Mail({
             <DropdownAvatar isCollapsed={isCollapsed} />
           </div>
           <Separator />
-          <Nav
+          <SideBar
             isCollapsed={isCollapsed}
             links={[
               {
@@ -156,7 +140,10 @@ export function Mail({
 
         <ResizableHandle withHandle />
 
-        <ResizablePanel defaultSize={defaultLayout[2]} minSize={isMobile ? 10 : 20}>
+        <ResizablePanel
+          defaultSize={defaultLayout[2]}
+          minSize={isMobile ? 10 : 20}
+        >
           <Tabs defaultValue="all">
             <div className="flex items-center px-4 py-2 h-[52px]">
               <h1 className="text-xl font-bold">Notas</h1>
@@ -180,16 +167,6 @@ export function Mail({
             </TabsContent>
           </Tabs>
         </ResizablePanel>
-
-        {/* <ResizableHandle withHandle />
-
-        <ResizablePanel defaultSize={defaultLayout[2]}>
-
-          <MailDisplay
-            notes={notes}
-            selectedNote={selectedNote}
-          />
-        </ResizablePanel> */}
       </ResizablePanelGroup>
     </TooltipProvider>
   );

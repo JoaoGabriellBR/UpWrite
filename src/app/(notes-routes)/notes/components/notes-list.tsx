@@ -1,12 +1,11 @@
 "use client";
 import React from "react";
-import { formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale/pt-BR";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardHeader, CardFooter, CardTitle } from "@/components/ui/card";
 import { Icons } from "@/components/icons";
 import Link from "next/link";
+import { getNoteTimestamp } from "@/lib/getNoteTimestamp";
 
 export function NotesList({ notes }: any) {
   return (
@@ -20,7 +19,6 @@ export function NotesList({ notes }: any) {
             <h2 className={cn("text-md")}>Nova nota</h2>
           </Card>
         </Link>
-
         {notes?.map((note: any) => (
           <Card
             key={note?.id}
@@ -35,13 +33,9 @@ export function NotesList({ notes }: any) {
                 </CardTitle>
               </Link>
             </CardHeader>
-
             <CardFooter>
               <span className="text-xs text-muted-foreground">
-                {formatDistanceToNow(new Date(note?.created_at), {
-                  addSuffix: true,
-                  locale: ptBR,
-                })}
+                {getNoteTimestamp(note)}
               </span>
             </CardFooter>
           </Card>

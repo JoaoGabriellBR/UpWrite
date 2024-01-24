@@ -1,13 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { LucideIcon } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { TooltipComponent } from "@/components/ui/tooltip";
 
-interface NavProps {
+interface SideBarProps {
   isCollapsed: boolean;
   links: {
     title: string | any;
@@ -18,7 +16,7 @@ interface NavProps {
   }[];
 }
 
-export function Nav({ links, isCollapsed }: NavProps) {
+export function SideBar({ links, isCollapsed }: SideBarProps) {
   return (
     <div
       className={cn(
@@ -42,7 +40,8 @@ export function Nav({ links, isCollapsed }: NavProps) {
                 className={cn(
                   buttonVariants({ variant: link.variant, size: "icon" }),
                   "h-9 w-9",
-                  link.variant === "default" && "text-white" )}
+                  link.variant === "default" && "text-white"
+                )}
               >
                 <link.icon className="h-4 w-4" />
                 <span className="sr-only">{link.title}</span>
@@ -50,29 +49,17 @@ export function Nav({ links, isCollapsed }: NavProps) {
             </TooltipComponent>
           ) : (
             <button
-              // onClick={link.onClick}
               key={index}
               onClick={link?.onClick}
               className={cn(
                 buttonVariants({ variant: link.variant, size: "sm" }),
                 "justify-start"
-                // link.variant === "default" &&
-                //   "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
-                // "justify-start"
               )}
             >
               <link.icon className="mr-2 h-4 w-4" />
               {link.title}
               {link.label && (
-                <span
-                  className={cn(
-                    "ml-auto",
-                  //   link.variant === "default" &&
-                  //     "text-background dark:text-white"
-                  )}
-                >
-                  {link.label}
-                </span>
+                <span className={cn("ml-auto")}>{link.label}</span>
               )}
             </button>
           )

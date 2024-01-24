@@ -165,7 +165,6 @@ export default function TermosECondiçoes() {
           </div>
         </div>
       </section>
-
       <Footer />
     </>
   );
