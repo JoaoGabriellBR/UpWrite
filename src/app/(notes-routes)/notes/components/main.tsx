@@ -55,7 +55,7 @@ export default function Main({
     return data;
   };
 
-  const { data: notes } = useQuery({
+  const { data: notes, isLoading } = useQuery({
     queryKey: ["notes"],
     queryFn: getUserNotes,
   });
@@ -163,7 +163,7 @@ export default function Main({
             </div>
 
             <TabsContent value="all" className="m-0">
-              <NotesList notes={notes} />
+              <NotesList notes={notes} isLoading={isLoading}/>
             </TabsContent>
           </Tabs>
         </ResizablePanel>
