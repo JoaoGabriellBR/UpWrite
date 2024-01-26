@@ -28,6 +28,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useMediaQuery } from "usehooks-ts";
+import { SettingsDialog } from "@/components/settings-dialog";
 
 interface MailProps {
   accounts: {
@@ -46,6 +47,7 @@ export default function Main({
   navCollapsedSize,
 }: MailProps | any) {
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+  const [isOpen, setIsOpened] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
   const router = useRouter();
 
@@ -104,27 +106,16 @@ export default function Main({
                 onClick: () => router.push("/createnote"),
               },
               {
-                title: "Notas",
-                label: "9",
-                icon: File,
-                variant: "ghost",
-              },
-              {
                 title: "Configurações",
                 label: "",
                 icon: Settings,
                 variant: "ghost",
+                onClick: () => setIsOpened(true)
               },
               {
                 title: "Lixeira",
                 label: "",
                 icon: Trash2,
-                variant: "ghost",
-              },
-              {
-                title: "Arquivadas",
-                label: "",
-                icon: Archive,
                 variant: "ghost",
               },
               {
@@ -136,6 +127,7 @@ export default function Main({
               },
             ]}
           />
+          <SettingsDialog isOpen={isOpen} setIsOpened={setIsOpened}/>
         </ResizablePanel>
 
         <ResizableHandle withHandle />
