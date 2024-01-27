@@ -9,7 +9,8 @@ export async function GET(request: Request) {
     try {
         const response = await prisma.notes.findFirst({
             where: {
-                id: String(noteId)
+                id: String(noteId),
+                deleted_at: null
             }
         });
 
@@ -34,6 +35,7 @@ export async function PATCH(request: Request){
             data: {
                 title,
                 content,
+                updated_at: new Date()
             }
         });
 

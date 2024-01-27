@@ -19,6 +19,19 @@ export default function HeaderNotes({ form, note, handleClick, loading, ...props
     });
   };
 
+  const archiveNote = async () => {
+    await fetch(`/api/notes/archive?id=${note?.id}`, {
+      method: "PATCH",
+    });
+  };
+
+  const getArchivedNotes = async () => {
+    await fetch(`/api/notes/archive`, {
+      method: "GET",
+    });
+  };
+
+
   const onSuccess = useCallback(() => {
     router.refresh();
     router.push("/notes");
@@ -33,7 +46,7 @@ export default function HeaderNotes({ form, note, handleClick, loading, ...props
   }, []);
 
   const { mutate } = useMutation({
-    mutationFn: deleteNote,
+    mutationFn: archiveNote,
     onSuccess,
     onError,
     onSettled: () => {
