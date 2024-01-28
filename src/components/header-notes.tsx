@@ -21,31 +21,43 @@ export default function HeaderNotes({
   const queryClient = useQueryClient();
   const pathname = usePathname();
 
-  const deleteNote = async () => {
-    await fetch(`/api/notes/noteId?id=${note?.id}`, {
-      method: "DELETE",
+  // const deleteNote = async () => {
+  //   await fetch(`/api/notes/noteId?id=${note?.id}`, {
+  //     method: "DELETE",
+  //   });
+  // };
+
+  const archiveNote = async (noteId: any) => {
+    await fetch(`/api/notes/archive?id=${noteId}`, {
+      method: "PATCH",
     });
   };
 
   const onSuccess = useCallback(() => {
     router.refresh();
     router.push("/notes");
+    toast({
+      title: "Nota arquivada",
+      description: "Sua nota foi arquivada com sucesso.",
+      variant: "default",
+    });
   }, [router]);
 
   const onError = useCallback(() => {
     toast({
       title: "Algo deu errado.",
-      description: "Sua nota não foi deletada. Tente novamente.",
+      description: "Sua nota não foi arquivada. Tente novamente.",
       variant: "destructive",
     });
   }, []);
 
   const { mutate } = useMutation({
-    mutationFn: deleteNote,
+    mutationFn: archiveNote,
     onSuccess,
     onError,
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
+      queryClient.invalidateQueries({ queryKey: ["archivedNotes"] });
     },
   });
 

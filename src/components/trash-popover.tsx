@@ -7,15 +7,18 @@ import { TooltipComponent } from "./ui/tooltip";
 import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
+import { Icons } from "./icons";
+import { cn } from "@/lib/utils";
 
 export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const [restoringNoteId, setRestoringNoteId] = useState(null);
 
   const getArchivedNotes = async () => {
     const notes = await fetch("/api/notes/archive");
@@ -52,7 +55,7 @@ export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
     });
   }, []);
 
-  const { mutate, isPending } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: unarchiveNote,
     onSuccess,
     onError,
@@ -65,6 +68,7 @@ export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
   const handleClickUnarchiveNote = useCallback(
     (noteId: any) => {
       mutate(noteId);
+      setRestoringNoteId(noteId);
     },
     [mutate]
   );
@@ -91,6 +95,10 @@ export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
         <ScrollArea className="h-72" aria-orientation="vertical">
           {isLoading ? (
             <h1>Carregando...</h1>
+          ) : !archivedNotes?.length ? (
+            <p className="text-muted-foreground">
+              Você não possui notas arquivadas.
+            </p>
           ) : (
             archivedNotes?.map((note: any) => (
               <div key={note?.id} className="flex items-center justify-between">
@@ -100,19 +108,17 @@ export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
                   </Label>
                 </Link>
                 <div className="flex flex-row items-center">
-                  {/* {buttons?.map((button: any, index: any) => (
-                  <TooltipComponent key={index} text={button.text}>
-                    <Button variant="ghost">
-                      <button.icon className="w-4 h-4" />
-                    </Button>
-                  </TooltipComponent>
-                ))} */}
                   <TooltipComponent text="Restaurar">
                     <Button
                       variant="ghost"
                       onClick={() => handleClickUnarchiveNote(note?.id)}
+                      disabled={restoringNoteId === note?.id}
                     >
-                      <CornerUpLeft className="w-4 h-4" />
+                      {restoringNoteId === note?.id ? (
+                        <Icons.spinner className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <CornerUpLeft className="w-4 h-4" />
+                      )}
                     </Button>
                   </TooltipComponent>
                   <TooltipComponent text="Excluir permanentemente">
@@ -120,7 +126,7 @@ export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
                       variant="ghost"
                       // onClick={() => handleClickUnarchiveNote(note?.id)}
                     >
-                      <CornerUpLeft className="w-4 h-4" />
+                      <Trash className="w-4 h-4" />
                     </Button>
                   </TooltipComponent>
                 </div>
