@@ -14,11 +14,13 @@ import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
 import { Icons } from "./icons";
 import { cn } from "@/lib/utils";
+import AlertDeleteNote from "./alert-delete-note";
 
 export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [restoringNoteId, setRestoringNoteId] = useState(null);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const getArchivedNotes = async () => {
     const notes = await fetch("/api/notes/archive");
@@ -124,11 +126,16 @@ export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
                   <TooltipComponent text="Excluir permanentemente">
                     <Button
                       variant="ghost"
-                      // onClick={() => handleClickUnarchiveNote(note?.id)}
+                      onClick={() => setIsAlertOpen(true)}
                     >
                       <Trash className="w-4 h-4" />
                     </Button>
                   </TooltipComponent>
+                  <AlertDeleteNote
+                    isAlertOpen={isAlertOpen}
+                    setIsAlertOpen={setIsAlertOpen}
+                    noteId={note?.id}
+                  />
                 </div>
               </div>
             ))

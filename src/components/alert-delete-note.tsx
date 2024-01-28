@@ -1,10 +1,4 @@
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -13,17 +7,59 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Icons } from "./icons";
-import { Button } from "./ui/button";
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+import { useState, useEffect, useCallback } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { toast } from "@/components/ui/use-toast";
 
-export default function AlertDeleteNote({ handleClickDelete }: any) {
+export default function AlertDeleteNote({
+  isAlertOpen,
+  setIsAlertOpen,
+  noteId,
+}: any) {
   const [isClient, setIsClient] = useState(false);
-  const pathname = usePathname();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const deleteNote = async () => {
+    await fetch(`/api/notes/noteId?id=${noteId}`, {
+      method: "DELETE",
+    });
+  };
+
+  const onSuccess = useCallback(() => {
+    router.refresh();
+    router.push("/notes");
+    toast({
+      title: "Nota excluida",
+      description: "Sua nota foi excluida com sucesso.",
+      variant: "default",
+    });
+  }, [router]);
+
+  const onError = useCallback(() => {
+    toast({
+      title: "Algo deu errado.",
+      description: "Sua nota não foi excluida. Tente novamente.",
+      variant: "destructive",
+    });
+  }, []);
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: deleteNote,
+    onSuccess,
+    onError,
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+      queryClient.invalidateQueries({ queryKey: ["archivedNotes"] });
+    },
+  });
+
+  const handleClickDelete = useCallback(() => {
+    mutate(noteId);
+  }, [mutate, noteId]);
 
   useEffect(() => {
     setIsClient(true);
@@ -32,47 +68,26 @@ export default function AlertDeleteNote({ handleClickDelete }: any) {
   return (
     <>
       {isClient ? (
-        pathname === "/createnote" ? (
-          <Link href="/notes">
-            <Button variant="outline">
-              <Icons.close className="h-5 w-5" />
-            </Button>
-          </Link>
-        ) : (
-          <AlertDialog>
-            <AlertDialogTrigger>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Button variant="outline">
-                    <Icons.moreHorizontal className="h-5 w-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem className="cursor-pointer">
-                    <Icons.trash className="mr-2 h-4 w-4" />
-                    <p>Excluir nota</p>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Essa ação não pode ser desfeita. Isso excluirá permanentemente
-                  sua nota.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                <AlertDialogAction onClick={handleClickDelete}>
-                  Excluir
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        )
+        <AlertDialog
+          open={isAlertOpen}
+          onOpenChange={() => setIsAlertOpen(false)}
+        >
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Essa ação não pode ser desfeita. Isso excluirá permanentemente
+                sua nota.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction onClick={handleClickDelete}>
+                Excluir
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       ) : null}
     </>
   );

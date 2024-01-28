@@ -9,6 +9,12 @@ import { toast } from "@/components/ui/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import AlertDeleteNote from "./alert-delete-note";
 import { usePathname } from "next/navigation";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function HeaderNotes({
   form,
@@ -51,7 +57,7 @@ export default function HeaderNotes({
     });
   }, []);
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: archiveNote,
     onSuccess,
     onError,
@@ -61,7 +67,7 @@ export default function HeaderNotes({
     },
   });
 
-  const handleClickDelete = useCallback(() => {
+  const handleClickArchive = useCallback(() => {
     mutate(note?.id);
   }, [mutate, note?.id]);
 
@@ -80,13 +86,13 @@ export default function HeaderNotes({
     {
       text: "Voltar",
       onClick: "",
-    }
-  ]
+    },
+  ];
 
   return (
     <>
       <header {...props}>
-        {note?.deleted_at !== null && pathname !== '/createnote' ? (
+        {note?.deleted_at !== null && pathname !== "/createnote" ? (
           <div className="py-2 flex flex-wrap justify-center items-center gap-3 bg-red-500">
             <p className="text-sm">Essa nota está na lixeira.</p>
             {buttons?.map((butt, index) => (
@@ -125,7 +131,28 @@ export default function HeaderNotes({
                   </>
                 )}
               </Button>
-              <AlertDeleteNote handleClickDelete={handleClickDelete} />
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Button variant="outline">
+                    {isPending ? (
+                      <Icons.spinner className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <Icons.moreHorizontal className="h-5 w-5" />
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={handleClickArchive}
+                  >
+                    <Icons.trash className="mr-2 h-4 w-4" />
+                    <p>Excluir nota</p>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              {/* <AlertDeleteNote handleClickDelete={handleClickDelete} /> */}
             </div>
           </div>
         )}
