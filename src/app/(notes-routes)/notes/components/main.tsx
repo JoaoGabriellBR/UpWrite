@@ -29,6 +29,7 @@ import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useMediaQuery } from "usehooks-ts";
 import { SettingsDialog } from "@/components/settings-dialog";
+import TrashPopover from "@/components/trash-popover";
 
 interface MailProps {
   accounts: {
@@ -48,6 +49,7 @@ export default function Main({
 }: MailProps | any) {
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
   const [isOpen, setIsOpened] = useState(false);
+  const [isTrashOpen, setIsTrashOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
   const router = useRouter();
 
@@ -117,6 +119,7 @@ export default function Main({
                 label: "",
                 icon: Trash2,
                 variant: "ghost",
+                onClick: () => setIsTrashOpen(true)
               },
               {
                 title: "Sair",
@@ -128,6 +131,7 @@ export default function Main({
             ]}
           />
           <SettingsDialog isOpen={isOpen} setIsOpened={setIsOpened}/>
+          <TrashPopover isTrashOpen={isTrashOpen} setIsTrashOpen={setIsTrashOpen}/>
         </ResizablePanel>
 
         <ResizableHandle withHandle />

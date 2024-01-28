@@ -10,7 +10,6 @@ export async function GET(request: Request) {
         const response = await prisma.notes.findFirst({
             where: {
                 id: String(noteId),
-                deleted_at: null
             }
         });
 

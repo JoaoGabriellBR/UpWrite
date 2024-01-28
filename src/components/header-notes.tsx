@@ -8,29 +8,24 @@ import { useCallback } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import AlertDeleteNote from "./alert-delete-note";
+import { usePathname } from "next/navigation";
 
-export default function HeaderNotes({ form, note, handleClick, loading, ...props }: any) {
+export default function HeaderNotes({
+  form,
+  note,
+  handleClick,
+  loading,
+  ...props
+}: any) {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const pathname = usePathname();
 
   const deleteNote = async () => {
     await fetch(`/api/notes/noteId?id=${note?.id}`, {
       method: "DELETE",
     });
   };
-
-  const archiveNote = async () => {
-    await fetch(`/api/notes/archive?id=${note?.id}`, {
-      method: "PATCH",
-    });
-  };
-
-  const getArchivedNotes = async () => {
-    await fetch(`/api/notes/archive`, {
-      method: "GET",
-    });
-  };
-
 
   const onSuccess = useCallback(() => {
     router.refresh();
@@ -46,7 +41,7 @@ export default function HeaderNotes({ form, note, handleClick, loading, ...props
   }, []);
 
   const { mutate } = useMutation({
-    mutationFn: archiveNote,
+    mutationFn: deleteNote,
     onSuccess,
     onError,
     onSettled: () => {
@@ -61,39 +56,67 @@ export default function HeaderNotes({ form, note, handleClick, loading, ...props
   const hasTitle = form.getValues("title");
   const isTitleValid = hasTitle && hasTitle.length <= 100;
 
+  const buttons = [
+    {
+      text: "Restaurar",
+      onClick: "",
+    },
+    {
+      text: "Excluir para sempre",
+      onClick: "",
+    },
+    {
+      text: "Voltar",
+      onClick: "",
+    }
+  ]
+
   return (
     <>
       <header {...props}>
-        <div className="flex flex-row justify-between items-center">
-          <Button variant="ghost" onClick={() => router.back()}>
-            <Icons.chevronLeft className="mr-2 h-4 w-4" />
-            Voltar
-          </Button>
-
-          <div className="flex flex-row items-center justify-between gap-3">
-            <Button
-              disabled={!isTitleValid || loading}
-              onClick={handleClick}
-              variant="outline"
-              type="submit"
-              className="h-9 border-none"
-            >
-              {loading ? (
-                <>
-                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                  Salvando
-                </>
-              ) : (
-                <>
-                  <Icons.check className="mr-2 h-5 w-5" />
-                  Salvar
-                </>
-              )}
+        {note?.deleted_at !== null && pathname !== '/createnote' ? (
+          <div className="py-2 flex flex-wrap justify-center items-center gap-3 bg-red-500">
+            <p className="text-sm">Essa nota está na lixeira.</p>
+            {buttons?.map((butt, index) => (
+              <button
+                key={index}
+                className="flex justify-center items-center w-auto h-5 border border-white p-5 rounded-full text-sm"
+              >
+                {butt.text}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-row justify-between items-center">
+            <Button variant="ghost" onClick={() => router.back()}>
+              <Icons.chevronLeft className="mr-2 h-4 w-4" />
+              Voltar
             </Button>
 
-            <AlertDeleteNote handleClickDelete={handleClickDelete} />
+            <div className="flex flex-row items-center justify-between gap-3">
+              <Button
+                disabled={!isTitleValid || loading}
+                onClick={handleClick}
+                variant="outline"
+                type="submit"
+                className="h-9 border-none"
+              >
+                {loading ? (
+                  <>
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                    Salvando
+                  </>
+                ) : (
+                  <>
+                    <Icons.check className="mr-2 h-5 w-5" />
+                    Salvar
+                  </>
+                )}
+              </Button>
+              <AlertDeleteNote handleClickDelete={handleClickDelete} />
+            </div>
           </div>
-        </div>
+        )}
       </header>
     </>
   );
