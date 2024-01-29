@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useUnarchiveNote from "@/hooks/use-unarchive-note";
 import { useState } from "react";
+import AlertDeleteNote from "./alert-delete-note";
+import useDeleteNote from "@/hooks/use-delete-note";
 
 export default function HeaderNotes({
   form,
@@ -27,7 +29,9 @@ export default function HeaderNotes({
   const router = useRouter();
   const queryClient = useQueryClient();
   const pathname = usePathname();
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [restoringNoteId, setRestoringNoteId] = useState(null);
+  const { isPendingDelete } = useDeleteNote();
   const { handleUnarchiveNote, isPendingUnarchive, isSuccessUnarchive } =
     useUnarchiveNote({});
 
@@ -89,7 +93,8 @@ export default function HeaderNotes({
     },
     {
       text: "Excluir para sempre",
-      onClick: "",
+      onClick: () => setIsAlertOpen(true),
+      disabled: isPendingDelete,
     },
     {
       text: "Voltar",
@@ -119,6 +124,11 @@ export default function HeaderNotes({
                 )}
               </button>
             ))}
+            <AlertDeleteNote
+              isAlertOpen={isAlertOpen}
+              setIsAlertOpen={setIsAlertOpen}
+              noteId={note?.id}
+            />
           </div>
         ) : (
           <div className="flex flex-row justify-between items-center px-3">

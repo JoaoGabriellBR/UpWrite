@@ -9,10 +9,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useState, useEffect, useCallback } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { toast } from "@/components/ui/use-toast";
+import useDeleteNote from "@/hooks/use-delete-note";
+import { Icons } from "./icons";
 
 export default function AlertDeleteNote({
   isAlertOpen,
@@ -20,46 +18,11 @@ export default function AlertDeleteNote({
   noteId,
 }: any) {
   const [isClient, setIsClient] = useState(false);
-  const router = useRouter();
-  const queryClient = useQueryClient();
+  const { handleDeleteNote, isPendingDelete } = useDeleteNote();
 
-  const deleteNote = async () => {
-    await fetch(`/api/notes/noteId?id=${noteId}`, {
-      method: "DELETE",
-    });
-  };
-
-  const onSuccess = useCallback(() => {
-    router.refresh();
-    router.push("/notes");
-    toast({
-      title: "Nota excluida",
-      description: "Sua nota foi excluida com sucesso.",
-      variant: "default",
-    });
-  }, [router]);
-
-  const onError = useCallback(() => {
-    toast({
-      title: "Algo deu errado.",
-      description: "Sua nota não foi excluida. Tente novamente.",
-      variant: "destructive",
-    });
-  }, []);
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: deleteNote,
-    onSuccess,
-    onError,
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-      queryClient.invalidateQueries({ queryKey: ["archivedNotes"] });
-    },
-  });
-
-  const handleClickDelete = useCallback(() => {
-    mutate(noteId);
-  }, [mutate, noteId]);
+  const handleClickDeleteNote = useCallback(() => {
+    handleDeleteNote(noteId);
+  }, [handleDeleteNote, noteId]);
 
   useEffect(() => {
     setIsClient(true);
@@ -69,7 +32,7 @@ export default function AlertDeleteNote({
     <>
       {isClient ? (
         <AlertDialog
-          open={isAlertOpen}
+          open={isAlertOpen || isPendingDelete}
           onOpenChange={() => setIsAlertOpen(false)}
         >
           <AlertDialogContent>
@@ -82,8 +45,15 @@ export default function AlertDeleteNote({
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancelar</AlertDialogCancel>
-              <AlertDialogAction onClick={handleClickDelete}>
-                Excluir
+              <AlertDialogAction
+                onClick={handleClickDeleteNote}
+                disabled={isPendingDelete}
+              >
+                {isPendingDelete ? (
+                  <Icons.spinner className="w-4 h-4 animate-spin" />
+                ) : (
+                  "Excluir"
+                )}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
