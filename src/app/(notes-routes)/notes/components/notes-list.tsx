@@ -16,12 +16,12 @@ export function NotesList({ notes, isLoading }: any) {
         </div>
       ) : (
         <div className="w-full h-full p-4 flex flex-col md:flex-row lg:flex-row flex-wrap justify-start items-center gap-3">
-          <Link href="/createnote">
-            <Card className="text-white bg-primary cursor-pointer hidden md:w-[12rem] md:h-[15rem] flex flex-col justify-center items-center gap-2">
+          <Link href="/createnote" className="w-full md:w-fit h-full">
+            <Card className="text-white bg-primary cursor-pointer w-full md:w-[12rem] h-[5rem] md:h-[15rem] flex flex-col justify-center items-center gap-2">
               <div className="flex items-center justify-center rounded-full">
-                <Icons.bookOpen className={cn("h-10 w-10")} />
+                <Icons.bookOpen className={cn("h-6 md:h-10 w-6 md:w-10")} />
               </div>
-              <h2 className={cn("text-md")}>Nova nota</h2>
+              <h2 className={cn("text-sm md:text-md")}>Nova nota</h2>
             </Card>
           </Link>
           {notes?.map((note: any) => (
