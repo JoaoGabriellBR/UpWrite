@@ -3,46 +3,36 @@ import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { toast } from "@/components/ui/use-toast";
 
-interface UseUnarchiveNoteProps {
-  setOpen?: (value: boolean) => void;
-}
-
-const useUnarchiveNote = ({ setOpen }: UseUnarchiveNoteProps) => {
+const useArchiveNote = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const unarchiveNote = async (noteId: any) => {
-    await fetch(`/api/notes/unarchive?id=${noteId}`, {
+  const archiveNote = async (noteId: any) => {
+    await fetch(`/api/notes/archive?id=${noteId}`, {
       method: "PATCH",
     });
   };
 
   const onSuccess = useCallback(() => {
     router.refresh();
-    if (setOpen) {
-      setOpen(false);
-    }
+    router.push("/notes");
     toast({
-      title: "Nota restaurada",
-      description: "Sua nota foi restaurada com sucesso.",
+      title: "Nota arquivada",
+      description: "Sua nota foi arquivada com sucesso.",
       variant: "default",
     });
-  }, [router, setOpen]);
+  }, [router]);
 
   const onError = useCallback(() => {
     toast({
       title: "Algo deu errado.",
-      description: "Sua nota não foi restaurada. Tente novamente.",
+      description: "Sua nota não foi arquivada. Tente novamente.",
       variant: "destructive",
     });
   }, []);
 
-  const {
-    mutate,
-    isPending: isPendingUnarchive,
-    isSuccess: isSuccessUnarchive,
-  } = useMutation({
-    mutationFn: unarchiveNote,
+  const { mutate, isPending: isPendingArchive } = useMutation({
+    mutationFn: archiveNote,
     onSuccess,
     onError,
     onSettled: () => {
@@ -51,14 +41,14 @@ const useUnarchiveNote = ({ setOpen }: UseUnarchiveNoteProps) => {
     },
   });
 
-  const handleUnarchiveNote = useCallback(
+  const handleArchiveNote = useCallback(
     (noteId: any) => {
       mutate(noteId);
     },
     [mutate]
   );
 
-  return { handleUnarchiveNote, isPendingUnarchive, isSuccessUnarchive };
+  return { handleArchiveNote, isPendingArchive };
 };
 
-export default useUnarchiveNote;
+export default useArchiveNote;

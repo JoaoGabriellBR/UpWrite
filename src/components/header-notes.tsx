@@ -3,10 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
-import { toast } from "@/components/ui/use-toast";
-import { useMutation } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import {
   DropdownMenu,
@@ -18,6 +15,7 @@ import useUnarchiveNote from "@/hooks/use-unarchive-note";
 import { useState } from "react";
 import AlertDeleteNote from "./alert-delete-note";
 import useDeleteNote from "@/hooks/use-delete-note";
+import useArchiveNote from "@/hooks/use-archive-note";
 
 export default function HeaderNotes({
   form,
@@ -27,51 +25,17 @@ export default function HeaderNotes({
   ...props
 }: any) {
   const router = useRouter();
-  const queryClient = useQueryClient();
   const pathname = usePathname();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [restoringNoteId, setRestoringNoteId] = useState(null);
   const { isPendingDelete } = useDeleteNote();
+  const { handleArchiveNote, isPendingArchive } = useArchiveNote();
   const { handleUnarchiveNote, isPendingUnarchive, isSuccessUnarchive } =
     useUnarchiveNote({});
 
-  const archiveNote = async (noteId: any) => {
-    await fetch(`/api/notes/archive?id=${noteId}`, {
-      method: "PATCH",
-    });
-  };
-
-  const onSuccess = useCallback(() => {
-    router.refresh();
-    router.push("/notes");
-    toast({
-      title: "Nota arquivada",
-      description: "Sua nota foi arquivada com sucesso.",
-      variant: "default",
-    });
-  }, [router]);
-
-  const onError = useCallback(() => {
-    toast({
-      title: "Algo deu errado.",
-      description: "Sua nota não foi arquivada. Tente novamente.",
-      variant: "destructive",
-    });
-  }, []);
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: archiveNote,
-    onSuccess,
-    onError,
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-      queryClient.invalidateQueries({ queryKey: ["archivedNotes"] });
-    },
-  });
-
-  const handleClickArchive = useCallback(() => {
-    mutate(note?.id);
-  }, [mutate, note?.id]);
+  const handleClickArchiveNote = useCallback(() => {
+    handleArchiveNote(note?.id);
+  }, [handleArchiveNote, note?.id]);
 
   const handleClickUnarchiveNote = useCallback(
     (noteId: any) => {
@@ -161,7 +125,7 @@ export default function HeaderNotes({
                 <DropdownMenu>
                   <DropdownMenuTrigger>
                     <Button variant="outline">
-                      {isPending ? (
+                      {isPendingArchive ? (
                         <Icons.spinner className="h-5 w-5 animate-spin" />
                       ) : (
                         <Icons.moreHorizontal className="h-5 w-5" />
@@ -172,7 +136,7 @@ export default function HeaderNotes({
                   <DropdownMenuContent align="end" className="w-48">
                     <DropdownMenuItem
                       className="cursor-pointer"
-                      onClick={handleClickArchive}
+                      onClick={handleClickArchiveNote}
                     >
                       <Icons.trash className="mr-2 h-4 w-4" />
                       <p>Excluir nota</p>
