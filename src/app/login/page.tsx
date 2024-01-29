@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { inputFields } from "@/lib/inputFields";
+import { inputFields } from "@/lib/arrays";
 import { signIn } from "next-auth/react";
 import { getToken } from "next-auth/jwt";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,32 +26,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
-const FormSchema = z.object({
-  email: z
-    .string()
-    .min(1, {
-      message: "O campo de e-mail não pode estar vazio.",
-    })
-    .email({
-      message: "Por favor, insira um endereço de e-mail válido.",
-    }),
-  password: z
-    .string()
-    .min(1, {
-      message: "O campo de senha não pode estar vazio.",
-    })
-    .min(8, {
-      message: "A senha deve ter pelo menos 8 caracteres.",
-    }),
-});
+import { formSchemaLogin } from "@/lib/schemas";
 
 export default function Login() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof formSchemaLogin>>({
+    resolver: zodResolver(formSchemaLogin),
     defaultValues: {
       email: "",
       password: "",

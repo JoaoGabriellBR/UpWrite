@@ -8,7 +8,7 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma as any),
   pages: {
     signIn: "/login",
-    signOut: '/',
+    signOut: "/",
   },
   session: {
     strategy: "jwt",
@@ -36,13 +36,16 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user) {
-          throw new Error('Email incorreto');
+          throw new Error("Email incorreto");
         }
 
-        const passwordMatch = await compare(credentials.password, user.password!);
+        const passwordMatch = await compare(
+          credentials.password,
+          user.password!
+        );
 
         if (!passwordMatch) {
-          throw new Error('Senha incorreta');
+          throw new Error("Senha incorreta");
         }
 
         return {

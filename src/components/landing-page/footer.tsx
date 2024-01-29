@@ -1,21 +1,10 @@
 import Link from "next/link";
 import { Icons } from "@/components/icons";
 import { TooltipComponent } from "@/components/ui/tooltip";
-import Image from "next/image";
-import logoPortfolio from "../../../public/logo-portfolio.png";
+import { linksLandingPage } from "@/lib/arrays";
 
 export default function Footer() {
   const year = new Date().getFullYear();
-
-  const links = [
-    { name: "Home", id: "/#home" },
-    { name: "Por que UpWrite?", id: "/#porqueupwrite" },
-    { name: "Características", id: "/#caracteristicas" },
-    { name: "Novidades", id: "/#novidades" },
-    { name: "FAQ", id: "/#faq" },
-    { name: "Política de privacidade", id: "/politica-de-privacidade" },
-    { name: "Termos e condições", id: "/termos-e-condicoes" },
-  ];
 
   return (
     <footer className="py-10 sm:pt-16 lg:pt-24">
@@ -25,7 +14,9 @@ export default function Footer() {
             <Link as="/" href="/">
               <div className="flex flex-row items-center gap-1">
                 <Icons.logo className="w-6 h-6 text-primary font-bold" />
-                <h1 className="font-heading text-2xl font-extrabold">upwrite</h1>
+                <h1 className="font-heading text-2xl font-extrabold">
+                  upwrite
+                </h1>
               </div>
             </Link>
 
@@ -60,7 +51,7 @@ export default function Footer() {
             <h1 className="font-heading text-xl">Links</h1>
 
             <ul className="mt-6 space-y-4">
-              {links.slice(0, 5).map((link) => (
+              {linksLandingPage.slice(0, 5).map((link) => (
                 <Link
                   key={link.name}
                   href={link.id}
@@ -77,7 +68,7 @@ export default function Footer() {
             <h1 className="font-heading text-xl">Sobre</h1>
 
             <ul className="mt-6 space-y-4">
-              {links.slice(5).map((link) => (
+              {linksLandingPage.slice(5).map((link) => (
                 <Link
                   key={link.name}
                   href={link.id}

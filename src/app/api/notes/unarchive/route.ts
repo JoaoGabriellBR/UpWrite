@@ -2,7 +2,6 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function PATCH(request: Request) {
-
   const { searchParams } = new URL(request.url);
   const noteId = searchParams.get("id");
 

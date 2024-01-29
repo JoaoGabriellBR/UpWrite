@@ -13,7 +13,6 @@ import AlertDeleteNote from "./alert-delete-note";
 import useUnarchiveNote from "@/hooks/use-unarchive-note";
 
 export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
-
   const [restoringNoteId, setRestoringNoteId] = useState(null);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const { handleUnarchiveNote } = useUnarchiveNote(setIsTrashOpen);
@@ -36,18 +35,6 @@ export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
     },
     [handleUnarchiveNote]
   );
-
-  const buttons = [
-    {
-      text: "Restaurar",
-      icon: CornerUpLeft,
-      // onClick: () => handleClickUnarchiveNote()
-    },
-    {
-      text: "Excluir permanentemente",
-      icon: Trash,
-    },
-  ];
 
   return (
     <Dialog open={isTrashOpen} onOpenChange={() => setIsTrashOpen(false)}>

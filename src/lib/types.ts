@@ -93,3 +93,9 @@ export interface CommandProps {
 export interface UseUnarchiveNoteProps {
   setOpen?: (value: boolean) => void;
 }
+
+export interface AccordionPropsFAQ {
+  value: string;
+  question: string;
+  answer: string;
+}

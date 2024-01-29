@@ -6,32 +6,10 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { CheckCircle } from "lucide-react";
-
-interface AccordionProps {
-  value: string;
-  question: string;
-  answer: string;
-}
+import { AccordionPropsFAQ } from "@/lib/types";
+import { accordionsPerguntasRespostas } from "@/lib/arrays";
 
 const PerguntasRespostas = () => {
-  const accordions = [
-    {
-      value: "item-1",
-      question: "Quantas notas posso criar?",
-      answer: "Você pode criar quantas notas desejar. (:",
-    },
-    {
-      value: "item-2",
-      question: "Posso editar minha nota após a publicação?",
-      answer: "Sim, é possível editar uma nota enquanto você trabalha nela.",
-    },
-    {
-      value: "item-3",
-      question: "Consigo recuperar notas excluídas?",
-      answer:
-        "Por enquanto não. Após excluída, a sua nota será automaticamente retirada de nosso banco de dados.",
-    },
-  ];
   return (
     <section
       id="faq"
@@ -47,7 +25,7 @@ const PerguntasRespostas = () => {
         </p>
 
         <Accordion type="single" collapsible className="w-full text-start">
-          {accordions.map((accordion: AccordionProps) => (
+          {accordionsPerguntasRespostas.map((accordion: AccordionPropsFAQ) => (
             <AccordionItem key={accordion.value} value={accordion.value}>
               <AccordionTrigger>
                 <div className="flex flex-row justify-start items-center gap-2">

@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Icons } from "@/components/icons";
-import { createTitleSchema } from "@/lib/createTitleSchema";
+import { createTitleSchema } from "@/lib/schemas";
 
 export default function EditNote({ params }: Params) {
   const noteId = params.noteId;

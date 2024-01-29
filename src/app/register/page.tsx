@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { inputFields } from "@/lib/inputFields";
+import { inputFields } from "@/lib/arrays";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -26,41 +26,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
-
-const FormSchema = z.object({
-  name: z
-    .string()
-    .min(1, {
-      message: "O nome de usuário não pode estar vazio.",
-    })
-    .min(2, {
-      message: "O nome de usuário deve ter pelo menos 2 caracteres.",
-    }),
-  email: z
-    .string()
-    .min(1, {
-      message: "O campo de e-mail não pode estar vazio.",
-    })
-    .email({
-      message: "Por favor, insira um endereço de e-mail válido.",
-    }),
-  password: z
-    .string()
-    .min(1, {
-      message: "O campo de senha não pode estar vazio.",
-    })
-    .min(8, {
-      message: "A senha deve ter pelo menos 8 caracteres.",
-    }),
-});
+import { formSchemaRegister } from "@/lib/schemas";
 
 export default function Register() {
   const router = useRouter();
-
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof formSchemaRegister>>({
+    resolver: zodResolver(formSchemaRegister),
     defaultValues: {
       name: "",
       email: "",
