@@ -17,7 +17,6 @@ import { LinkSelector } from "./link-selector";
 import { TooltipComponent } from "../ui/tooltip";
 
 export default function TiptapMenuBar({ editor }: any) {
-  
   const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState(false);
   const [isColorSelectorOpen, setIsColorSelectorOpen] = useState(false);
   const [isLinkSelectorOpen, setIsLinkSelectorOpen] = useState(false);

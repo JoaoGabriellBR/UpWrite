@@ -1,18 +1,7 @@
-import { Editor } from "@tiptap/core";
 import { Check, ChevronDown } from "lucide-react";
-import { Dispatch, FC, SetStateAction } from "react";
+import { FC } from "react";
 import * as Popover from "@radix-ui/react-popover";
-
-export interface BubbleColorMenuItem {
-  name: string;
-  color: string;
-}
-
-interface ColorSelectorProps {
-  editor: Editor;
-  isOpen: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-}
+import { BubbleColorMenuItem, ColorSelectorProps } from "@/lib/types";
 
 const TEXT_COLORS: BubbleColorMenuItem[] = [
   {

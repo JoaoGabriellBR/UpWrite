@@ -1,17 +1,11 @@
 "use client";
 
 import { getUrlFromString } from "@/lib/utils";
-import { Editor } from "@tiptap/core";
 import { ExternalLink } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
 import { Input } from "../ui/input";
-import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
-
-interface LinkSelectorProps {
-  editor: Editor;
-  isOpen: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-}
+import { FC, useEffect, useRef } from "react";
+import { LinkSelectorProps } from "@/lib/types";
 
 export const LinkSelector: FC<LinkSelectorProps> = ({
   editor,

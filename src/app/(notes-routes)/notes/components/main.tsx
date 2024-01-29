@@ -30,17 +30,7 @@ import { signOut } from "next-auth/react";
 import { useMediaQuery } from "usehooks-ts";
 import { SettingsDialog } from "@/components/settings-dialog";
 import TrashPopover from "@/components/trash-popover";
-
-interface MailProps {
-  accounts: {
-    label: string;
-    email: string;
-    icon: React.ReactNode;
-  }[];
-  defaultLayout?: number[] | undefined;
-  defaultCollapsed?: boolean;
-  navCollapsedSize: number;
-}
+import { MailProps } from "@/lib/types";
 
 export default function Main({
   defaultLayout = [680, 680],
@@ -112,14 +102,14 @@ export default function Main({
                 label: "",
                 icon: Settings,
                 variant: "ghost",
-                onClick: () => setIsOpened(true)
+                onClick: () => setIsOpened(true),
               },
               {
                 title: "Lixeira",
                 label: "",
                 icon: Trash2,
                 variant: "ghost",
-                onClick: () => setIsTrashOpen(true)
+                onClick: () => setIsTrashOpen(true),
               },
               {
                 title: "Sair",
@@ -130,8 +120,11 @@ export default function Main({
               },
             ]}
           />
-          <SettingsDialog isOpen={isOpen} setIsOpened={setIsOpened}/>
-          <TrashPopover isTrashOpen={isTrashOpen} setIsTrashOpen={setIsTrashOpen}/>
+          <SettingsDialog isOpen={isOpen} setIsOpened={setIsOpened} />
+          <TrashPopover
+            isTrashOpen={isTrashOpen}
+            setIsTrashOpen={setIsTrashOpen}
+          />
         </ResizablePanel>
 
         <ResizableHandle withHandle />
@@ -145,7 +138,10 @@ export default function Main({
               <h1 className="text-xl font-bold">Notas</h1>
             </div>
             <Separator />
-            <div className="w-fit bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+
+            {/* O PESQUISAR SERÁ ADICIONADO POSTERIORMENTE  */}
+
+            {/* <div className="w-fit bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
               <form>
                 <Input
                   icon={
@@ -156,10 +152,10 @@ export default function Main({
                   className="pl-8"
                 />
               </form>
-            </div>
+            </div> */}
 
             <TabsContent value="all" className="m-0">
-              <NotesList notes={notes} isLoading={isLoading}/>
+              <NotesList notes={notes} isLoading={isLoading} />
             </TabsContent>
           </Tabs>
         </ResizablePanel>

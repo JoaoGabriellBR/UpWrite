@@ -1,27 +1,27 @@
 :root {
-    --black: rgb(255 255 255);
-    --white: rgb(25 25 25);
-    --highlight-default: #ffffff;
-    --highlight-purple: #f6f3f8;
-    --highlight-red: #fdebeb;
-    --highlight-yellow: #fbf4a2;
-    --highlight-blue: #c1ecf9;
-    --highlight-green: #acf79f;
-    --highlight-orange: #faebdd;
-    --highlight-pink: #faf1f5;
-    --highlight-gray: #f1f1ef;
+  --black: rgb(255 255 255);
+  --white: rgb(25 25 25);
+  --highlight-default: #ffffff;
+  --highlight-purple: #f6f3f8;
+  --highlight-red: #fdebeb;
+  --highlight-yellow: #fbf4a2;
+  --highlight-blue: #c1ecf9;
+  --highlight-green: #acf79f;
+  --highlight-orange: #faebdd;
+  --highlight-pink: #faf1f5;
+  --highlight-gray: #f1f1ef;
 }
 
 .dark-theme {
-    --black: rgb(255 255 255);
-    --white: rgb(25 25 25);
-    --highlight-default: #000000;
-    --highlight-purple: #3f2c4b;
-    --highlight-red: #5c1a1a;
-    --highlight-yellow: #5c4b1a;
-    --highlight-blue: #1a3d5c;
-    --highlight-green: #1a5c20;
-    --highlight-orange: #5c3a1a;
-    --highlight-pink: #5c1a3a;
-    --highlight-gray: #3a3a3a;
+  --black: rgb(255 255 255);
+  --white: rgb(25 25 25);
+  --highlight-default: #000000;
+  --highlight-purple: #3f2c4b;
+  --highlight-red: #5c1a1a;
+  --highlight-yellow: #5c4b1a;
+  --highlight-blue: #1a3d5c;
+  --highlight-green: #1a5c20;
+  --highlight-orange: #5c3a1a;
+  --highlight-pink: #5c1a3a;
+  --highlight-gray: #3a3a3a;
 }

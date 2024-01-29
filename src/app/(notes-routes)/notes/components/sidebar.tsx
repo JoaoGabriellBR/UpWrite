@@ -1,20 +1,8 @@
 "use client";
-
-import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { TooltipComponent } from "@/components/ui/tooltip";
-
-interface SideBarProps {
-  isCollapsed: boolean;
-  links: {
-    title: string | any;
-    label?: string;
-    icon: LucideIcon;
-    variant: "default" | "ghost";
-    onClick?: any;
-  }[];
-}
+import { SideBarProps } from "@/lib/types";
 
 export function SideBar({ links, isCollapsed }: SideBarProps) {
   return (

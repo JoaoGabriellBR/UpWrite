@@ -1,4 +1,3 @@
-import { Editor } from "@tiptap/core";
 import {
   Check,
   ChevronDown,
@@ -12,13 +11,8 @@ import {
   Quote,
 } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
-import { Dispatch, FC, SetStateAction } from "react";
-
-interface NodeSelectorProps {
-  editor: Editor;
-  isOpen: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-}
+import { FC } from "react";
+import { NodeSelectorProps } from "@/lib/types";
 
 export const NodeSelector: FC<NodeSelectorProps> = ({
   editor,

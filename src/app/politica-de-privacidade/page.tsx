@@ -18,8 +18,10 @@ export default function PoliticaDePrivacidade() {
                 A sua privacidade é importante para nós. É política do UpWrite
                 respeitar a sua privacidade em relação a qualquer informação sua
                 que possamos coletar no site{" "}
-                <a className="text-primary" href="/">UpWrite</a>, e outros
-                sites que possuímos e operamos.
+                <a className="text-primary" href="/">
+                  UpWrite
+                </a>
+                , e outros sites que possuímos e operamos.
               </span>
             </p>
             <p>
@@ -117,7 +119,7 @@ export default function PoliticaDePrivacidade() {
           </div>
         </div>
       </section>
-      <Footer/>
+      <Footer />
     </>
   );
 }

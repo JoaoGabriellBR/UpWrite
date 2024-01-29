@@ -19,13 +19,16 @@ export default function TermosECondiçoes() {
             <p>
               <span>
                 Ao acessar o site{" "}
-                <a className="text-primary" href="/">UpWrite</a>, concorda em
-                cumprir estes termos de serviço, todas as leis e regulamentos
-                aplicáveis ​​e concorda que é responsável pelo cumprimento de
-                todas as leis locais aplicáveis. Se você não concordar com algum
-                desses termos, está proibido de usar ou acessar este site. Os
-                materiais contidos neste site são protegidos pelas leis de
-                direitos autorais e marcas comerciais aplicáveis.
+                <a className="text-primary" href="/">
+                  UpWrite
+                </a>
+                , concorda em cumprir estes termos de serviço, todas as leis e
+                regulamentos aplicáveis ​​e concorda que é responsável pelo
+                cumprimento de todas as leis locais aplicáveis. Se você não
+                concordar com algum desses termos, está proibido de usar ou
+                acessar este site. Os materiais contidos neste site são
+                protegidos pelas leis de direitos autorais e marcas comerciais
+                aplicáveis.
               </span>
             </p>
             <h2>

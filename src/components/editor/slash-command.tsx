@@ -2,10 +2,8 @@ import React, {
   useState,
   useEffect,
   useCallback,
-  ReactNode,
   useRef,
   useLayoutEffect,
-  useContext,
 } from "react";
 import { Editor, Range, Extension } from "@tiptap/core";
 import Suggestion from "@tiptap/suggestion";
@@ -18,33 +16,16 @@ import {
   Heading3,
   List,
   ListOrdered,
-  MessageSquarePlus,
   Text,
   TextQuote,
-  Image as ImageIcon,
   Code,
   CheckSquare,
 } from "lucide-react";
-// import { LoadingCircle } from "@/ui/icons";
 import { toast } from "sonner";
 import va from "@vercel/analytics";
-// import { Magic } from "@/ui/icons";
 import { getPrevText } from "@/lib/editor";
-import * as Popover from "@radix-ui/react-popover";
 import { Icons } from "../icons";
-// import { startImageUpload } from "@/ui/editor/plugins/upload-images";
-// import { NovelContext } from "../provider";
-
-interface CommandItemProps {
-  title: string;
-  description: string;
-  icon: ReactNode;
-}
-
-interface CommandProps {
-  editor: Editor;
-  range: Range;
-}
+import { CommandItemProps, CommandProps } from "@/lib/types";
 
 const Command = Extension.create({
   name: "slash-command",
@@ -145,7 +126,7 @@ const getSuggestionItems = ({ query }: { query: string }) => {
       },
     },
     {
-     title: "Título 3",
+      title: "Título 3",
       description: "Título de seção pequena.",
       searchTerms: ["subtitle", "small"],
       icon: <Heading3 size={18} />,
@@ -372,7 +353,9 @@ const CommandList = ({
             </div>
             <div>
               <p className="text-sm text-heading">{item.title}</p>
-              <p className="text-[0.6rem] opacity-70 tracking-wider">{item.description}</p>
+              <p className="text-[0.6rem] opacity-70 tracking-wider">
+                {item.description}
+              </p>
             </div>
           </button>
         );

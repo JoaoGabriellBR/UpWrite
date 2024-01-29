@@ -12,7 +12,7 @@ import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
 import TiptapLink from "@tiptap/extension-link";
-import Dropcursor from '@tiptap/extension-dropcursor';
+import Dropcursor from "@tiptap/extension-dropcursor";
 import { Markdown } from "tiptap-markdown";
 import SlashCommand from "./slash-command";
 import { EditorProps } from "@/lib/types";

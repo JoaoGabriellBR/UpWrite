@@ -2,10 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { toast } from "@/components/ui/use-toast";
-
-interface UseUnarchiveNoteProps {
-  setOpen?: (value: boolean) => void;
-}
+import { UseUnarchiveNoteProps } from "@/lib/types";
 
 const useUnarchiveNote = ({ setOpen }: UseUnarchiveNoteProps) => {
   const router = useRouter();
