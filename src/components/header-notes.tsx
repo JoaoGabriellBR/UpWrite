@@ -7,7 +7,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { useMutation } from "@tanstack/react-query";
-import AlertDeleteNote from "./alert-delete-note";
 import { usePathname } from "next/navigation";
 import {
   DropdownMenu,
@@ -15,6 +14,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import useUnarchiveNote from "@/hooks/use-unarchive-note";
+import { useState } from "react";
 
 export default function HeaderNotes({
   form,
@@ -26,12 +27,9 @@ export default function HeaderNotes({
   const router = useRouter();
   const queryClient = useQueryClient();
   const pathname = usePathname();
-
-  // const deleteNote = async () => {
-  //   await fetch(`/api/notes/noteId?id=${note?.id}`, {
-  //     method: "DELETE",
-  //   });
-  // };
+  const [restoringNoteId, setRestoringNoteId] = useState(null);
+  const { handleUnarchiveNote, isPendingUnarchive, isSuccessUnarchive } =
+    useUnarchiveNote({});
 
   const archiveNote = async (noteId: any) => {
     await fetch(`/api/notes/archive?id=${noteId}`, {
@@ -71,13 +69,23 @@ export default function HeaderNotes({
     mutate(note?.id);
   }, [mutate, note?.id]);
 
+  const handleClickUnarchiveNote = useCallback(
+    (noteId: any) => {
+      handleUnarchiveNote(noteId);
+      setRestoringNoteId(noteId);
+    },
+    [handleUnarchiveNote]
+  );
+
   const hasTitle = form.getValues("title");
   const isTitleValid = hasTitle && hasTitle.length <= 100;
 
   const buttons = [
     {
       text: "Restaurar",
-      onClick: "",
+      onClick: () => handleClickUnarchiveNote(note?.id),
+      disabled: restoringNoteId === note?.id,
+      condition: isPendingUnarchive,
     },
     {
       text: "Excluir para sempre",
@@ -85,27 +93,35 @@ export default function HeaderNotes({
     },
     {
       text: "Voltar",
-      onClick: "",
+      onClick: () => router.push("/notes"),
     },
   ];
 
   return (
     <>
       <header {...props}>
-        {note?.deleted_at !== null && pathname !== "/createnote" ? (
+        {note?.deleted_at !== null &&
+        pathname !== "/createnote" &&
+        !isSuccessUnarchive ? (
           <div className="py-2 flex flex-wrap justify-center items-center gap-3 bg-red-500">
             <p className="text-sm">Essa nota está na lixeira.</p>
             {buttons?.map((butt, index) => (
               <button
                 key={index}
-                className="flex justify-center items-center w-auto h-5 border border-white p-5 rounded-full text-sm"
+                onClick={butt.onClick}
+                disabled={butt.disabled}
+                className="flex justify-center items-center min-w-50 h-5 border border-white p-5 rounded-full text-sm"
               >
-                {butt.text}
+                {butt.condition ? (
+                  <Icons.spinner className="h-4 w-4 animate-spin" />
+                ) : (
+                  butt.text
+                )}
               </button>
             ))}
           </div>
         ) : (
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-row justify-between items-center px-3">
             <Button variant="ghost" onClick={() => router.back()}>
               <Icons.chevronLeft className="mr-2 h-4 w-4" />
               Voltar
@@ -131,28 +147,29 @@ export default function HeaderNotes({
                   </>
                 )}
               </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Button variant="outline">
-                    {isPending ? (
-                      <Icons.spinner className="h-5 w-5 animate-spin" />
-                    ) : (
-                      <Icons.moreHorizontal className="h-5 w-5" />
-                    )}
-                  </Button>
-                </DropdownMenuTrigger>
+              {pathname === "/createnote" ? null : (
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Button variant="outline">
+                      {isPending ? (
+                        <Icons.spinner className="h-5 w-5 animate-spin" />
+                      ) : (
+                        <Icons.moreHorizontal className="h-5 w-5" />
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
 
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem
-                    className="cursor-pointer"
-                    onClick={handleClickArchive}
-                  >
-                    <Icons.trash className="mr-2 h-4 w-4" />
-                    <p>Excluir nota</p>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              {/* <AlertDeleteNote handleClickDelete={handleClickDelete} /> */}
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem
+                      className="cursor-pointer"
+                      onClick={handleClickArchive}
+                    >
+                      <Icons.trash className="mr-2 h-4 w-4" />
+                      <p>Excluir nota</p>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
           </div>
         )}

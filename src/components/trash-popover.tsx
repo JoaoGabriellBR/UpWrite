@@ -1,26 +1,23 @@
 "use client";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { ModeToggle } from "@/contexts/mode-toggle";
 import { CornerUpLeft, Trash } from "lucide-react";
 import { TooltipComponent } from "./ui/tooltip";
 import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { toast } from "@/components/ui/use-toast";
 import { Icons } from "./icons";
-import { cn } from "@/lib/utils";
 import AlertDeleteNote from "./alert-delete-note";
+import useUnarchiveNote from "@/hooks/use-unarchive-note";
 
 export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
-  const router = useRouter();
-  const queryClient = useQueryClient();
+
   const [restoringNoteId, setRestoringNoteId] = useState(null);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const { handleUnarchiveNote } = useUnarchiveNote(setIsTrashOpen);
 
   const getArchivedNotes = async () => {
     const notes = await fetch("/api/notes/archive");
@@ -33,46 +30,12 @@ export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
     queryFn: getArchivedNotes,
   });
 
-  const unarchiveNote = async (noteId: any) => {
-    await fetch(`/api/notes/unarchive?id=${noteId}`, {
-      method: "PATCH",
-    });
-  };
-
-  const onSuccess = useCallback(() => {
-    router.refresh();
-    setIsTrashOpen(false);
-    toast({
-      title: "Nota restaurada",
-      description: "Sua nota foi restaurada com sucesso.",
-      variant: "default",
-    });
-  }, [router, setIsTrashOpen]);
-
-  const onError = useCallback(() => {
-    toast({
-      title: "Algo deu errado.",
-      description: "Sua nota não foi deletada. Tente novamente.",
-      variant: "destructive",
-    });
-  }, []);
-
-  const { mutate } = useMutation({
-    mutationFn: unarchiveNote,
-    onSuccess,
-    onError,
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-      queryClient.invalidateQueries({ queryKey: ["archivedNotes"] });
-    },
-  });
-
   const handleClickUnarchiveNote = useCallback(
     (noteId: any) => {
-      mutate(noteId);
+      handleUnarchiveNote(noteId);
       setRestoringNoteId(noteId);
     },
-    [mutate]
+    [handleUnarchiveNote]
   );
 
   const buttons = [
