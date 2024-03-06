@@ -1,14 +1,14 @@
-
-# 📆 Olá, Bem-vindo(a) ao UpWrite
-
-UpWrite se trata de um criador de notas fácil e intuito com recursos avançados de edição de texto.
-
-[![Website][Website]][Website-url]
+![Logo do projeto](/public/upwrite-mockup.png)
 
 <br>
 
-https://github.com/JoaoGabriellBR/UpWrite/assets/88870257/9d27b069-5903-4f9d-8b26-1dfd528d3f1c
+# UpWrite
 
+O UpWrite se trata de um criador de notas fácil e intuitivo com recursos avançados de edição de texto.
+
+## 🔥 Introdução
+
+📌 O Upwrite oferece recursos avançados de edição de texto para que você não precise lidar diretamente com código ou linguagens de marcação. No site você pode modificar fontes, cores e tamanhos, incluir links, tabelas e outros elementos, aprimorando assim o conteúdo para que fique mais atrativo e profissional.
 
 ## 🛠 Tecnologias utilizadas
 
@@ -19,6 +19,7 @@ https://github.com/JoaoGabriellBR/UpWrite/assets/88870257/9d27b069-5903-4f9d-8b2
 - [Shadcn UI](https://ui.shadcn.com)
 - [React Query](https://ui.shadcn.com)
 - [Next Auth](https://next-auth.js.org)
+
 ## Rodando localmente
 
 Clone o projeto
@@ -52,6 +53,10 @@ Inicie o servidor
 ```bash
   npm run dev
 ```
+
+## 📄 Licença
+
+Esse projeto está sob a licença MIT - acesse os detalhes [LICENSE.md](/LICENSE).
 
 
 ## 🔗 Links
