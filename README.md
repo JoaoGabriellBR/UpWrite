@@ -56,7 +56,7 @@ Inicie o servidor
 
 ## 📄 Licença
 
-Esse projeto está sob a licença MIT - acesse os detalhes [LICENSE.md](/LICENSE).
+Esse projeto está sob a licença MIT - acesse os detalhes [LICENSE.md](/LICENSE.md).
 
 
 ## 🔗 Links
