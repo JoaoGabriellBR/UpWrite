@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { inputFields } from "@/lib/arrays";
 import { signIn } from "next-auth/react";
-import { getToken } from "next-auth/jwt";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -27,6 +26,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { formSchemaLogin } from "@/lib/schemas";
+import Link from "next/link";
 
 export default function Login() {
   const router = useRouter();
@@ -70,42 +70,21 @@ export default function Login() {
     }
   };
 
-  const handleBack = async (req: any) => {
-    const token = await getToken({ req });
-    if (!token) {
-      return router.push("/");
-    }
-  };
-
   return (
-    <>
-      <header className=" w-full pt-7">
-        <div className="max-w-7xl mx-auto px-4">
-          <Button variant="ghost" onClick={handleBack}>
-            <Icons.chevronLeft className="mr-2 h-4 w-4" />
-            Voltar
-          </Button>
-        </div>
-      </header>
-
-      <section className="overflow-hidden py-8 md:py-20 w-full flex flex-col justify-center items-center">
-        <Card>
-          <CardHeader className="space-y-1 flex items-center">
-            <Icons.logo className="h-6 w-6 text-primary" />
-            <CardTitle className="text-2xl">Bem vindo de volta</CardTitle>
-            <CardDescription>
+    <div className="flex min-h-screen">
+      <div className="flex w-full lg:w-1/2 flex-col items-center justify-center px-6 py-12">
+        <Card className="w-full max-w-md auth-card">
+          <CardHeader className="space-y-1 flex items-center text-center">
+            <Icons.logo className="h-10 w-10 text-primary mb-4" />
+            <CardTitle className="text-2xl text-white">
+              Bem vindo de volta
+            </CardTitle>
+            <CardDescription className="text-gray-400">
               Insira o seu email abaixo para logar em sua conta.
             </CardDescription>
           </CardHeader>
 
           <CardContent className="grid gap-4">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase"></div>
-            </div>
-
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -118,11 +97,14 @@ export default function Login() {
                     name={input.id as "email" | "password"}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{input.label}</FormLabel>
+                        <FormLabel className="text-gray-200">
+                          {input.label}
+                        </FormLabel>
                         <FormControl>
                           <Input
                             type={input.id}
                             placeholder={input.placeholder}
+                            className="bg-[#1F1F1F] border-gray-800 text-white"
                             {...field}
                           />
                         </FormControl>
@@ -131,21 +113,53 @@ export default function Login() {
                     )}
                   />
                 ))}
-                <Button type="submit" disabled={loading} className="w-full">
+                <div className="flex justify-end">
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm text-primary hover:underline"
+                  >
+                    Esqueceu a senha?
+                  </Link>
+                </div>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+                >
                   {loading ? (
                     <>
                       <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                       Entrando
                     </>
                   ) : (
-                    <> Entrar </>
+                    <>Entrar</>
                   )}
                 </Button>
+                <div className="text-center text-sm text-gray-400">
+                  Não possui uma conta?{" "}
+                  <Link
+                    href="/register"
+                    className="text-primary hover:underline"
+                  >
+                    Criar conta
+                  </Link>
+                </div>
               </form>
             </Form>
           </CardContent>
         </Card>
-      </section>
-    </>
+      </div>
+      <div className="hidden lg:flex lg:w-1/2 relative auth-gradient">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-12">
+          <h1 className="text-4xl font-bold mb-4">
+            Desbloqueie sua criatividade com UpWrite.
+          </h1>
+          <p className="text-lg text-center max-w-lg">
+            Sua plataforma inteligente para notas e ideias, potencializada por
+            IA.
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }
