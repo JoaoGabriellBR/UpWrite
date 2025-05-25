@@ -71,93 +71,102 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen">
-      <div className="flex w-full lg:w-1/2 flex-col items-center justify-center px-6 py-12">
-        <Card className="w-full max-w-md auth-card">
-          <CardHeader className="space-y-1 flex items-center text-center">
-            <Icons.logo className="h-10 w-10 text-primary mb-4" />
-            <CardTitle className="text-2xl text-white">
-              Bem vindo de volta
-            </CardTitle>
-            <CardDescription className="text-gray-400">
-              Insira o seu email abaixo para logar em sua conta.
-            </CardDescription>
-          </CardHeader>
+    <div className="min-h-screen">
+      <header className="absolute top-0 left-0 w-full p-4">
+        <Button
+          variant="ghost"
+          onClick={() => router.push("/")}
+          className="hover:bg-background/20"
+        >
+          <Icons.chevronLeft className="mr-2 h-4 w-4" />
+          Voltar
+        </Button>
+      </header>
 
-          <CardContent className="grid gap-4">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="grid gap-4"
-              >
-                {inputFields?.slice(1).map((input) => (
-                  <FormField
-                    key={input.id}
-                    control={form.control}
-                    name={input.id as "email" | "password"}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-gray-200">
-                          {input.label}
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            type={input.id}
-                            placeholder={input.placeholder}
-                            className="bg-[#1F1F1F] border-gray-800 text-white"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-xs" />
-                      </FormItem>
-                    )}
-                  />
-                ))}
-                <div className="flex justify-end">
-                  <Link
-                    href="/forgot-password"
-                    className="text-sm text-primary hover:underline"
-                  >
-                    Esqueceu a senha?
-                  </Link>
-                </div>
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+      <div className="flex min-h-screen">
+        <div className="flex w-full lg:w-1/2 flex-col items-center justify-center px-6 py-12">
+          <Card className="w-full max-w-md auth-card">
+            <CardHeader className="space-y-1 flex items-center text-center">
+              <Icons.logo className="h-10 w-10 text-primary mb-4" />
+              <CardTitle className="text-2xl">Bem vindo de volta</CardTitle>
+              <CardDescription>
+                Insira o seu email abaixo para logar em sua conta.
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent className="grid gap-4">
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="grid gap-4"
                 >
-                  {loading ? (
-                    <>
-                      <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                      Entrando
-                    </>
-                  ) : (
-                    <>Entrar</>
-                  )}
-                </Button>
-                <div className="text-center text-sm text-gray-400">
-                  Não possui uma conta?{" "}
-                  <Link
-                    href="/register"
-                    className="text-primary hover:underline"
+                  {inputFields?.slice(1).map((input) => (
+                    <FormField
+                      key={input.id}
+                      control={form.control}
+                      name={input.id as "email" | "password"}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{input.label}</FormLabel>
+                          <FormControl>
+                            <Input
+                              type={input.id}
+                              placeholder={input.placeholder}
+                              className="auth-input"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-xs" />
+                        </FormItem>
+                      )}
+                    />
+                  ))}
+                  <div className="flex justify-end">
+                    <Link
+                      href="/forgot-password"
+                      className="text-sm text-primary hover:underline"
+                    >
+                      Esqueceu a senha?
+                    </Link>
+                  </div>
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full auth-button"
                   >
-                    Criar conta
-                  </Link>
-                </div>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
-      </div>
-      <div className="hidden lg:flex lg:w-1/2 relative auth-gradient">
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-12">
-          <h1 className="text-4xl font-bold mb-4">
-            Desbloqueie sua criatividade com UpWrite.
-          </h1>
-          <p className="text-lg text-center max-w-lg">
-            Sua plataforma inteligente para notas e ideias, potencializada por
-            IA.
-          </p>
+                    {loading ? (
+                      <>
+                        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                        Entrando
+                      </>
+                    ) : (
+                      <>Entrar</>
+                    )}
+                  </Button>
+                  <div className="text-center text-sm text-muted-foreground">
+                    Não possui uma conta?{" "}
+                    <Link
+                      href="/register"
+                      className="text-primary hover:underline"
+                    >
+                      Criar conta
+                    </Link>
+                  </div>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="hidden lg:flex lg:w-1/2 relative auth-gradient">
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-12">
+            <h1 className="text-4xl font-bold mb-4">
+              Desbloqueie sua criatividade com UpWrite.
+            </h1>
+            <p className="text-lg text-center max-w-lg">
+              Sua plataforma inteligente para notas e ideias, potencializada por
+              IA.
+            </p>
+          </div>
         </div>
       </div>
     </div>
