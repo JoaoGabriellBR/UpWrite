@@ -23,7 +23,7 @@ export const LinkSelector: FC<LinkSelectorProps> = ({
     <Popover.Root open={isOpen}>
       <div className="relative h-full">
         <Popover.Trigger
-          className="w-auto bg-card flex h-full items-center gap-1 whitespace-nowrap p-2 text-xs font-medium hover:bg-accent active:bg-secondary"
+          className="w-auto bg-card flex h-full items-center gap-1 whitespace-nowrap p-2 text-medium hover:bg-accent active:bg-secondary"
           onClick={() => setIsOpen(!isOpen)}
         >
           <ExternalLink className="h-4 w-4" />
@@ -32,7 +32,7 @@ export const LinkSelector: FC<LinkSelectorProps> = ({
 
         <Popover.Content
           align="start"
-          className="bg-card z-[99999] my-1 flex max-h-80 w-48 flex-col overflow-hidden overflow-y-auto rounded border border-secondary p-1 shadow-xl animate-in fade-in slide-in-from-top-1"
+          className="bg-card z-[99999] my-1 flex max-h-80 min-w-48 flex-col overflow-hidden overflow-y-auto rounded border border-secondary p-1 shadow-xl animate-in fade-in slide-in-from-top-1"
         >
           <form
             onSubmit={(e: any) => {
@@ -55,7 +55,7 @@ export const LinkSelector: FC<LinkSelectorProps> = ({
               ref={inputRef}
               placeholder="Cole um link"
               defaultValue={editor.getAttributes("link").href || ""}
-              className="flex-1 p-1 text-xs outline-none h-7"
+              className="flex-1 p-2 text-medium outline-none h-10 w-auto"
             />
           </form>
         </Popover.Content>

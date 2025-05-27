@@ -112,11 +112,11 @@ export default function TiptapMenuBar({ editor }: any) {
             <TooltipComponent text={item.label} key={index} delayDuration={0}>
               <button
                 onClick={item.command}
-                className="p-2 text-xs bg-card hover:bg-accent"
+                className="p-2 text-medium bg-card hover:bg-accent"
                 type="button"
               >
                 <item.icon
-                  className={cn("h-3.5 w-3.5", {
+                  className={cn("h-4 w-4", {
                     "text-primary": item.isActive(),
                   })}
                 />

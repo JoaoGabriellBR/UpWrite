@@ -4,6 +4,7 @@ import {
   Heading1,
   Heading2,
   Heading3,
+  Heading4,
   ListOrdered,
   TextIcon,
   Code,
@@ -47,6 +48,12 @@ export const NodeSelector: FC<NodeSelectorProps> = ({
       icon: Heading3,
       command: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
       isActive: () => editor.isActive("heading", { level: 3 }),
+    },
+    {
+      name: "Título 4",
+      icon: Heading4,
+      command: () => editor.chain().focus().toggleHeading({ level: 4 }).run(),
+      isActive: () => editor.isActive("heading", { level: 4 }),
     },
     {
       name: "Lista de tarefas",
@@ -94,7 +101,7 @@ export const NodeSelector: FC<NodeSelectorProps> = ({
     <Popover.Root open={isOpen}>
       <div className="relative h-full">
         <Popover.Trigger
-          className="w-auto bg-card flex h-full items-center gap-1 whitespace-nowrap p-2 text-xs font-medium hover:bg-accent active:bg-secondary"
+          className="w-auto bg-card flex h-full items-center gap-1 whitespace-nowrap p-2 text-medium hover:bg-accent active:bg-secondary"
           onClick={() => setIsOpen(!isOpen)}
         >
           <span>{activeItem?.name}</span>
@@ -103,7 +110,7 @@ export const NodeSelector: FC<NodeSelectorProps> = ({
 
         <Popover.Content
           align="start"
-          className="bg-card z-[99999] my-1 flex max-h-80 w-48 flex-col overflow-hidden overflow-y-auto rounded border border-secondary p-1 shadow-xl animate-in fade-in slide-in-from-top-1"
+          className="bg-card z-[99999] my-1 flex max-h-80 min-w-48 flex-col overflow-hidden overflow-y-auto rounded border border-secondary p-1 shadow-xl animate-in fade-in slide-in-from-top-1"
         >
           {items.map((item: any, index: any) => (
             <button
@@ -112,7 +119,7 @@ export const NodeSelector: FC<NodeSelectorProps> = ({
                 item.command();
                 setIsOpen(false);
               }}
-              className="flex items-center justify-between rounded-sm px-2 py-1 text-xs bg-card hover:bg-accent"
+              className="flex items-center justify-between rounded-sm px-2 py-1 text-medium bg-card hover:bg-accent"
               type="button"
             >
               <div className="flex items-center space-x-2">

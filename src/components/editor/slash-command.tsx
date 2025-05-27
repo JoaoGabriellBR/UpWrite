@@ -20,6 +20,7 @@ import {
   TextQuote,
   Code,
   CheckSquare,
+  Heading4,
 } from "lucide-react";
 import { toast } from "sonner";
 import va from "@vercel/analytics";
@@ -136,6 +137,20 @@ const getSuggestionItems = ({ query }: { query: string }) => {
           .focus()
           .deleteRange(range)
           .setNode("heading", { level: 3 })
+          .run();
+      },
+    },
+    {
+      title: "Título 4",
+      description: "Título de seção bem pequena.",
+      searchTerms: ["subtitle", "small"],
+      icon: <Heading4 size={18} />,
+      command: ({ editor, range }: CommandProps) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .setNode("heading", { level: 4 })
           .run();
       },
     },
