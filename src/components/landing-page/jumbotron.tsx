@@ -7,9 +7,9 @@ export default function Jumbotron() {
     <>
       <section
         id="home"
-        className="py-8 md:py-20 w-full flex flex-col justify-center items-center"
+        className="min-h-[60vh] w-full flex flex-col justify-center items-center"
       >
-        <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
+        <div className="container flex max-w-7xl flex-col items-center gap-4 text-center">
           <Link
             href="https://github.com/JoaoGabriellBR/UpWrite"
             className="rounded-2xl bg-muted px-4 py-1.5 text-sm font-medium"
@@ -17,7 +17,7 @@ export default function Jumbotron() {
           >
             Confira o projeto no Github
           </Link>
-          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-8xl">
             Simplifique sua vida e aumente sua produtividade.
           </h1>
           <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
