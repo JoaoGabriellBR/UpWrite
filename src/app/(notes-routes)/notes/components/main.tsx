@@ -47,7 +47,6 @@ import useArchiveNote from "@/hooks/use-archive-note";
 import { toast } from "@/components/ui/use-toast";
 import { Icons } from "@/components/icons";
 import { NoteSkeleton, NoteListSkeleton } from "@/components/note-skeleton";
-import { useDebounce } from "usehooks-ts";
 
 export default function Main({
   defaultLayout = [265, 655],
@@ -95,6 +94,37 @@ export default function Main({
     enabled: !!selectedNote?.id,
   });
 
+  const createNewNote = async () => {
+    const response = await fetch("/api/notes", {
+      method: "POST",
+      body: JSON.stringify({
+        title: "Nova nota",
+        content: {
+          type: "doc",
+          content: [{ type: "paragraph", content: [] }],
+        },
+      }),
+    });
+    const data = await response.json();
+    return data;
+  };
+
+  const { mutate: createNoteMutation, isPending: isCreating } = useMutation({
+    mutationFn: createNewNote,
+    onSuccess: (newNote) => {
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+      setSelectedNote(newNote);
+      form.setValue("title", newNote.title);
+    },
+    onError: () => {
+      toast({
+        title: "Erro ao criar nota",
+        description: "Não foi possível criar uma nova nota.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const updateNote = async (noteData: {
     id: string;
     title?: string;
@@ -107,13 +137,15 @@ export default function Main({
 
     setIsUpdating(true);
     try {
-      await fetch(`/api/notes/noteId?id=${noteData.id}`, {
+      const response = await fetch(`/api/notes/noteId?id=${noteData.id}`, {
         method: "PATCH",
         body: JSON.stringify({
           title: noteData.title,
           content: noteData.content,
         }),
       });
+      const updatedNote = await response.json();
+      return updatedNote;
     } catch (error) {
       console.error("Erro ao atualizar nota:", error);
       toast({
@@ -125,8 +157,6 @@ export default function Main({
       setIsUpdating(false);
     }
   };
-
-  const debouncedUpdateNote = useDebounce(updateNote, 500);
 
   const { mutate: updateNoteMutation } = useMutation({
     mutationFn: updateNote,
@@ -150,7 +180,7 @@ export default function Main({
     if (notes && notes.length > 0 && !selectedNote) {
       const sortedNotes = [...notes].sort(
         (a, b) =>
-          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       );
       setSelectedNote(sortedNotes[0]);
       form.setValue("title", sortedNotes[0].title);
@@ -163,7 +193,7 @@ export default function Main({
   };
 
   const handleNewNote = () => {
-    router.push("/createnote");
+    createNoteMutation();
   };
 
   const handleChangeContent = useCallback(
@@ -173,12 +203,26 @@ export default function Main({
       }
 
       const content = editor.getJSON();
-      debouncedUpdateNote({
+      updateNoteMutation({
         id: selectedNote.id,
         content,
       });
     },
-    [selectedNote, isUpdating, debouncedUpdateNote]
+    [selectedNote, isUpdating, updateNoteMutation]
+  );
+
+  const handleTitleChange = useCallback(
+    (title: string) => {
+      if (!selectedNote?.id || isUpdating) {
+        return;
+      }
+
+      updateNoteMutation({
+        id: selectedNote.id,
+        title,
+      });
+    },
+    [selectedNote, isUpdating, updateNoteMutation]
   );
 
   const handleArchiveClick = useCallback(() => {
@@ -189,6 +233,13 @@ export default function Main({
     handleArchiveNote(selectedNote.id);
     setSelectedNote(null);
   }, [selectedNote, handleArchiveNote]);
+
+  const sortedNotes = notes
+    ? [...notes].sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      )
+    : [];
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -274,7 +325,7 @@ export default function Main({
                   <NoteListSkeleton />
                 ) : (
                   <NotesList
-                    notes={notes}
+                    notes={sortedNotes}
                     isLoading={isLoading}
                     onNoteSelect={handleNoteSelect}
                     selectedNote={selectedNote}
@@ -334,6 +385,7 @@ export default function Main({
                     form={form}
                     content={currentNote?.content}
                     handleChangeContent={handleChangeContent}
+                    onTitleChange={handleTitleChange}
                   />
                 </div>
               </>

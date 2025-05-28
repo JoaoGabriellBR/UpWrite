@@ -34,6 +34,7 @@ export interface EditorProps {
   form?: any;
   content: any;
   handleChangeContent: ({ editor }: { editor: Editor }) => void;
+  onTitleChange?: (title: string) => void;
   readOnly?: boolean;
 }
 

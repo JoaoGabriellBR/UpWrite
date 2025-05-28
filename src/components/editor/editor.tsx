@@ -32,6 +32,7 @@ export default function Editor({
   form,
   content,
   handleChangeContent,
+  onTitleChange,
   readOnly = false,
 }: EditorProps) {
   const editor = useEditor({
@@ -146,6 +147,14 @@ export default function Editor({
     }
   }, [content, editor]);
 
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitle = e.target.value;
+    form.setValue("title", newTitle);
+    if (onTitleChange) {
+      onTitleChange(newTitle);
+    }
+  };
+
   if (!editor) return null;
 
   return (
@@ -161,6 +170,7 @@ export default function Editor({
               <FormControl>
                 <Input
                   {...field}
+                  onChange={handleTitleChange}
                   outline
                   placeholder="Sem título"
                   className="pl-0 py-7 border-none font-bold placeholder:font-normal placeholder:opacity-40 scroll-m-20 tracking-tight text-2xl md:text-3xl lg:text-4xl"
