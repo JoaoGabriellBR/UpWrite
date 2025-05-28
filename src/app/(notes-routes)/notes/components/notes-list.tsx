@@ -3,9 +3,10 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Icons } from "@/components/icons";
-import { File } from "lucide-react";
+import { File, Plus } from "lucide-react";
 import { getNoteTimestamp } from "@/lib/getNoteTimestamp";
 import { NoteProps } from "@/lib/types";
+import { Button } from "@/components/ui/button";
 
 interface NotesListProps {
   notes: NoteProps[];
@@ -13,6 +14,7 @@ interface NotesListProps {
   onNoteSelect: (note: NoteProps) => void;
   selectedNote: NoteProps | null;
   isCollapsed: boolean;
+  onNewNote: () => void;
 }
 
 export function NotesList({
@@ -21,6 +23,7 @@ export function NotesList({
   onNoteSelect,
   selectedNote,
   isCollapsed,
+  onNewNote,
 }: NotesListProps) {
   if (isLoading) {
     return (
@@ -33,8 +36,18 @@ export function NotesList({
   if (!notes?.length) {
     return (
       <div className="flex flex-col items-center justify-center h-full p-4 text-muted-foreground">
-        <File className="h-8 w-8 mb-2" />
-        <p className="text-sm text-center">Nenhuma nota encontrada</p>
+        <File className="h-8 w-8 mb-4" />
+        <p className="text-sm text-center mb-4">
+          Você ainda não possui nenhuma nota
+        </p>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={onNewNote}
+          className="h-10 w-10 rounded-full"
+        >
+          <Plus className="h-4 w-4" />
+        </Button>
       </div>
     );
   }

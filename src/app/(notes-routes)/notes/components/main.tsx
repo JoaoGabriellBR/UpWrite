@@ -47,6 +47,7 @@ import useArchiveNote from "@/hooks/use-archive-note";
 import { toast } from "@/components/ui/use-toast";
 import { Icons } from "@/components/icons";
 import { NoteSkeleton, NoteListSkeleton } from "@/components/note-skeleton";
+import debounce from "lodash/debounce";
 
 export default function Main({
   defaultLayout = [265, 655],
@@ -135,7 +136,6 @@ export default function Main({
       return;
     }
 
-    setIsUpdating(true);
     try {
       const response = await fetch(`/api/notes/noteId?id=${noteData.id}`, {
         method: "PATCH",
@@ -153,27 +153,140 @@ export default function Main({
         description: "Não foi possível salvar as alterações.",
         variant: "destructive",
       });
-    } finally {
-      setIsUpdating(false);
     }
   };
 
   const { mutate: updateNoteMutation } = useMutation({
     mutationFn: updateNote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-      if (selectedNote?.id) {
-        queryClient.invalidateQueries({ queryKey: ["note", selectedNote.id] });
+    onMutate: async (newNote) => {
+      await queryClient.cancelQueries({ queryKey: ["note", newNote.id] });
+      await queryClient.cancelQueries({ queryKey: ["notes"] });
+
+      // Snapshot do estado anterior
+      const previousNote = queryClient.getQueryData(["note", newNote.id]);
+      const previousNotes = queryClient.getQueryData(["notes"]);
+
+      // Atualização otimista da nota atual
+      queryClient.setQueryData(["note", newNote.id], (old: any) => ({
+        ...old,
+        ...newNote,
+      }));
+
+      // Atualização otimista da lista de notas
+      if (previousNotes) {
+        queryClient.setQueryData(["notes"], (old: any) =>
+          old.map((note: NoteProps) =>
+            note.id === newNote.id
+              ? {
+                  ...note,
+                  ...newNote,
+                  updated_at: new Date().toISOString(),
+                }
+              : note
+          )
+        );
       }
+
+      return { previousNote, previousNotes };
     },
-    onError: () => {
+    onError: (err, newNote, context: any) => {
+      // Em caso de erro, reverte as alterações
+      if (context?.previousNote) {
+        queryClient.setQueryData(["note", newNote.id], context.previousNote);
+      }
+      if (context?.previousNotes) {
+        queryClient.setQueryData(["notes"], context.previousNotes);
+      }
       toast({
         title: "Erro ao salvar",
         description: "Não foi possível salvar as alterações.",
         variant: "destructive",
       });
     },
+    onSettled: (data, error, variables) => {
+      // Revalida silenciosamente apenas a nota atual
+      queryClient.invalidateQueries({
+        queryKey: ["note", variables.id],
+        exact: true,
+        refetchType: "none",
+      });
+    },
   });
+
+  // Ref para armazenar as funções de debounce
+  const debouncedFns = React.useRef({
+    content: debounce((data: any) => updateNoteMutation(data), 1000),
+    title: debounce((data: any) => updateNoteMutation(data), 500),
+  }).current;
+
+  const handleChangeContent = useCallback(
+    ({ editor }: any) => {
+      if (!selectedNote?.id) return;
+
+      const content = editor.getJSON();
+      const now = new Date().toISOString();
+
+      // Atualização otimista local da nota e da lista
+      const updatedNote = {
+        id: selectedNote.id,
+        content,
+        updated_at: now,
+      };
+
+      // Atualiza o cache da nota e da lista
+      queryClient.setQueryData(["note", selectedNote.id], (old: any) => ({
+        ...old,
+        ...updatedNote,
+      }));
+
+      queryClient.setQueryData(["notes"], (old: any) =>
+        old?.map((note: NoteProps) =>
+          note.id === selectedNote.id ? { ...note, ...updatedNote } : note
+        )
+      );
+
+      // Debounce da atualização no servidor
+      debouncedFns.content(updatedNote);
+    },
+    [selectedNote?.id, queryClient, debouncedFns]
+  );
+
+  const handleTitleChange = useCallback(
+    (title: string) => {
+      if (!selectedNote?.id) return;
+
+      const now = new Date().toISOString();
+      const updatedNote = {
+        id: selectedNote.id,
+        title,
+        updated_at: now,
+      };
+
+      // Atualiza o cache da nota e da lista
+      queryClient.setQueryData(["note", selectedNote.id], (old: any) => ({
+        ...old,
+        ...updatedNote,
+      }));
+
+      queryClient.setQueryData(["notes"], (old: any) =>
+        old?.map((note: NoteProps) =>
+          note.id === selectedNote.id ? { ...note, ...updatedNote } : note
+        )
+      );
+
+      // Debounce da atualização no servidor
+      debouncedFns.title(updatedNote);
+    },
+    [selectedNote?.id, queryClient, debouncedFns]
+  );
+
+  // Limpa os debounces quando o componente é desmontado
+  useEffect(() => {
+    return () => {
+      debouncedFns.content.cancel();
+      debouncedFns.title.cancel();
+    };
+  }, [debouncedFns]);
 
   // Set the most recent note as selected when notes are loaded
   useEffect(() => {
@@ -195,35 +308,6 @@ export default function Main({
   const handleNewNote = () => {
     createNoteMutation();
   };
-
-  const handleChangeContent = useCallback(
-    ({ editor }: any) => {
-      if (!selectedNote?.id || isUpdating) {
-        return;
-      }
-
-      const content = editor.getJSON();
-      updateNoteMutation({
-        id: selectedNote.id,
-        content,
-      });
-    },
-    [selectedNote, isUpdating, updateNoteMutation]
-  );
-
-  const handleTitleChange = useCallback(
-    (title: string) => {
-      if (!selectedNote?.id || isUpdating) {
-        return;
-      }
-
-      updateNoteMutation({
-        id: selectedNote.id,
-        title,
-      });
-    },
-    [selectedNote, isUpdating, updateNoteMutation]
-  );
 
   const handleArchiveClick = useCallback(() => {
     if (!selectedNote?.id) {
@@ -330,6 +414,7 @@ export default function Main({
                     onNoteSelect={handleNoteSelect}
                     selectedNote={selectedNote}
                     isCollapsed={isCollapsed}
+                    onNewNote={handleNewNote}
                   />
                 )}
               </div>
