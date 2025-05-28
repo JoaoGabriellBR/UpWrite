@@ -7,12 +7,14 @@ import Novidades from "@/components/landing-page/novidades";
 import PerguntasRespostas from "@/components/landing-page/perguntas-e-respostas";
 import DeUmUp from "@/components/landing-page/de-um-up";
 import Footer from "@/components/landing-page/footer";
+import ScreenMockup from "@/components/landing-page/screen-mockup";
 
 export default function Home() {
   return (
     <>
       <Header />
       <Jumbotron />
+      <ScreenMockup />
       <Garanta />
       <Organizaçao />
       <Preserve />
