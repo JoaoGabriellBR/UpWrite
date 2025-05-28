@@ -33,7 +33,8 @@ export interface NoteProps {
 export interface EditorProps {
   form?: any;
   content: any;
-  handleChangeContent: (newValue: JSONContent) => void;
+  handleChangeContent: ({ editor }: { editor: Editor }) => void;
+  readOnly?: boolean;
 }
 
 export interface MailProps {

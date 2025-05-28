@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -22,10 +24,14 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+  const session = await getServerSession(authOptions);
   const { searchParams } = new URL(request.url);
   const noteId = searchParams.get("id");
-
   const { title, content } = await request.json();
+
+  if (!session) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     const response = await prisma.notes.update({
@@ -33,16 +39,16 @@ export async function PATCH(request: Request) {
         id: String(noteId),
       },
       data: {
-        title,
-        content,
+        ...(title && { title }),
+        ...(content && { content }),
         updated_at: new Date(),
       },
     });
 
-    return NextResponse.json({ response });
+    return NextResponse.json(response, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { message: "Não foi possível atualizar a nota." },
+      { message: "Não foi possível atualizar a nota" },
       { status: 500 }
     );
   }

@@ -25,11 +25,14 @@ import {
 } from "@/components/ui/form";
 import "./styles/prosemirror.css";
 import "./styles/colors.css";
+import { useDebounce } from "usehooks-ts";
+import { useEffect } from "react";
 
 export default function Editor({
   form,
   content,
   handleChangeContent,
+  readOnly = false,
 }: EditorProps) {
   const editor = useEditor({
     editorProps: {
@@ -124,8 +127,24 @@ export default function Editor({
       }),
     ],
     content: content,
-    onUpdate: ({ editor }) => handleChangeContent({ editor }),
+    onUpdate: ({ editor }) => {
+      if (!readOnly) {
+        handleChangeContent({ editor });
+      }
+    },
+    editable: !readOnly,
   });
+
+  useEffect(() => {
+    if (editor && content) {
+      const currentContent = editor.getJSON();
+      if (JSON.stringify(currentContent) !== JSON.stringify(content)) {
+        const selection = editor.state.selection;
+        editor.commands.setContent(content);
+        editor.commands.setTextSelection(selection);
+      }
+    }
+  }, [content, editor]);
 
   if (!editor) return null;
 

@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Archive,
   File,
@@ -9,6 +9,7 @@ import {
   Search,
   Settings,
   Trash2,
+  MoreHorizontal,
 } from "lucide-react";
 
 import { NotesList } from "@/app/(notes-routes)/notes/components/notes-list";
@@ -16,15 +17,21 @@ import { SideBar } from "@/app/(notes-routes)/notes/components/sidebar";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import DropdownAvatar from "@/components/dropdown-avatar";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useMediaQuery } from "usehooks-ts";
@@ -36,6 +43,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createTitleSchema } from "@/lib/schemas";
 import * as z from "zod";
+import useArchiveNote from "@/hooks/use-archive-note";
+import { toast } from "@/components/ui/use-toast";
+import { Icons } from "@/components/icons";
+import { NoteSkeleton, NoteListSkeleton } from "@/components/note-skeleton";
+import { useDebounce } from "usehooks-ts";
 
 export default function Main({
   defaultLayout = [265, 655],
@@ -46,8 +58,11 @@ export default function Main({
   const [isOpen, setIsOpened] = useState(false);
   const [isTrashOpen, setIsTrashOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState<NoteProps | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const { handleArchiveNote, isPendingArchive } = useArchiveNote();
 
   const form = useForm<z.infer<typeof createTitleSchema>>({
     mode: "onChange",
@@ -68,9 +83,71 @@ export default function Main({
     queryFn: getUserNotes,
   });
 
+  const getNoteById = async (noteId: string) => {
+    const response = await fetch(`/api/notes/noteId?id=${noteId}`);
+    const data = await response.json();
+    return data;
+  };
+
+  const { data: currentNote, isLoading: isLoadingNote } = useQuery({
+    queryKey: ["note", selectedNote?.id],
+    queryFn: () => (selectedNote?.id ? getNoteById(selectedNote.id) : null),
+    enabled: !!selectedNote?.id,
+  });
+
+  const updateNote = async (noteData: {
+    id: string;
+    title?: string;
+    content?: any;
+  }) => {
+    if (!noteData?.id) {
+      console.error("Tentativa de atualizar nota sem ID");
+      return;
+    }
+
+    setIsUpdating(true);
+    try {
+      await fetch(`/api/notes/noteId?id=${noteData.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          title: noteData.title,
+          content: noteData.content,
+        }),
+      });
+    } catch (error) {
+      console.error("Erro ao atualizar nota:", error);
+      toast({
+        title: "Erro ao salvar",
+        description: "Não foi possível salvar as alterações.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const debouncedUpdateNote = useDebounce(updateNote, 500);
+
+  const { mutate: updateNoteMutation } = useMutation({
+    mutationFn: updateNote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+      if (selectedNote?.id) {
+        queryClient.invalidateQueries({ queryKey: ["note", selectedNote.id] });
+      }
+    },
+    onError: () => {
+      toast({
+        title: "Erro ao salvar",
+        description: "Não foi possível salvar as alterações.",
+        variant: "destructive",
+      });
+    },
+  });
+
   // Set the most recent note as selected when notes are loaded
   useEffect(() => {
-    if (notes && notes.length > 0) {
+    if (notes && notes.length > 0 && !selectedNote) {
       const sortedNotes = [...notes].sort(
         (a, b) =>
           new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
@@ -78,7 +155,7 @@ export default function Main({
       setSelectedNote(sortedNotes[0]);
       form.setValue("title", sortedNotes[0].title);
     }
-  }, [notes, form]);
+  }, [notes, form, selectedNote]);
 
   const handleNoteSelect = (note: NoteProps) => {
     setSelectedNote(note);
@@ -89,6 +166,30 @@ export default function Main({
     router.push("/createnote");
   };
 
+  const handleChangeContent = useCallback(
+    ({ editor }: any) => {
+      if (!selectedNote?.id || isUpdating) {
+        return;
+      }
+
+      const content = editor.getJSON();
+      debouncedUpdateNote({
+        id: selectedNote.id,
+        content,
+      });
+    },
+    [selectedNote, isUpdating, debouncedUpdateNote]
+  );
+
+  const handleArchiveClick = useCallback(() => {
+    if (!selectedNote?.id) {
+      return;
+    }
+
+    handleArchiveNote(selectedNote.id);
+    setSelectedNote(null);
+  }, [selectedNote, handleArchiveNote]);
+
   return (
     <TooltipProvider delayDuration={0}>
       <ResizablePanelGroup
@@ -98,7 +199,7 @@ export default function Main({
             sizes
           )}`;
         }}
-        className="h-full max-h-[800px] items-stretch"
+        className="h-screen items-stretch"
       >
         <ResizablePanel
           defaultSize={defaultLayout[0]}
@@ -160,20 +261,26 @@ export default function Main({
 
             <div className="flex-1 overflow-hidden">
               <div className="p-2">
-                <Input
-                  placeholder="Pesquisar notas..."
-                  className="w-full"
-                  prefix={<Search className="w-4 h-4 text-muted-foreground" />}
-                />
+                <div className="relative">
+                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Pesquisar notas..."
+                    className="w-full pl-8"
+                  />
+                </div>
               </div>
               <div className="h-[calc(100%-60px)] overflow-y-auto">
-                <NotesList
-                  notes={notes}
-                  isLoading={isLoading}
-                  onNoteSelect={handleNoteSelect}
-                  selectedNote={selectedNote}
-                  isCollapsed={isCollapsed}
-                />
+                {isLoading ? (
+                  <NoteListSkeleton />
+                ) : (
+                  <NotesList
+                    notes={notes}
+                    isLoading={isLoading}
+                    onNoteSelect={handleNoteSelect}
+                    selectedNote={selectedNote}
+                    isCollapsed={isCollapsed}
+                  />
+                )}
               </div>
             </div>
 
@@ -189,19 +296,44 @@ export default function Main({
 
         <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
           <div className="h-full flex flex-col">
-            {selectedNote ? (
+            {isLoadingNote ? (
+              <div className="p-4">
+                <NoteSkeleton />
+              </div>
+            ) : selectedNote ? (
               <>
                 <div className="flex items-center justify-between p-4 border-b">
                   <h1 className="text-xl font-semibold truncate">
                     {selectedNote.title}
                   </h1>
+                  <div className="flex items-center gap-2">
+                    {isUpdating && (
+                      <Icons.spinner className="h-4 w-4 animate-spin text-muted-foreground" />
+                    )}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          {isPendingArchive ? (
+                            <Icons.spinner className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <MoreHorizontal className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={handleArchiveClick}>
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          <span>Excluir nota</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
                 <div className="flex-1 overflow-y-auto p-4">
                   <Editor
                     form={form}
-                    content={selectedNote.content}
-                    handleChangeContent={() => {}}
-                    readOnly
+                    content={currentNote?.content}
+                    handleChangeContent={handleChangeContent}
                   />
                 </div>
               </>
