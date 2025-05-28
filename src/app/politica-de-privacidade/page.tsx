@@ -9,7 +9,7 @@ export default function PoliticaDePrivacidade() {
         <div className="max-w-4xl mx-auto px-4 flex flex-col space-y-5">
           <h1 className="font-heading text-4xl sm:text-4xl md:text-5xl lg:text-6xl">
             Política de privacidade do{" "}
-            <span className="text-primary">UpWrite</span>
+            <span className="text-gradient">UpWrite</span>
           </h1>
 
           <div className="space-y-5 text-justify leading-normal text-muted-foreground sm:text-lg sm:leading-8">
@@ -18,7 +18,7 @@ export default function PoliticaDePrivacidade() {
                 A sua privacidade é importante para nós. É política do UpWrite
                 respeitar a sua privacidade em relação a qualquer informação sua
                 que possamos coletar no site{" "}
-                <a className="text-primary" href="/">
+                <a className="text-gradient" href="/">
                   UpWrite
                 </a>
                 , e outros sites que possuímos e operamos.

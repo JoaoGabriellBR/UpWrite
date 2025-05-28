@@ -9,7 +9,7 @@ export default function TermosECondiçoes() {
         <div className="max-w-4xl mx-auto px-4 flex flex-col space-y-5">
           <h1 className="font-heading text-4xl sm:text-4xl md:text-5xl lg:text-6xl">
             Termos e condições de uso do{" "}
-            <span className="text-primary">UpWrite</span>
+            <span className="text-gradient">UpWrite</span>
           </h1>
 
           <div className="space-y-5 text-justify leading-normal text-muted-foreground sm:text-lg sm:leading-8">
@@ -19,7 +19,7 @@ export default function TermosECondiçoes() {
             <p>
               <span>
                 Ao acessar o site{" "}
-                <a className="text-primary" href="/">
+                <a className="text-gradient" href="/">
                   UpWrite
                 </a>
                 , concorda em cumprir estes termos de serviço, todas as leis e

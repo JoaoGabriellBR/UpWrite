@@ -28,7 +28,7 @@ export default function Jumbotron() {
             <Button asChild size="default">
               <Link
                 href="/register"
-                className="flex flex-row items-center gap-2"
+                className="flex flex-row items-center gap-2 bg-gradient"
               >
                 Registrar
                 <Icons.arrowRight size={15} />
