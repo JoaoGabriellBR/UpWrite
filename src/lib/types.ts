@@ -26,7 +26,8 @@ export interface NoteProps {
   content: any;
   created_at: Date;
   updated_at: Date;
-  deleted_at: Date;
+  deleted_at: Date | null;
+  author_id?: string;
 }
 
 export interface EditorProps {

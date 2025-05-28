@@ -2,51 +2,79 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Card, CardHeader, CardFooter, CardTitle } from "@/components/ui/card";
 import { Icons } from "@/components/icons";
-import Link from "next/link";
+import { File } from "lucide-react";
 import { getNoteTimestamp } from "@/lib/getNoteTimestamp";
+import { NoteProps } from "@/lib/types";
 
-export function NotesList({ notes, isLoading }: any) {
+interface NotesListProps {
+  notes: NoteProps[];
+  isLoading: boolean;
+  onNoteSelect: (note: NoteProps) => void;
+  selectedNote: NoteProps | null;
+  isCollapsed: boolean;
+}
+
+export function NotesList({
+  notes,
+  isLoading,
+  onNoteSelect,
+  selectedNote,
+  isCollapsed,
+}: NotesListProps) {
+  if (isLoading) {
+    return (
+      <div className="mt-4 h-full w-full flex justify-center items-center">
+        <Icons.spinner className="text-primary h-6 w-6 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!notes?.length) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full p-4 text-muted-foreground">
+        <File className="h-8 w-8 mb-2" />
+        <p className="text-sm text-center">Nenhuma nota encontrada</p>
+      </div>
+    );
+  }
+
+  const sortedNotes = [...notes].sort(
+    (a, b) =>
+      new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+  );
+
   return (
-    <ScrollArea className="h-screen">
-      {isLoading ? (
-        <div className="mt-10 h-full w-full flex justify-center items-center">
-          <Icons.spinner className="text-primary h-10 w-10 animate-spin" />
-        </div>
-      ) : (
-        <div className="w-full h-full p-4 flex flex-col md:flex-row lg:flex-row flex-wrap justify-start items-center gap-3">
-          <Link href="/createnote" className="w-full md:w-fit h-full">
-            <Card className="text-white bg-gradient cursor-pointer w-full md:w-[12rem] h-[5rem] md:h-[15rem] flex flex-col justify-center items-center gap-2">
-              <div className="flex items-center justify-center rounded-full">
-                <Icons.bookOpen className={cn("h-6 md:h-10 w-6 md:w-10")} />
-              </div>
-              <h2 className={cn("text-sm md:text-md")}>Nova nota</h2>
-            </Card>
-          </Link>
-          {notes?.map((note: any) => (
-            <Card
-              key={note?.id}
-              className="w-full md:w-[12rem] lg:w-[12rem] h-[10rem] md:h-[15rem] lg:h-[15rem] flex flex-col justify-between"
-            >
-              <CardHeader className="flex flex-row justify-between items-center">
-                <Link href={`/editnote/${note?.id}`}>
-                  <CardTitle className="cursor-pointer text-heading text-md hover:underline underline-offset-2">
-                    {note?.title?.length >= 40
-                      ? note?.title.slice(0, 40) + "..."
-                      : note?.title}
-                  </CardTitle>
-                </Link>
-              </CardHeader>
-              <CardFooter>
-                <span className="text-xs text-muted-foreground">
+    <div className="px-2">
+      {sortedNotes.map((note) => (
+        <button
+          key={note.id}
+          onClick={() => onNoteSelect(note)}
+          className={cn(
+            "w-full text-left px-2 py-1.5 rounded-lg transition-colors",
+            "hover:bg-muted/50",
+            selectedNote?.id === note.id && "bg-muted",
+            "flex items-start gap-2",
+            isCollapsed ? "justify-center" : "justify-start"
+          )}
+        >
+          {isCollapsed ? (
+            <File className="h-4 w-4 shrink-0 mt-0.5" />
+          ) : (
+            <>
+              <File className="h-4 w-4 shrink-0 mt-0.5" />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium truncate">
+                  {note.title || "Sem título"}
+                </p>
+                <p className="text-xs text-muted-foreground truncate">
                   {getNoteTimestamp(note)}
-                </span>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-      )}
-    </ScrollArea>
+                </p>
+              </div>
+            </>
+          )}
+        </button>
+      ))}
+    </div>
   );
 }
