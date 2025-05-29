@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { IconType } from "react-icons";
-import { IoSettingsOutline } from "react-icons/io5";
+import { IoAddCircleOutline, IoSettingsOutline } from "react-icons/io5";
+import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { LuArrowLeftFromLine, LuTrash } from "react-icons/lu";
 import { LuLogOut } from "react-icons/lu";
@@ -22,13 +23,20 @@ const Sidebar = () => {
   return (
     <motion.nav
       layout
-      className="sticky top-0 max-h-screen shrink-0 border-r border-slate-300 bg-white p-2"
+      className="sticky top-0 max-h-screen shrink-0 border-r border-slate-300 bg-white p-2 space-y-10"
       style={{
         width: open ? "300px" : "fit-content",
       }}
     >
       <ToggleClose open={open} setOpen={setOpen} />
       <div className="space-y-1">
+        <Option
+          Icon={MdOutlineAddCircleOutline}
+          title="Nova nota"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+        />
         <Option
           Icon={IoSettingsOutline}
           title="Configurações"
@@ -75,10 +83,8 @@ const Option = ({
     <motion.button
       layout
       onClick={() => setSelected(title)}
-      className={`relative flex h-10 w-full items-center rounded-md transition-colors ${
-        selected === title
-          ? "bg-indigo-100 text-indigo-800"
-          : "text-secondary hover:bg-slate-100"
+      className={`relative flex h-10 w-full items-center rounded-md transition-colors text-secondary hover:bg-slate-100 ${
+        title === "Nova nota" && "bg-gradient"
       }`}
     >
       <motion.div
@@ -143,4 +149,8 @@ const ToggleClose = ({
   );
 };
 
-const ExampleContent = () => <div className="h-[200vh] w-full"><h1>teste</h1></div>;
+const ExampleContent = () => (
+  <div className="h-[200vh] w-full">
+    <h1>teste</h1>
+  </div>
+);
