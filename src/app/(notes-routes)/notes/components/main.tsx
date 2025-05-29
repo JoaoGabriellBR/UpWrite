@@ -11,8 +11,7 @@ import {
   Trash2,
   MoreHorizontal,
 } from "lucide-react";
-
-import { NotesList } from "@/app/(notes-routes)/notes/components/notes-list";
+import { NotesList } from "./notes-list";
 import { SideBar } from "@/app/(notes-routes)/notes/components/sidebar";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
