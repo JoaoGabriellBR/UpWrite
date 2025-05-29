@@ -47,6 +47,7 @@ import { toast } from "@/components/ui/use-toast";
 import { Icons } from "@/components/icons";
 import { NoteSkeleton, NoteListSkeleton } from "@/components/note-skeleton";
 import debounce from "lodash/debounce";
+import { RetractingSideBar } from "@/components/retracting-sidedar";
 
 export default function Main({
   defaultLayout = [265, 655],
@@ -326,7 +327,7 @@ export default function Main({
 
   return (
     <TooltipProvider delayDuration={0}>
-      <ResizablePanelGroup
+      {/* <ResizablePanelGroup
         direction="horizontal"
         onLayout={(sizes: number[]) => {
           document.cookie = `react-resizable-panels:layout=${JSON.stringify(
@@ -481,7 +482,8 @@ export default function Main({
             )}
           </div>
         </ResizablePanel>
-      </ResizablePanelGroup>
+      </ResizablePanelGroup> */}
+      <RetractingSideBar />
     </TooltipProvider>
   );
 }
