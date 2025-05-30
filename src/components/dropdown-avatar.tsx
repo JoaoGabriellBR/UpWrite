@@ -34,7 +34,7 @@ export default function DropdownAvatar({ isCollapsed }: any) {
   const user = session?.user;
 
   return (
-    <DropdownMenu>
+    <DropdownMenu >
       <DropdownMenuTrigger asChild>
         {isCollapsed ? (
           <div>

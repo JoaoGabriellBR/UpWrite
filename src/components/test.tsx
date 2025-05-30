@@ -1,27 +1,8 @@
 "use client";
 import * as React from "react";
 import { useState, useEffect, useCallback } from "react";
-import {
-  Archive,
-  File,
-  LogOut,
-  Plus,
-  Search,
-  Settings,
-  Trash2,
-  MoreHorizontal,
-} from "lucide-react";
-import { NotesList } from "./notes-list";
-import { SideBar } from "@/app/(notes-routes)/notes/components/sidebar";
-import { cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
+import { File, Trash2, MoreHorizontal } from "lucide-react";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,13 +10,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import DropdownAvatar from "@/components/dropdown-avatar";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
 import { useMediaQuery } from "usehooks-ts";
-import { SettingsDialog } from "@/components/settings-dialog";
-import TrashPopover from "@/components/trash-popover";
 import { MailProps, NoteProps } from "@/lib/types";
 import Editor from "@/components/editor/editor";
 import { useForm } from "react-hook-form";
@@ -45,11 +22,10 @@ import * as z from "zod";
 import useArchiveNote from "@/hooks/use-archive-note";
 import { toast } from "@/components/ui/use-toast";
 import { Icons } from "@/components/icons";
-import { NoteSkeleton, NoteListSkeleton } from "@/components/note-skeleton";
+import { NoteSkeleton } from "@/components/note-skeleton";
 import debounce from "lodash/debounce";
-import { RetractingSideBar } from "@/components/retracting-sidedar";
 
-export default function Main({
+export default function Test({
   defaultLayout = [265, 655],
   defaultCollapsed = false,
   navCollapsedSize,
@@ -327,11 +303,56 @@ export default function Main({
 
   return (
     <TooltipProvider delayDuration={0}>
-      <RetractingSideBar
-        defaultLayout={defaultLayout}
-        defaultCollapsed={defaultCollapsed}
-        navCollapsedSize={navCollapsedSize}
-      />
+      <div className="h-full flex flex-col">
+        {isLoadingNote ? (
+          <div className="p-4">
+            <NoteSkeleton />
+          </div>
+        ) : selectedNote ? (
+          <>
+            <div className="flex items-center justify-between p-4 border-b">
+              <h1 className="text-xl font-semibold truncate">
+                {selectedNote.title}
+              </h1>
+              <div className="flex items-center gap-2">
+                {isUpdating && (
+                  <Icons.spinner className="h-4 w-4 animate-spin text-muted-foreground" />
+                )}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      {isPendingArchive ? (
+                        <Icons.spinner className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <MoreHorizontal className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={handleArchiveClick}>
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      <span>Excluir nota</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4">
+              <Editor
+                form={form}
+                content={currentNote?.content}
+                handleChangeContent={handleChangeContent}
+                onTitleChange={handleTitleChange}
+              />
+            </div>
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
+            <File className="w-12 h-12 mb-4" />
+            <p>Selecione uma nota ou crie uma nova</p>
+          </div>
+        )}
+      </div>
     </TooltipProvider>
   );
 }
