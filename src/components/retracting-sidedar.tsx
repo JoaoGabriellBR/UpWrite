@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useState, useCallback } from "react";
 import { IconType } from "react-icons";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -40,6 +40,24 @@ import {
   TooltipContent,
 } from "@/components/ui/tooltip";
 
+interface Note {
+  id: string;
+  title: string;
+  content: any;
+  updatedAt: string;
+}
+
+interface UpdateNoteData {
+  id: string;
+  title: string;
+  content: any;
+}
+
+interface MutationContext {
+  previousNotes: Note[] | undefined;
+  previousNote: Note | undefined;
+}
+
 export const RetractingSideBar = ({
   defaultLayout = [265, 655],
   defaultCollapsed = false,
@@ -53,8 +71,8 @@ export const RetractingSideBar = ({
   const [selected, setSelected] = useState("Nova nota");
   const [isOpen, setIsOpened] = useState(false);
   const [isTrashOpen, setIsTrashOpen] = useState(false);
-  const [selectedNote, setSelectedNote] = useState<any>(null);
-  const [currentNote, setCurrentNote] = useState<any>(null);
+  const [selectedNote, setSelectedNote] = useState<Note | null>(null);
+  const [currentNote, setCurrentNote] = useState<Note | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const queryClient = useQueryClient();
@@ -78,23 +96,97 @@ export const RetractingSideBar = ({
   });
 
   const { mutate: updateNote } = useMutation({
-    mutationFn: async ({ id, title, content }: any) => {
-      const response = await fetch(`/api/notes/${id}`, {
+    mutationFn: async ({ id, title, content }: UpdateNoteData) => {
+      const response = await fetch(`/api/notes/${id}?id=${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title, content }),
+        body: JSON.stringify({
+          title: title.trim(),
+          content: typeof content === "string" ? JSON.parse(content) : content,
+        }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to update note");
+        const error = await response.json();
+        throw new Error(error.message || "Failed to update note");
       }
 
-      return response.json();
+      const data = await response.json();
+      return data;
     },
-    onSuccess: () => {
+    onMutate: async (newNote: UpdateNoteData) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["notes"] });
+      await queryClient.cancelQueries({ queryKey: ["note", newNote.id] });
+
+      // Snapshot the previous values
+      const previousNotes = queryClient.getQueryData<Note[]>(["notes"]) || [];
+      const previousNote = queryClient.getQueryData<Note>(["note", newNote.id]);
+
+      // Create updated note with current timestamp
+      const updatedNote = {
+        ...(previousNote || {}),
+        ...newNote,
+        title: newNote.title.trim(),
+        content:
+          typeof newNote.content === "string"
+            ? JSON.parse(newNote.content)
+            : newNote.content,
+        updatedAt: new Date().toISOString(),
+      };
+
+      // Update notes list
+      queryClient.setQueryData<Note[]>(["notes"], (old = []) =>
+        old.map((note) => (note.id === newNote.id ? updatedNote : note))
+      );
+
+      // Update individual note
+      queryClient.setQueryData<Note>(["note", newNote.id], updatedNote);
+
+      return { previousNotes, previousNote } as MutationContext;
+    },
+    onError: (
+      error: Error,
+      newNote: UpdateNoteData,
+      context?: MutationContext
+    ) => {
+      console.error("Update error:", error);
+
+      // Revert optimistic updates
+      if (context?.previousNotes) {
+        queryClient.setQueryData(["notes"], context.previousNotes);
+      }
+      if (context?.previousNote) {
+        queryClient.setQueryData(["note", newNote.id], context.previousNote);
+      }
+
+      // Show error toast
+      toast({
+        title: "Erro ao salvar",
+        description: error.message || "Não foi possível atualizar a nota",
+        variant: "destructive",
+      });
+
+      setIsUpdating(false);
+    },
+    onSuccess: (updatedNote: Note) => {
+      // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["notes"] });
+      queryClient.invalidateQueries({ queryKey: ["note", updatedNote.id] });
+
+      // Update local state
+      setSelectedNote((prev) =>
+        prev?.id === updatedNote.id ? updatedNote : prev
+      );
+      setCurrentNote((prev) =>
+        prev?.id === updatedNote.id ? updatedNote : prev
+      );
+
+      setIsUpdating(false);
+    },
+    onSettled: () => {
       setIsUpdating(false);
     },
   });
@@ -108,7 +200,10 @@ export const RetractingSideBar = ({
         },
         body: JSON.stringify({
           title: "Nova nota",
-          content: "",
+          content: {
+            type: "doc",
+            content: [{ type: "paragraph", content: [] }],
+          },
         }),
       });
 
@@ -122,6 +217,7 @@ export const RetractingSideBar = ({
       queryClient.invalidateQueries({ queryKey: ["notes"] });
       setSelectedNote(data);
       setCurrentNote(data);
+      form.setValue("title", data.title);
     },
   });
 
@@ -134,44 +230,86 @@ export const RetractingSideBar = ({
   const handleNoteSelect = (note: any) => {
     setSelectedNote(note);
     setCurrentNote(note);
+    form.setValue("title", note.title);
   };
 
-  const handleChangeContent = ({ editor }: { editor: any }) => {
-    if (!selectedNote) return;
-    setIsUpdating(true);
-    updateNote({
-      id: selectedNote.id,
-      title: selectedNote.title,
-      content: editor.getJSON(),
-    });
-  };
+  const handleChangeContent = useCallback(
+    debounce(({ editor }: { editor: any }) => {
+      if (!selectedNote?.id) return;
 
-  const handleTitleChange = (title: string) => {
-    if (!selectedNote) return;
-    setIsUpdating(true);
-    updateNote({
-      id: selectedNote.id,
-      title,
-      content: selectedNote.content,
-    });
-  };
+      const content = editor.getJSON();
+      if (!content || typeof content !== "object") {
+        console.error("Invalid content format");
+        return;
+      }
+
+      setIsUpdating(true);
+      try {
+        updateNote({
+          id: selectedNote.id,
+          title: selectedNote.title,
+          content: JSON.stringify(content),
+        });
+      } catch (error) {
+        console.error("Error updating content:", error);
+        toast({
+          title: "Erro ao salvar",
+          description: "Não foi possível atualizar o conteúdo da nota",
+          variant: "destructive",
+        });
+        setIsUpdating(false);
+      }
+    }, 1000),
+    [selectedNote, updateNote]
+  );
+
+  const handleTitleChange = useCallback(
+    debounce((title: string) => {
+      if (!selectedNote?.id || !title.trim()) return;
+
+      setIsUpdating(true);
+      try {
+        updateNote({
+          id: selectedNote.id,
+          title: title.trim(),
+          content: selectedNote.content,
+        });
+      } catch (error) {
+        console.error("Error updating title:", error);
+        toast({
+          title: "Erro ao salvar",
+          description: "Não foi possível atualizar o título da nota",
+          variant: "destructive",
+        });
+        setIsUpdating(false);
+      }
+    }, 500),
+    [selectedNote, updateNote]
+  );
 
   const handleArchiveClick = () => {
     if (!selectedNote) return;
-    handleArchiveNote(selectedNote.id, {
-      onSuccess: () => {
-        setSelectedNote(null);
-        setCurrentNote(null);
-        toast({
-          description: "Nota movida para a lixeira",
-        });
-      },
+    handleArchiveNote(selectedNote.id);
+    setSelectedNote(null);
+    setCurrentNote(null);
+    toast({
+      description: "Nota movida para a lixeira",
     });
   };
 
   const sortedNotes = notes?.sort((a: any, b: any) => {
     return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
   });
+
+  // Set initial note when notes are loaded
+  React.useEffect(() => {
+    if (notes && notes.length > 0 && !selectedNote) {
+      const firstNote = notes[0];
+      setSelectedNote(firstNote);
+      setCurrentNote(firstNote);
+      form.setValue("title", firstNote.title);
+    }
+  }, [notes, selectedNote, form]);
 
   return (
     <div className="flex h-screen">
@@ -246,14 +384,58 @@ export const RetractingSideBar = ({
                 (isLoading ? (
                   <NoteListSkeleton />
                 ) : (
-                  <NotesList
-                    notes={sortedNotes}
-                    isLoading={isLoading}
-                    onNoteSelect={handleNoteSelect}
-                    selectedNote={selectedNote}
-                    isCollapsed={!open}
-                    onNewNote={handleNewNote}
-                  />
+                  <div className="space-y-1 p-2">
+                    {sortedNotes?.map((note: any) => (
+                      <div
+                        key={note.id}
+                        className={cn(
+                          "flex items-center justify-between rounded-md px-2 py-1",
+                          selectedNote?.id === note.id
+                            ? "bg-accent"
+                            : "hover:bg-accent/50"
+                        )}
+                      >
+                        <button
+                          className="flex-1 text-left truncate text-sm"
+                          onClick={() => handleNoteSelect(note)}
+                        >
+                          {note.title}
+                        </button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-6 w-6"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                              onClick={() => {
+                                const noteToArchive =
+                                  selectedNote?.id === note.id
+                                    ? selectedNote?.id
+                                    : note.id;
+                                handleArchiveNote(noteToArchive);
+                                if (selectedNote?.id === note.id) {
+                                  setSelectedNote(null);
+                                  setCurrentNote(null);
+                                }
+                                toast({
+                                  description: "Nota movida para a lixeira",
+                                });
+                              }}
+                            >
+                              <LuTrash className="mr-2 h-4 w-4" />
+                              <span>Excluir nota</span>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    ))}
+                  </div>
                 ))}
             </ScrollArea>
           </div>
@@ -273,9 +455,11 @@ export const RetractingSideBar = ({
           ) : selectedNote ? (
             <>
               <div className="flex items-center justify-between p-4 border-b">
-                <h1 className="text-xl font-semibold truncate">
-                  {selectedNote.title}
-                </h1>
+                <Input
+                  value={selectedNote.title}
+                  onChange={(e) => handleTitleChange(e.target.value)}
+                  className="text-xl font-semibold bg-transparent border-none h-auto p-0 focus-visible:ring-0"
+                />
                 <div className="flex items-center gap-2">
                   {isUpdating && (
                     <Icons.spinner className="h-4 w-4 animate-spin text-muted-foreground" />
