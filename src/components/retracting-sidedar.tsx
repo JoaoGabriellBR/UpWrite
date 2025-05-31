@@ -375,7 +375,7 @@ export const RetractingSideBar = ({
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Pesquisar notas..."
-                  className={cn("w-full pl-8", !open && "hidden")}
+                  className={cn("w-full p-8", !open && "hidden")}
                 />
               </div>
             </div>
@@ -483,7 +483,7 @@ export const RetractingSideBar = ({
                   </DropdownMenu>
                 </div>
               </div>
-              <div className="flex-1 overflow-y-auto p-4">
+              <div className="flex-1 overflow-y-auto py-10 sm:py-10 md:py-12 lg:py-16 xl:py-20 px-32 sm:px-32 md:px-48 lg:px-60 xl:px-72">
                 <Editor
                   form={form}
                   content={currentNote?.content}
