@@ -5,7 +5,7 @@ export const inputFields = [
     id: "name",
     label: "Nome",
     type: "text",
-    placeholder: "João Gabriel",
+    placeholder: "User",
   },
   {
     id: "email",

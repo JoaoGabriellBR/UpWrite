@@ -28,6 +28,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { formSchemaRegister } from "@/lib/schemas";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Register() {
   const router = useRouter();
@@ -83,7 +84,12 @@ export default function Register() {
         <div className="flex w-full lg:w-1/2 flex-col items-center justify-center px-6 py-12">
           <Card className="w-full max-w-md auth-card">
             <CardHeader className="space-y-1 flex items-center text-center">
-              <Icons.logo className="h-10 w-10 text-primary mb-4" />
+              <Image
+                src={"/logo.png"}
+                alt="Logotipo João Gabriel Silva"
+                height={30}
+                width={30}
+              />
               <CardTitle className="text-2xl">Criar uma conta</CardTitle>
               <CardDescription>
                 Coloque o seu email abaixo para criar sua conta.

@@ -27,7 +27,7 @@ const ComponentSchema = ({
     <section id={id} className="py-8 md:py-20 w-full">
       <div
         className={cn(
-          "max-w-7xl px-4 mx-auto sm:px-6 lg:px-8 container flex flex-col justify-between items-center gap-4",
+          "max-w-7xl px-4 mx-auto container flex flex-col justify-between items-center gap-4",
           imagePosition === "left" ? "lg:flex-row" : "lg:flex-row-reverse"
         )}
       >
@@ -42,10 +42,10 @@ const ComponentSchema = ({
           />
         </div> */}
 
-        <div className="relative w-full max-h-[80vh] aspect-[16/9]">
+        <div className="flex flex-row justify-center items-center relative w-full lg:w-1/2 min-h-[80vh] max-h-[80vh] aspect-[16/9]">
           {/* Background Gradient */}
           {id === "novidades" && (
-            <div className="absolute inset-[100px] dark:inset-[40px] bg-gradient-to-br from-purple-900/80 via-blue-800/50 to-transparent rounded-sm dark:rounded-[10rem] blur-[7rem] dark:blur-[5rem]" />
+            <div className="absolute inset-[100px] dark:inset-[20px] bg-gradient-to-br from-purple-900/80 via-blue-800/50 to-transparent rounded-sm dark:rounded-[10rem] blur-[7rem] dark:blur-[5rem]" />
           )}
 
           {/* Image */}
@@ -61,7 +61,7 @@ const ComponentSchema = ({
 
         <Card className="w-full lg:w-1/2 border-none p-0 m-0">
           <CardHeader>
-            <CardTitle className="font-heading text-3xl">{title}</CardTitle>
+            <CardTitle className="font-heading text-6xl">{title}</CardTitle>
           </CardHeader>
 
           <CardContent>

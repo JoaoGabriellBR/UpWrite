@@ -77,7 +77,7 @@ import {
 } from "lucide-react";
 
 export const Icons = {
-  logo: TrendingUp,
+  logo: "TrendingUp",
   close: X,
   spinner: Loader2,
   chevronLeft: ChevronLeft,

@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/form";
 import { formSchemaLogin } from "@/lib/schemas";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Login() {
   const router = useRouter();
@@ -87,7 +88,12 @@ export default function Login() {
         <div className="flex w-full lg:w-1/2 flex-col items-center justify-center px-6 py-12">
           <Card className="w-full max-w-md auth-card">
             <CardHeader className="space-y-1 flex items-center text-center">
-              <Icons.logo className="h-10 w-10 text-primary mb-4" />
+              <Image
+                src="/logo.png"
+                alt="Logotipo João Gabriel Silva"
+                height={30}
+                width={30}
+              />
               <CardTitle className="text-2xl">Bem vindo de volta</CardTitle>
               <CardDescription>
                 Insira o seu email abaixo para logar em sua conta.
