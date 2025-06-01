@@ -10,8 +10,8 @@ const Novidades = () => {
         title="Sempre atualizado"
         description="O UpWrite está em constante evolução, para que a sua experiência seja cada vez melhor."
         imageSrc={novidades}
-        imageWidth={767}
-        imageHeight={754}
+        imageWidth={500}
+        imageHeight={500}
         imagePosition="right"
       />
     </>

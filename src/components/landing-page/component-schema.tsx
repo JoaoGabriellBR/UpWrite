@@ -31,7 +31,24 @@ const ComponentSchema = ({
           imagePosition === "left" ? "lg:flex-row" : "lg:flex-row-reverse"
         )}
       >
-        <div className="w-full lg:w-1/2">
+        {/* <div className="w-full lg:w-1/2">
+          <Image
+            src={imageSrc}
+            alt={imageAlt}
+            width={imageWidth}
+            height={imageHeight}
+            layout="responsive"
+            objectFit="contain"
+          />
+        </div> */}
+
+        <div className="relative w-full max-h-[80vh] aspect-[16/9]">
+          {/* Background Gradient */}
+          {id === "novidades" && (
+            <div className="absolute inset-[100px] dark:inset-[40px] bg-gradient-to-br from-purple-900/80 via-blue-800/50 to-transparent rounded-sm dark:rounded-[10rem] blur-[7rem] dark:blur-[5rem]" />
+          )}
+
+          {/* Image */}
           <Image
             src={imageSrc}
             alt={imageAlt}
