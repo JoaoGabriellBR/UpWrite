@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { SmartphoneMockup } from "../smartphone-mockup";
 
 const ComponentSchema = ({
   id,
@@ -44,19 +45,23 @@ const ComponentSchema = ({
 
         <div className="flex flex-row justify-center items-center relative w-full lg:w-1/2 min-h-[80vh] max-h-[80vh] aspect-[16/9]">
           {/* Background Gradient */}
-          {id === "novidades" && (
-            <div className="absolute inset-[100px] dark:inset-[20px] bg-gradient-to-br from-purple-900/80 via-blue-800/50 to-transparent rounded-sm dark:rounded-[10rem] blur-[7rem] dark:blur-[5rem]" />
-          )}
+          {/* {id === "novidades" && ( */}
+          <div className="absolute dark:inset-[60px] bg-gradient-to-br from-purple-900/80 via-blue-800/50 to-transparent rounded-sm dark:rounded-[10rem] blur-[7rem] dark:blur-[6rem]" />
+          {/* )} */}
 
           {/* Image */}
-          <Image
-            src={imageSrc}
-            alt={imageAlt}
-            width={imageWidth}
-            height={imageHeight}
-            layout="responsive"
-            objectFit="contain"
-          />
+          {id === "caracteristicas" ? (
+            <SmartphoneMockup />
+          ) : (
+            <Image
+              src={imageSrc}
+              alt={imageAlt}
+              width={imageWidth}
+              height={imageHeight}
+              layout="responsive"
+              objectFit="contain"
+            />
+          )}
         </div>
 
         <Card className="w-full lg:w-1/2 border-none p-0 m-0">

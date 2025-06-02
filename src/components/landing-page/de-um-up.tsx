@@ -7,7 +7,7 @@ export default function DeUmUp() {
     <>
       <section className="py-8 md:py-20 w-full">
         <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
-          <h1 className="font-heading text-4xl sm:text-4xl md:text-5xl lg:text-6xl">
+          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-8xl">
             Dê um <span className="text-gradient">Up</span> na sua vida{" "}
           </h1>
           <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
