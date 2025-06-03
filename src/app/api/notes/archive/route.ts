@@ -34,7 +34,7 @@ export async function GET() {
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { message: "Não foi possível capturar as notas arquivadas." },
+      { message: "Não foi possível capturar as notas excluídas." },
       { status: 500 }
     );
   }

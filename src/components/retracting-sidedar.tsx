@@ -6,9 +6,8 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { LuArrowLeftFromLine, LuTrash, LuLogOut } from "react-icons/lu";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
-import { Search, File, MoreHorizontal } from "lucide-react";
+import { File, MoreHorizontal } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { NotesList } from "@/app/(notes-routes)/notes/components/notes-list";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { signOut } from "next-auth/react";
 import DropdownAvatar from "@/components/dropdown-avatar";
@@ -29,12 +28,10 @@ import { NoteSkeleton, NoteListSkeleton } from "@/components/note-skeleton";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createTitleSchema } from "@/lib/schemas";
-import * as z from "zod";
 import useArchiveNote from "@/hooks/use-archive-note";
 import { toast } from "@/components/ui/use-toast";
 import debounce from "lodash/debounce";
 import {
-  TooltipProvider,
   Tooltip,
   TooltipTrigger,
   TooltipContent,
@@ -59,9 +56,7 @@ interface MutationContext {
 }
 
 export const RetractingSideBar = ({
-  defaultLayout = [265, 655],
   defaultCollapsed = false,
-  navCollapsedSize,
 }: {
   defaultLayout?: number[];
   defaultCollapsed?: boolean;
@@ -304,7 +299,6 @@ export const RetractingSideBar = ({
   return (
     <div className="flex h-screen">
       <motion.nav
-        layout
         className="sticky top-0 max-h-screen shrink-0 border-r border-border bg-background space-y-4"
         style={{
           width: open ? "265px" : "50px",
@@ -319,7 +313,7 @@ export const RetractingSideBar = ({
           >
             <ToggleClose open={open} setOpen={setOpen} />
           </div>
-          <Separator />
+          <Separator className="my-[6px]" />
           <div className="space-y-1 p-2">
             <Option
               Icon={MdOutlineAddCircleOutline}
@@ -360,7 +354,7 @@ export const RetractingSideBar = ({
           </div>
 
           <div className="flex-1 overflow-hidden">
-            <div className="p-2">
+            {/* <div className="p-2">
               <div className="relative">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -368,7 +362,7 @@ export const RetractingSideBar = ({
                   className={cn("w-full p-8", !open && "hidden")}
                 />
               </div>
-            </div>
+            </div> */}
             <ScrollArea className="h-[calc(100%-60px)]">
               {open &&
                 (isLoading ? (
@@ -500,7 +494,6 @@ export const RetractingSideBar = ({
 const Option = ({
   Icon,
   title,
-  selected,
   setSelected,
   open,
   variant = "ghost",
@@ -543,7 +536,6 @@ const Option = ({
           layout
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.1 }}
           className="text-sm"
         >
           {title}
@@ -576,10 +568,16 @@ const ToggleClose = ({
   const button = (
     <motion.button
       layout
-      className="flex h-9 w-full items-center rounded-md transition-colors hover:bg-accent px-2"
+      className={cn(
+        "relative flex h-9 w-full rounded-md transition-colors px-2",
+        open ? "justify-start items-center" : "justify-center items-center"
+      )}
       onClick={() => setOpen((pv) => !pv)}
     >
-      <motion.div layout className="grid h-full w-4 place-content-center">
+      <motion.div
+        layout
+        className={cn("w-full", open ? "h-4 w-4 mr-2" : "h-4 w-4")}
+      >
         {open ? (
           <LuArrowLeftFromLine className="h-4 w-4 transition-transform" />
         ) : (
@@ -594,8 +592,7 @@ const ToggleClose = ({
           layout
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.1 }}
-          className="ml-2 text-sm"
+          className="text-sm"
         >
           Esconder
         </motion.span>
@@ -603,16 +600,16 @@ const ToggleClose = ({
     </motion.button>
   );
 
-  if (!open) {
-    return (
-      <Tooltip delayDuration={0}>
-        <TooltipTrigger asChild>{button}</TooltipTrigger>
-        <TooltipContent side="right" className="flex items-center">
-          Expandir
-        </TooltipContent>
-      </Tooltip>
-    );
-  }
+  // if (!open) {
+  //   return (
+  //     <Tooltip delayDuration={0}>
+  //       <TooltipTrigger asChild>{button}</TooltipTrigger>
+  //       <TooltipContent side="right" className="flex items-center">
+  //         Expandir
+  //       </TooltipContent>
+  //     </Tooltip>
+  //   );
+  // }
 
   return button;
 };

@@ -1,68 +1,20 @@
 "use client";
 import * as React from "react";
-import { useState, useEffect, useCallback } from "react";
-import {
-  Archive,
-  File,
-  LogOut,
-  Plus,
-  Search,
-  Settings,
-  Trash2,
-  MoreHorizontal,
-} from "lucide-react";
-import { NotesList } from "./notes-list";
-import { SideBar } from "@/app/(notes-routes)/notes/components/sidebar";
-import { cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
+import { useState, useEffect } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import DropdownAvatar from "@/components/dropdown-avatar";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
-import { useMediaQuery } from "usehooks-ts";
-import { SettingsDialog } from "@/components/settings-dialog";
-import TrashPopover from "@/components/trash-popover";
 import { MailProps, NoteProps } from "@/lib/types";
-import Editor from "@/components/editor/editor";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createTitleSchema } from "@/lib/schemas";
 import * as z from "zod";
-import useArchiveNote from "@/hooks/use-archive-note";
 import { toast } from "@/components/ui/use-toast";
-import { Icons } from "@/components/icons";
-import { NoteSkeleton, NoteListSkeleton } from "@/components/note-skeleton";
 import debounce from "lodash/debounce";
 import { RetractingSideBar } from "@/components/retracting-sidedar";
 
-export default function Main({
-  defaultLayout = [265, 655],
-  defaultCollapsed = false,
-  navCollapsedSize,
-}: MailProps | any) {
-  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
-  const [isOpen, setIsOpened] = useState(false);
-  const [isTrashOpen, setIsTrashOpen] = useState(false);
+export default function Main({ defaultCollapsed = false }: MailProps | any) {
   const [selectedNote, setSelectedNote] = useState<NoteProps | null>(null);
-  const [isUpdating, setIsUpdating] = useState(false);
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  const router = useRouter();
   const queryClient = useQueryClient();
-  const { handleArchiveNote, isPendingArchive } = useArchiveNote();
 
   const form = useForm<z.infer<typeof createTitleSchema>>({
     mode: "onChange",
@@ -78,52 +30,9 @@ export default function Main({
     return data;
   };
 
-  const { data: notes, isLoading } = useQuery({
+  const { data: notes } = useQuery({
     queryKey: ["notes"],
     queryFn: getUserNotes,
-  });
-
-  const getNoteById = async (noteId: string) => {
-    const response = await fetch(`/api/notes/noteId?id=${noteId}`);
-    const data = await response.json();
-    return data;
-  };
-
-  const { data: currentNote, isLoading: isLoadingNote } = useQuery({
-    queryKey: ["note", selectedNote?.id],
-    queryFn: () => (selectedNote?.id ? getNoteById(selectedNote.id) : null),
-    enabled: !!selectedNote?.id,
-  });
-
-  const createNewNote = async () => {
-    const response = await fetch("/api/notes", {
-      method: "POST",
-      body: JSON.stringify({
-        title: "Nova nota",
-        content: {
-          type: "doc",
-          content: [{ type: "paragraph", content: [] }],
-        },
-      }),
-    });
-    const data = await response.json();
-    return data;
-  };
-
-  const { mutate: createNoteMutation, isPending: isCreating } = useMutation({
-    mutationFn: createNewNote,
-    onSuccess: (newNote) => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-      setSelectedNote(newNote);
-      form.setValue("title", newNote.title);
-    },
-    onError: () => {
-      toast({
-        title: "Erro ao criar nota",
-        description: "Não foi possível criar uma nova nota.",
-        variant: "destructive",
-      });
-    },
   });
 
   const updateNote = async (noteData: {
@@ -219,67 +128,6 @@ export default function Main({
     title: debounce((data: any) => updateNoteMutation(data), 500),
   }).current;
 
-  const handleChangeContent = useCallback(
-    ({ editor }: any) => {
-      if (!selectedNote?.id) return;
-
-      const content = editor.getJSON();
-      const now = new Date().toISOString();
-
-      // Atualização otimista local da nota e da lista
-      const updatedNote = {
-        id: selectedNote.id,
-        content,
-        updated_at: now,
-      };
-
-      // Atualiza o cache da nota e da lista
-      queryClient.setQueryData(["note", selectedNote.id], (old: any) => ({
-        ...old,
-        ...updatedNote,
-      }));
-
-      queryClient.setQueryData(["notes"], (old: any) =>
-        old?.map((note: NoteProps) =>
-          note.id === selectedNote.id ? { ...note, ...updatedNote } : note
-        )
-      );
-
-      // Debounce da atualização no servidor
-      debouncedFns.content(updatedNote);
-    },
-    [selectedNote?.id, queryClient, debouncedFns]
-  );
-
-  const handleTitleChange = useCallback(
-    (title: string) => {
-      if (!selectedNote?.id) return;
-
-      const now = new Date().toISOString();
-      const updatedNote = {
-        id: selectedNote.id,
-        title,
-        updated_at: now,
-      };
-
-      // Atualiza o cache da nota e da lista
-      queryClient.setQueryData(["note", selectedNote.id], (old: any) => ({
-        ...old,
-        ...updatedNote,
-      }));
-
-      queryClient.setQueryData(["notes"], (old: any) =>
-        old?.map((note: NoteProps) =>
-          note.id === selectedNote.id ? { ...note, ...updatedNote } : note
-        )
-      );
-
-      // Debounce da atualização no servidor
-      debouncedFns.title(updatedNote);
-    },
-    [selectedNote?.id, queryClient, debouncedFns]
-  );
-
   // Limpa os debounces quando o componente é desmontado
   useEffect(() => {
     return () => {
@@ -300,38 +148,9 @@ export default function Main({
     }
   }, [notes, form, selectedNote]);
 
-  const handleNoteSelect = (note: NoteProps) => {
-    setSelectedNote(note);
-    form.setValue("title", note.title);
-  };
-
-  const handleNewNote = () => {
-    createNoteMutation();
-  };
-
-  const handleArchiveClick = useCallback(() => {
-    if (!selectedNote?.id) {
-      return;
-    }
-
-    handleArchiveNote(selectedNote.id);
-    setSelectedNote(null);
-  }, [selectedNote, handleArchiveNote]);
-
-  const sortedNotes = notes
-    ? [...notes].sort(
-        (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      )
-    : [];
-
   return (
     <TooltipProvider delayDuration={0}>
-      <RetractingSideBar
-        defaultLayout={defaultLayout}
-        defaultCollapsed={defaultCollapsed}
-        navCollapsedSize={navCollapsedSize}
-      />
+      <RetractingSideBar defaultCollapsed={defaultCollapsed} />
     </TooltipProvider>
   );
 }

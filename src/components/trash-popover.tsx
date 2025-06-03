@@ -38,9 +38,9 @@ export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
 
   return (
     <Dialog open={isTrashOpen} onOpenChange={() => setIsTrashOpen(false)}>
-      <DialogContent className="min-h-72 overflow-y-auto">
+      <DialogContent className="min-h-72">
         <DialogHeader className="border-b pb-3">
-          <h2 className="text-lg font-medium">Notas arquivadas</h2>
+          <h2 className="text-lg font-medium">Notas excluídas</h2>
         </DialogHeader>
 
         <ScrollArea className="h-72" aria-orientation="vertical">
@@ -48,7 +48,7 @@ export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
             <h1>Carregando...</h1>
           ) : !archivedNotes?.length ? (
             <p className="text-muted-foreground">
-              Você não possui notas arquivadas.
+              Você não possui notas excluídas.
             </p>
           ) : (
             archivedNotes?.map((note: any) => (
