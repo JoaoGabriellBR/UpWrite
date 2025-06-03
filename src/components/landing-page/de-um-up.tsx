@@ -5,7 +5,7 @@ import { Icons } from "../icons";
 export default function DeUmUp() {
   return (
     <>
-      <section className="py-8 md:py-20 w-full">
+      <section className="py-8 md:py-20 w-full min-h-[50vh] flex items-center">
         <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-8xl">
             Dê um <span className="text-gradient">Up</span> na sua vida{" "}

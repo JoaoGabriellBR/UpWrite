@@ -33,9 +33,9 @@ const PerguntasRespostas = () => {
   ];
 
   return (
-    <section className="py-8 md:py-20 w-full min-h-[80vh] flex items-center">
-      <div className="container max-w-7xl mx-auto px-4">
-        <h1 className="font-heading text-4xl sm:text-4xl md:text-5xl lg:text-6xl pb-10 text-center">
+    <section className="w-full min-h-[80vh] flex items-center">
+      <div className="container max-w-7xl mx-auto px-4 space-y-10">
+        <h1 className="font-heading text-4xl sm:text-4xl md:text-5xl lg:text-6xl text-center">
           Perguntas e Respostas
         </h1>
 

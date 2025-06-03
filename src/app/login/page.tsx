@@ -168,10 +168,6 @@ export default function Login() {
             <h1 className="text-4xl font-bold mb-4">
               Desbloqueie sua criatividade com UpWrite.
             </h1>
-            <p className="text-lg text-center max-w-lg">
-              Sua plataforma inteligente para notas e ideias, potencializada por
-              IA.
-            </p>
           </div>
         </div>
       </div>
