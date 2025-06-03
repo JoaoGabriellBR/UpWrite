@@ -39,8 +39,8 @@ export async function PATCH(request: Request) {
         id: String(noteId),
       },
       data: {
-        ...(title && { title }),
-        ...(content && { content }),
+        title,
+        content,
         updated_at: new Date(),
       },
     });

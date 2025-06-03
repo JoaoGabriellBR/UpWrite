@@ -103,7 +103,7 @@ export const RetractingSideBar = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          title: title.trim(),
+          title: title || "",
           content: typeof content === "string" ? JSON.parse(content) : content,
         }),
       });
@@ -117,19 +117,16 @@ export const RetractingSideBar = ({
       return data;
     },
     onMutate: async (newNote: UpdateNoteData) => {
-      // Cancel any outgoing refetches
       await queryClient.cancelQueries({ queryKey: ["notes"] });
       await queryClient.cancelQueries({ queryKey: ["note", newNote.id] });
 
-      // Snapshot the previous values
       const previousNotes = queryClient.getQueryData<Note[]>(["notes"]) || [];
       const previousNote = queryClient.getQueryData<Note>(["note", newNote.id]);
 
-      // Create updated note with current timestamp
       const updatedNote = {
         ...(previousNote || {}),
         ...newNote,
-        title: newNote.title.trim(),
+        title: newNote.title?.trim() || "",
         content:
           typeof newNote.content === "string"
             ? JSON.parse(newNote.content)
@@ -137,12 +134,10 @@ export const RetractingSideBar = ({
         updatedAt: new Date().toISOString(),
       };
 
-      // Update notes list
       queryClient.setQueryData<Note[]>(["notes"], (old = []) =>
         old.map((note) => (note.id === newNote.id ? updatedNote : note))
       );
 
-      // Update individual note
       queryClient.setQueryData<Note>(["note", newNote.id], updatedNote);
 
       return { previousNotes, previousNote } as MutationContext;
@@ -154,7 +149,6 @@ export const RetractingSideBar = ({
     ) => {
       console.error("Update error:", error);
 
-      // Revert optimistic updates
       if (context?.previousNotes) {
         queryClient.setQueryData(["notes"], context.previousNotes);
       }
@@ -162,7 +156,6 @@ export const RetractingSideBar = ({
         queryClient.setQueryData(["note", newNote.id], context.previousNote);
       }
 
-      // Show error toast
       toast({
         title: "Erro ao salvar",
         description: error.message || "Não foi possível atualizar a nota",
@@ -172,11 +165,9 @@ export const RetractingSideBar = ({
       setIsUpdating(false);
     },
     onSuccess: (updatedNote: Note) => {
-      // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["notes"] });
       queryClient.invalidateQueries({ queryKey: ["note", updatedNote.id] });
 
-      // Update local state
       setSelectedNote((prev) =>
         prev?.id === updatedNote.id ? updatedNote : prev
       );
@@ -199,7 +190,7 @@ export const RetractingSideBar = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          title: "Nova nota",
+          title: "",
           content: {
             type: "doc",
             content: [{ type: "paragraph", content: [] }],
@@ -265,13 +256,13 @@ export const RetractingSideBar = ({
 
   const handleTitleChange = useCallback(
     debounce((title: string) => {
-      if (!selectedNote?.id || !title.trim()) return;
+      if (!selectedNote?.id) return;
 
       setIsUpdating(true);
       try {
         updateNote({
           id: selectedNote.id,
-          title: title.trim(),
+          title: title,
           content: selectedNote.content,
         });
       } catch (error) {
@@ -301,7 +292,6 @@ export const RetractingSideBar = ({
     return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
   });
 
-  // Set initial note when notes are loaded
   React.useEffect(() => {
     if (notes && notes.length > 0 && !selectedNote) {
       const firstNote = notes[0];
@@ -399,7 +389,7 @@ export const RetractingSideBar = ({
                           className="flex-1 text-left truncate text-sm"
                           onClick={() => handleNoteSelect(note)}
                         >
-                          {note.title}
+                          {note.title?.trim() || "Sem título"}
                         </button>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>

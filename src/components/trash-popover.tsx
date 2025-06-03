@@ -38,7 +38,7 @@ export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
 
   return (
     <Dialog open={isTrashOpen} onOpenChange={() => setIsTrashOpen(false)}>
-      <DialogContent className="max-h-72">
+      <DialogContent className="min-h-72 overflow-y-auto">
         <DialogHeader className="border-b pb-3">
           <h2 className="text-lg font-medium">Notas arquivadas</h2>
         </DialogHeader>

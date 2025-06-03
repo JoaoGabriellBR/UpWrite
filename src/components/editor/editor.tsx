@@ -174,6 +174,7 @@ export default function Editor({
                   outline
                   placeholder="Sem título"
                   className="pl-0 py-7 border-none font-bold placeholder:font-normal placeholder:opacity-40 scroll-m-20 tracking-tight text-2xl md:text-3xl lg:text-4xl"
+                  value={field.value || ""}
                 />
               </FormControl>
               <FormMessage className="text-sm" />
