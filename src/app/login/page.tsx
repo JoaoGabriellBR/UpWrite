@@ -86,17 +86,13 @@ export default function Login() {
 
       <div className="flex min-h-screen">
         <div className="flex w-full lg:w-1/2 flex-col items-center justify-center px-6 py-12">
-          <Card className="w-full max-w-md auth-card">
-            <CardHeader className="space-y-1 flex items-center text-center">
-              <Image
-                src="/logo.png"
-                alt="Logotipo João Gabriel Silva"
-                height={30}
-                width={30}
-              />
-              <CardTitle className="text-2xl">Bem vindo de volta</CardTitle>
+          <Card className="w-full max-w-md border-none bg-transparent">
+            <CardHeader className="space-y-1 flex items-start text-start">
+              <CardTitle className="text-4xl font-heading">
+                Bem-vindo(a) de volta
+              </CardTitle>
               <CardDescription>
-                Insira o seu email abaixo para logar em sua conta.
+                Insira o seu email abaixo para entrar em sua conta.
               </CardDescription>
             </CardHeader>
 
@@ -164,8 +160,19 @@ export default function Login() {
           </Card>
         </div>
         <div className="hidden lg:flex lg:w-1/2 relative auth-gradient">
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-12">
-            <h1 className="text-4xl font-bold mb-4">
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-12 space-y-10">
+            <Image
+              src="/signin.png"
+              alt="Logotipo João Gabriel Silva"
+              priority
+              quality={100}
+              loading="eager"
+              unoptimized
+              draggable={false}
+              height={1000}
+              width={1000}
+            />
+            <h1 className="max-w-3xl text-center font-heading text-3xl md:text-4xl lg:text-5xl xl:text-6xl">
               Desbloqueie sua criatividade com UpWrite.
             </h1>
           </div>
