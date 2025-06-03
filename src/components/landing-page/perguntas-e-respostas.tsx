@@ -7,8 +7,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const PerguntasRespostas = () => {
@@ -16,24 +14,23 @@ const PerguntasRespostas = () => {
 
   const solutions = [
     {
-      value: "individuals",
-      title: "Individuals",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos laudantium in iusto iure aliquam commodi possimus eaque sit recusandae incidunt?",
+      value: "Quantas notas posso criar?",
+      title: "Quantas notas posso criar?",
+      description: "Você pode criar quantas notas desejar. (:",
       image: "/public/mockup.png",
     },
     {
       value: "Inteligência Artificial?",
       title: "Inteligência Artificial?",
       description:
-        "Tailored solutions for growing businesses. Scale your operations with our enterprise-grade tools and support.",
+        "Muito em breve estaremos introduzindo diferentes serviços de chatbots.",
       image: "/public/novidades.png",
     },
     {
-      value: "enterprise",
-      title: "Enterprise",
+      value: "Consigo recuperar notas excluídas?",
+      title: "Consigo recuperar notas excluídas?",
       description:
-        "Custom solutions for large organizations. Get dedicated support and advanced features for your team.",
+        "Sim. Você consegue recuperar notas que foram excluídas ou apagá-las permanentemente.",
       image: "/public/novidades.png",
     },
   ];
@@ -86,10 +83,6 @@ const PerguntasRespostas = () => {
                       <p className="leading-normal text-muted-foreground sm:text-lg sm:leading-8 mb-6">
                         {solution.description}
                       </p>
-                      <Button className="bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:opacity-90 transition-opacity w-full group">
-                        Learn more
-                        <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-                      </Button>
                     </div>
                   </AccordionContent>
                 </AccordionItem>

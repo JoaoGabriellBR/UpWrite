@@ -25,31 +25,17 @@ const ComponentSchema = ({
   textButton,
 }: any) => {
   return (
-    <section id={id} className="py-8 md:py-20 w-full">
+    <section id={id} className="py-8 md:py-10 w-full overflow-hidden">
       <div
         className={cn(
-          "max-w-7xl px-4 mx-auto container flex flex-col justify-between items-center gap-4",
+          "max-w-7xl px-4 mx-auto container flex flex-col justify-between items-center gap-20",
           imagePosition === "left" ? "lg:flex-row" : "lg:flex-row-reverse"
         )}
       >
-        {/* <div className="w-full lg:w-1/2">
-          <Image
-            src={imageSrc}
-            alt={imageAlt}
-            width={imageWidth}
-            height={imageHeight}
-            layout="responsive"
-            objectFit="contain"
-          />
-        </div> */}
-
         <div className="flex flex-row justify-center items-center relative w-full lg:w-1/2 min-h-[80vh] max-h-[80vh] aspect-[16/9]">
           {/* Background Gradient */}
-          {/* {id === "novidades" && ( */}
           <div className="absolute dark:inset-[60px] bg-gradient-to-br from-purple-900/80 via-blue-800/50 to-transparent rounded-sm dark:rounded-[10rem] blur-[7rem] dark:blur-[6rem]" />
-          {/* )} */}
 
-          {/* Image */}
           {id === "caracteristicas" ? (
             <SmartphoneMockup />
           ) : (
