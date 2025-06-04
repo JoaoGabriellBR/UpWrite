@@ -18,7 +18,7 @@ const useDeleteNote = () => {
     router.push("/notes");
     toast({
       title: "Nota excluida",
-      description: "Sua nota foi excluida com sucesso.",
+      description: "Sua nota foi excluida permanentemente com sucesso.",
       variant: "default",
     });
   }, [router]);

@@ -12,7 +12,7 @@ import { useState, useEffect, useCallback } from "react";
 import useDeleteNote from "@/hooks/use-delete-note";
 import { Icons } from "./icons";
 
-export default function AlertDeleteNote({
+export default function AlertDeleteNoteForever({
   isAlertOpen,
   setIsAlertOpen,
   noteId,
@@ -39,8 +39,7 @@ export default function AlertDeleteNote({
             <AlertDialogHeader>
               <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
               <AlertDialogDescription>
-                Essa ação não pode ser desfeita. Isso excluirá permanentemente
-                sua nota.
+                Gostaria mesmo de excluir esta nota da lixeira permanentemente?
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
