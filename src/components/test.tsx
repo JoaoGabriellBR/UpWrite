@@ -24,6 +24,7 @@ import { toast } from "@/components/ui/use-toast";
 import { Icons } from "@/components/icons";
 import { NoteSkeleton } from "@/components/note-skeleton";
 import debounce from "lodash/debounce";
+import AlertArchiveNote from "./alert-archive-note";
 
 export default function Test({
   defaultLayout = [265, 655],
@@ -33,6 +34,7 @@ export default function Test({
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
   const [isOpen, setIsOpened] = useState(false);
   const [isTrashOpen, setIsTrashOpen] = useState(false);
+  const [isArchiveAlertOpen, setIsArchiveAlertOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState<NoteProps | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -290,9 +292,12 @@ export default function Test({
       return;
     }
 
-    handleArchiveNote(selectedNote.id);
+    setIsArchiveAlertOpen(true);
+  }, [selectedNote]);
+
+  const handleArchiveComplete = useCallback(() => {
     setSelectedNote(null);
-  }, [selectedNote, handleArchiveNote]);
+  }, []);
 
   const sortedNotes = notes
     ? [...notes].sort(
@@ -335,6 +340,12 @@ export default function Test({
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
+                <AlertArchiveNote
+                  isAlertOpen={isArchiveAlertOpen}
+                  setIsAlertOpen={setIsArchiveAlertOpen}
+                  noteId={selectedNote?.id}
+                  onArchive={handleArchiveComplete}
+                />
               </div>
             </div>
             <div className="flex-1 overflow-y-auto p-4">

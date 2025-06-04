@@ -16,6 +16,7 @@ import { useState } from "react";
 import AlertDeleteNote from "./alert-delete-note";
 import useDeleteNote from "@/hooks/use-delete-note";
 import useArchiveNote from "@/hooks/use-archive-note";
+import AlertArchiveNote from "./alert-archive-note";
 
 export default function HeaderNotes({
   form,
@@ -27,6 +28,7 @@ export default function HeaderNotes({
   const router = useRouter();
   const pathname = usePathname();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isArchiveAlertOpen, setIsArchiveAlertOpen] = useState(false);
   const [restoringNoteId, setRestoringNoteId] = useState(null);
   const { isPendingDelete } = useDeleteNote();
   const { handleArchiveNote, isPendingArchive } = useArchiveNote();
@@ -34,8 +36,12 @@ export default function HeaderNotes({
     useUnarchiveNote({});
 
   const handleClickArchiveNote = useCallback(() => {
-    handleArchiveNote(note?.id);
-  }, [handleArchiveNote, note?.id]);
+    setIsArchiveAlertOpen(true);
+  }, []);
+
+  const handleArchiveComplete = useCallback(() => {
+    router.push("/notes");
+  }, [router]);
 
   const handleClickUnarchiveNote = useCallback(
     (noteId: any) => {
@@ -121,27 +127,33 @@ export default function HeaderNotes({
                   </>
                 )}
               </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <Button variant="outline">
-                      {isPendingArchive ? (
-                        <Icons.spinner className="h-5 w-5 animate-spin" />
-                      ) : (
-                        <Icons.moreHorizontal className="h-5 w-5" />
-                      )}
-                    </Button>
-                  </DropdownMenuTrigger>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Button variant="outline">
+                    {isPendingArchive ? (
+                      <Icons.spinner className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <Icons.moreHorizontal className="h-5 w-5" />
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
 
-                  <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      onClick={handleClickArchiveNote}
-                    >
-                      <Icons.trash className="mr-2 h-4 w-4" />
-                      <p>Excluir nota</p>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={handleClickArchiveNote}
+                  >
+                    <Icons.trash className="mr-2 h-4 w-4" />
+                    <p>Excluir nota</p>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <AlertArchiveNote
+                isAlertOpen={isArchiveAlertOpen}
+                setIsAlertOpen={setIsArchiveAlertOpen}
+                noteId={note?.id}
+                onArchive={handleArchiveComplete}
+              />
             </div>
           </div>
         )}

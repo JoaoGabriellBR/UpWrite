@@ -36,6 +36,9 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
+import AlertArchiveNote from "./alert-archive-note";
+import { useMediaQuery } from "usehooks-ts";
+import { useRouter } from "next/navigation";
 
 interface Note {
   id: string;
@@ -57,20 +60,22 @@ interface MutationContext {
 
 export const RetractingSideBar = ({
   defaultCollapsed = false,
-}: {
-  defaultLayout?: number[];
-  defaultCollapsed?: boolean;
-  navCollapsedSize?: number;
-}) => {
-  const [open, setOpen] = useState(!defaultCollapsed);
-  const [selected, setSelected] = useState("Nova nota");
+  navCollapsedSize,
+}: any) => {
+  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
   const [isOpen, setIsOpened] = useState(false);
   const [isTrashOpen, setIsTrashOpen] = useState(false);
+  const [isArchiveAlertOpen, setIsArchiveAlertOpen] = useState(false);
+  const [noteToArchive, setNoteToArchive] = useState<string | null>(null);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [currentNote, setCurrentNote] = useState<Note | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
-
+  const [selected, setSelected] = useState("Nova nota");
+  const [open, setOpen] = useState(true);
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const router = useRouter();
   const queryClient = useQueryClient();
+  const { handleArchiveNote, isPendingArchive } = useArchiveNote();
 
   const form = useForm({
     resolver: zodResolver(createTitleSchema),
@@ -207,8 +212,6 @@ export const RetractingSideBar = ({
     },
   });
 
-  const { handleArchiveNote, isPendingArchive } = useArchiveNote();
-
   const handleNewNote = () => {
     createNote();
   };
@@ -275,13 +278,16 @@ export const RetractingSideBar = ({
 
   const handleArchiveClick = () => {
     if (!selectedNote) return;
-    handleArchiveNote(selectedNote.id);
-    setSelectedNote(null);
-    setCurrentNote(null);
-    toast({
-      description: "Nota movida para a lixeira",
-    });
+    setIsArchiveAlertOpen(true);
   };
+
+  const handleArchiveComplete = useCallback(() => {
+    if (selectedNote?.id === noteToArchive) {
+      setSelectedNote(null);
+      setCurrentNote(null);
+    }
+    setNoteToArchive(null);
+  }, [selectedNote?.id, noteToArchive]);
 
   const sortedNotes = notes?.sort((a: any, b: any) => {
     return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
@@ -398,18 +404,12 @@ export const RetractingSideBar = ({
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem
                               onClick={() => {
-                                const noteToArchive =
+                                const noteId =
                                   selectedNote?.id === note.id
                                     ? selectedNote?.id
                                     : note.id;
-                                handleArchiveNote(noteToArchive);
-                                if (selectedNote?.id === note.id) {
-                                  setSelectedNote(null);
-                                  setCurrentNote(null);
-                                }
-                                toast({
-                                  description: "Nota movida para a lixeira",
-                                });
+                                setNoteToArchive(noteId);
+                                setIsArchiveAlertOpen(true);
                               }}
                             >
                               <LuTrash className="mr-2 h-4 w-4" />
@@ -429,6 +429,13 @@ export const RetractingSideBar = ({
           </div>
         </div>
       </motion.nav>
+
+      <AlertArchiveNote
+        isAlertOpen={isArchiveAlertOpen}
+        setIsAlertOpen={setIsArchiveAlertOpen}
+        noteId={noteToArchive}
+        onArchive={handleArchiveComplete}
+      />
 
       <div className="flex-1">
         <div className="h-full flex flex-col">
