@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import organizacaoLightMode from "../../../public/organizacao-lightmode.png";
 import organizacaoDarkMode from "../../../public/organizacao-darkmode.png";
 import ComponentSchema from "./component-schema";
@@ -7,15 +7,8 @@ import { useTheme } from "next-themes";
 
 const Organizacao = () => {
   const { resolvedTheme } = useTheme();
-  const [imageSrc, setImageSrc] = useState({});
-
-  useEffect(() => {
-    if (resolvedTheme === "dark") {
-      setImageSrc(organizacaoDarkMode);
-    } else {
-      setImageSrc(organizacaoLightMode);
-    }
-  }, [resolvedTheme]);
+  const imageSrc =
+    resolvedTheme === "dark" ? organizacaoDarkMode : organizacaoLightMode;
 
   return (
     <>

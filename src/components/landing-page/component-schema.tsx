@@ -25,38 +25,46 @@ const ComponentSchema = ({
   textButton,
 }: any) => {
   return (
-    <section id={id} className="py-8 md:py-10 w-full overflow-hidden">
+    <section id={id} className="py-6 sm:py-8 md:py-12 w-full">
       <div
         className={cn(
-          "max-w-7xl px-4 mx-auto container flex flex-col justify-between items-center gap-20",
+          "max-w-7xl px-4 mx-auto flex flex-col justify-between items-center gap-8 md:gap-12 lg:gap-20",
           imagePosition === "left" ? "lg:flex-row" : "lg:flex-row-reverse"
         )}
       >
-        <div className="flex flex-row justify-center items-center relative w-full lg:w-1/2 min-h-[80vh] max-h-[80vh] aspect-[16/9]">
+        <div className="relative w-full lg:w-1/2 min-h-[40vh] lg:min-h-[60vh] flex items-center">
           {/* Background Gradient */}
-          <div className="absolute dark:inset-[60px] bg-gradient-to-br from-purple-900/80 via-blue-800/50 to-transparent rounded-sm dark:rounded-[10rem] blur-[7rem] dark:blur-[6rem]" />
+          <div className="absolute inset-0 dark:inset-[60px] bg-gradient-to-br from-purple-900/80 via-blue-800/50 to-transparent rounded-sm dark:rounded-[10rem] blur-[7rem] dark:blur-[6rem]" />
 
-          {id === "caracteristicas" ? (
-            <SmartphoneMockup />
-          ) : (
-            <Image
-              src={imageSrc}
-              alt={imageAlt}
-              width={imageWidth}
-              height={imageHeight}
-              layout="responsive"
-              objectFit="contain"
-            />
-          )}
+          <div className="relative w-full h-full flex items-center justify-center">
+            {id === "caracteristicas" ? (
+              <SmartphoneMockup />
+            ) : (
+              <div className="relative w-full aspect-[16/9] flex items-center justify-center">
+                <Image
+                  src={imageSrc}
+                  alt={imageAlt || "Imagem ilustrativa"}
+                  width={imageWidth}
+                  height={imageHeight}
+                  quality={75}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+                  className="object-contain"
+                  priority={id === "porqueupwrite"}
+                />
+              </div>
+            )}
+          </div>
         </div>
 
-        <Card className="w-full lg:w-1/2 border-none p-0 m-0">
+        <Card className="w-full lg:w-1/2 border-none shadow-none">
           <CardHeader>
-            <CardTitle className="font-heading text-6xl">{title}</CardTitle>
+            <CardTitle className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl break-words">
+              {title}
+            </CardTitle>
           </CardHeader>
 
           <CardContent>
-            <p className="leading-normal text-muted-foreground sm:text-lg sm:leading-8">
+            <p className="leading-relaxed text-muted-foreground text-base sm:text-lg md:text-xl">
               {description}
             </p>
           </CardContent>
@@ -65,7 +73,7 @@ const ComponentSchema = ({
             <CardFooter>
               <Link
                 href="/register"
-                className="flex flex-row justify-start items-center gap-2 text-primary underline-offset-4 hover:underline"
+                className="flex flex-row justify-start items-center gap-2 text-primary underline-offset-4 hover:underline transition-colors duration-200"
               >
                 {textButton}
                 <Icons.arrowRight size={15} />
