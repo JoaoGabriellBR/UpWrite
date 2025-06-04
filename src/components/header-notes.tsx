@@ -121,7 +121,6 @@ export default function HeaderNotes({
                   </>
                 )}
               </Button>
-              {pathname === "/createnote" ? null : (
                 <DropdownMenu>
                   <DropdownMenuTrigger>
                     <Button variant="outline">
@@ -143,7 +142,6 @@ export default function HeaderNotes({
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              )}
             </div>
           </div>
         )}

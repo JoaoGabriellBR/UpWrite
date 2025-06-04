@@ -17,8 +17,8 @@ const useArchiveNote = () => {
     router.refresh();
     router.push("/notes");
     toast({
-      title: "Nota arquivada",
-      description: "Sua nota foi arquivada com sucesso.",
+      title: "Nota excluída",
+      description: "Sua nota foi excluída com sucesso.",
       variant: "default",
     });
   }, [router]);
@@ -26,7 +26,7 @@ const useArchiveNote = () => {
   const onError = useCallback(() => {
     toast({
       title: "Algo deu errado.",
-      description: "Sua nota não foi arquivada. Tente novamente.",
+      description: "Sua nota não foi excluída. Tente novamente.",
       variant: "destructive",
     });
   }, []);

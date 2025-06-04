@@ -441,8 +441,9 @@ export const RetractingSideBar = ({
               <div className="flex items-center justify-between p-4 border-b">
                 <Input
                   value={selectedNote.title}
-                  onChange={(e) => handleTitleChange(e.target.value)}
-                  className="text-xl font-semibold bg-transparent border-none h-auto p-0 focus-visible:ring-0"
+                  placeholder="Sem título"
+                  readOnly
+                  className="text-xl font-semibold bg-transparent border-none h-auto p-0 focus-visible:ring-0 placeholder:text-muted-foreground placeholder:font-normal"
                 />
                 <div className="flex items-center gap-2">
                   {isUpdating && (

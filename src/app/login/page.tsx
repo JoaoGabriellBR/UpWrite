@@ -123,14 +123,14 @@ export default function Login() {
                       )}
                     />
                   ))}
-                  <div className="flex justify-end">
+                  {/* <div className="flex justify-end">
                     <Link
                       href="/forgot-password"
                       className="text-sm text-primary hover:underline"
                     >
                       Esqueceu a senha?
                     </Link>
-                  </div>
+                  </div> */}
                   <Button
                     type="submit"
                     disabled={loading}
