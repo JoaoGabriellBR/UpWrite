@@ -28,12 +28,22 @@ import "./styles/colors.css";
 import { useDebounce } from "usehooks-ts";
 import { useEffect } from "react";
 
+export interface EditorProps {
+  form: any;
+  content: any;
+  handleChangeContent: (params: { editor: any; version: string }) => void;
+  onTitleChange?: (title: string) => void;
+  readOnly?: boolean;
+  version: string;
+}
+
 export default function Editor({
   form,
   content,
   handleChangeContent,
   onTitleChange,
   readOnly = false,
+  version,
 }: EditorProps) {
   const editor = useEditor({
     editorProps: {
@@ -130,7 +140,7 @@ export default function Editor({
     content: content,
     onUpdate: ({ editor }) => {
       if (!readOnly) {
-        handleChangeContent({ editor });
+        handleChangeContent({ editor, version });
       }
     },
     editable: !readOnly,

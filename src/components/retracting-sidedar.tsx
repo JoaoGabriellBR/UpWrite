@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useState, useCallback } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useState,
+  useCallback,
+  useRef,
+} from "react";
 import { IconType } from "react-icons";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -76,6 +82,8 @@ export const RetractingSideBar = ({
   const router = useRouter();
   const queryClient = useQueryClient();
   const { handleArchiveNote, isPendingArchive } = useArchiveNote();
+  const currentVersionRef = useRef<string>("");
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const form = useForm({
     resolver: zodResolver(createTitleSchema),
@@ -95,8 +103,24 @@ export const RetractingSideBar = ({
     },
   });
 
+  const generateVersion = useCallback(() => {
+    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  }, []);
+
   const { mutate: updateNote } = useMutation({
-    mutationFn: async ({ id, title, content }: UpdateNoteData) => {
+    mutationFn: async ({
+      id,
+      title,
+      content,
+      version,
+    }: UpdateNoteData & { version: string }) => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+
+      const abortController = new AbortController();
+      abortControllerRef.current = abortController;
+
       const response = await fetch(`/api/notes/${id}?id=${id}`, {
         method: "PATCH",
         headers: {
@@ -106,6 +130,7 @@ export const RetractingSideBar = ({
           title: title || "",
           content: typeof content === "string" ? JSON.parse(content) : content,
         }),
+        signal: abortController.signal,
       });
 
       if (!response.ok) {
@@ -113,10 +138,14 @@ export const RetractingSideBar = ({
         throw new Error(error.message || "Failed to update note");
       }
 
+      if (version !== currentVersionRef.current) {
+        throw new Error("Note version mismatch - update cancelled");
+      }
+
       const data = await response.json();
       return data;
     },
-    onMutate: async (newNote: UpdateNoteData) => {
+    onMutate: async (newNote) => {
       await queryClient.cancelQueries({ queryKey: ["notes"] });
       await queryClient.cancelQueries({ queryKey: ["note", newNote.id] });
 
@@ -142,11 +171,14 @@ export const RetractingSideBar = ({
 
       return { previousNotes, previousNote } as MutationContext;
     },
-    onError: (
-      error: Error,
-      newNote: UpdateNoteData,
-      context?: MutationContext
-    ) => {
+    onError: (error: Error, newNote, context?: MutationContext) => {
+      if (
+        error.name === "AbortError" ||
+        error.message.includes("version mismatch")
+      ) {
+        return;
+      }
+
       console.error("Update error:", error);
 
       if (context?.previousNotes) {
@@ -179,6 +211,7 @@ export const RetractingSideBar = ({
     },
     onSettled: () => {
       setIsUpdating(false);
+      abortControllerRef.current = null;
     },
   });
 
@@ -217,27 +250,29 @@ export const RetractingSideBar = ({
   };
 
   const handleNoteSelect = (note: any) => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    const newVersion = generateVersion();
+    currentVersionRef.current = newVersion;
     setSelectedNote(note);
     setCurrentNote(note);
     form.setValue("title", note.title);
   };
 
   const handleChangeContent = useCallback(
-    debounce(({ editor }: { editor: any }) => {
+    debounce(({ editor, version }: { editor: any; version: string }) => {
       if (!selectedNote?.id) return;
-
-      const content = editor.getJSON();
-      if (!content || typeof content !== "object") {
-        console.error("Invalid content format");
-        return;
-      }
+      if (version !== currentVersionRef.current) return;
 
       setIsUpdating(true);
       try {
         updateNote({
           id: selectedNote.id,
           title: selectedNote.title,
-          content: JSON.stringify(content),
+          content: JSON.stringify(editor.getJSON()),
+          version,
         });
       } catch (error) {
         console.error("Error updating content:", error);
@@ -481,6 +516,7 @@ export const RetractingSideBar = ({
                   content={currentNote?.content}
                   handleChangeContent={handleChangeContent}
                   onTitleChange={handleTitleChange}
+                  version={currentVersionRef.current}
                 />
               </div>
             </>
