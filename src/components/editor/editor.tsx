@@ -26,7 +26,7 @@ import {
 import "./styles/prosemirror.css";
 import "./styles/colors.css";
 import { useDebounce } from "usehooks-ts";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export interface EditorProps {
   form: any;
@@ -45,6 +45,11 @@ export default function Editor({
   readOnly = false,
   version,
 }: EditorProps) {
+  // Referências para controlar o estado de edição
+  const isUserEditingRef = useRef(false);
+  const lastUserInteractionRef = useRef(0);
+  const editorInitializedRef = useRef(false);
+  
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -140,22 +145,83 @@ export default function Editor({
     content: content,
     onUpdate: ({ editor }) => {
       if (!readOnly) {
+        // Marca que o usuário está editando ativamente
+        isUserEditingRef.current = true;
+        lastUserInteractionRef.current = Date.now();
+        
+        // Para de considerar que está editando após 2 segundos de inatividade
+        setTimeout(() => {
+          if (Date.now() - lastUserInteractionRef.current >= 2000) {
+            isUserEditingRef.current = false;
+          }
+        }, 2000);
+        
         handleChangeContent({ editor, version });
       }
+    },
+    onCreate({ editor }) {
+      // Marca que o editor foi inicializado
+      editorInitializedRef.current = true;
+    },
+    onFocus() {
+      // Quando o editor ganha foco, marca como editando
+      isUserEditingRef.current = true;
+      lastUserInteractionRef.current = Date.now();
+    },
+    onBlur() {
+      // Quando perde o foco, para de considerar como editando após um delay
+      setTimeout(() => {
+        if (Date.now() - lastUserInteractionRef.current >= 1000) {
+          isUserEditingRef.current = false;
+        }
+      }, 1000);
     },
     editable: !readOnly,
   });
 
+  // Effect otimizado para sincronização de conteúdo
   useEffect(() => {
-    if (editor && content) {
+    // Só sincroniza se:
+    // 1. Editor existe e foi inicializado
+    // 2. Há conteúdo para sincronizar
+    // 3. Usuário não está editando ativamente
+    // 4. O conteúdo realmente mudou
+    if (
+      editor && 
+      editorInitializedRef.current && 
+      content && 
+      !isUserEditingRef.current
+    ) {
       const currentContent = editor.getJSON();
-      if (JSON.stringify(currentContent) !== JSON.stringify(content)) {
+      const contentChanged = JSON.stringify(currentContent) !== JSON.stringify(content);
+      
+      if (contentChanged) {
+        // Preserva a seleção atual se possível
         const selection = editor.state.selection;
-        editor.commands.setContent(content);
-        editor.commands.setTextSelection(selection);
+        
+        // Atualiza o conteúdo sem interferir na digitação
+        editor.commands.setContent(content, false);
+        
+        // Tenta restaurar a seleção se ainda for válida
+        try {
+          if (selection && selection.from <= editor.state.doc.content.size) {
+            editor.commands.setTextSelection(selection);
+          }
+        } catch (e) {
+          // Se não conseguir restaurar a seleção, não faz nada
+          console.debug('Could not restore selection after content update');
+        }
       }
     }
   }, [content, editor]);
+
+  // Effect para inicializar o conteúdo quando o editor é criado
+  useEffect(() => {
+    if (editor && content && !editorInitializedRef.current) {
+      editor.commands.setContent(content);
+      editorInitializedRef.current = true;
+    }
+  }, [editor, content]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;

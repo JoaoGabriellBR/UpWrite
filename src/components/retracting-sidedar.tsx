@@ -78,6 +78,13 @@ export const RetractingSideBar = ({
   const [isUpdating, setIsUpdating] = useState(false);
   const [selected, setSelected] = useState("Nova nota");
   const [open, setOpen] = useState(true);
+
+  // Estados para controlar edição local vs remota
+  const [localContent, setLocalContent] = useState<any>(null);
+  const [localTitle, setLocalTitle] = useState<string>("");
+  const isEditingRef = useRef(false);
+  const pendingUpdatesRef = useRef(new Set<string>());
+
   const isMobile = useMediaQuery("(max-width: 768px)");
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -121,6 +128,9 @@ export const RetractingSideBar = ({
       const abortController = new AbortController();
       abortControllerRef.current = abortController;
 
+      // Adiciona o ID à lista de atualizações pendentes
+      pendingUpdatesRef.current.add(id);
+
       const response = await fetch(`/api/notes/${id}?id=${id}`, {
         method: "PATCH",
         headers: {
@@ -143,6 +153,10 @@ export const RetractingSideBar = ({
       }
 
       const data = await response.json();
+
+      // Remove o ID da lista de atualizações pendentes
+      pendingUpdatesRef.current.delete(id);
+
       return data;
     },
     onMutate: async (newNote) => {
@@ -152,26 +166,33 @@ export const RetractingSideBar = ({
       const previousNotes = queryClient.getQueryData<Note[]>(["notes"]) || [];
       const previousNote = queryClient.getQueryData<Note>(["note", newNote.id]);
 
-      const updatedNote = {
-        ...(previousNote || {}),
-        ...newNote,
-        title: newNote.title?.trim() || "",
-        content:
-          typeof newNote.content === "string"
-            ? JSON.parse(newNote.content)
-            : newNote.content,
-        updatedAt: new Date().toISOString(),
-      };
+      // CORREÇÃO CRÍTICA: Não atualiza o cache se o usuário está editando
+      // Isso evita que as atualizações otimistas interfiram na digitação
+      if (!isEditingRef.current) {
+        const updatedNote = {
+          ...(previousNote || {}),
+          ...newNote,
+          title: newNote.title?.trim() || "",
+          content:
+            typeof newNote.content === "string"
+              ? JSON.parse(newNote.content)
+              : newNote.content,
+          updatedAt: new Date().toISOString(),
+        };
 
-      queryClient.setQueryData<Note[]>(["notes"], (old = []) =>
-        old.map((note) => (note.id === newNote.id ? updatedNote : note))
-      );
+        queryClient.setQueryData<Note[]>(["notes"], (old = []) =>
+          old.map((note) => (note.id === newNote.id ? updatedNote : note))
+        );
 
-      queryClient.setQueryData<Note>(["note", newNote.id], updatedNote);
+        queryClient.setQueryData<Note>(["note", newNote.id], updatedNote);
+      }
 
       return { previousNotes, previousNote } as MutationContext;
     },
     onError: (error: Error, newNote, context?: MutationContext) => {
+      // Remove da lista de pendentes em caso de erro
+      pendingUpdatesRef.current.delete(newNote.id);
+
       if (
         error.name === "AbortError" ||
         error.message.includes("version mismatch")
@@ -181,10 +202,10 @@ export const RetractingSideBar = ({
 
       console.error("Update error:", error);
 
-      if (context?.previousNotes) {
+      if (context?.previousNotes && !isEditingRef.current) {
         queryClient.setQueryData(["notes"], context.previousNotes);
       }
-      if (context?.previousNote) {
+      if (context?.previousNote && !isEditingRef.current) {
         queryClient.setQueryData(["note", newNote.id], context.previousNote);
       }
 
@@ -197,15 +218,30 @@ export const RetractingSideBar = ({
       setIsUpdating(false);
     },
     onSuccess: (updatedNote: Note) => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-      queryClient.invalidateQueries({ queryKey: ["note", updatedNote.id] });
+      // Remove da lista de pendentes
+      pendingUpdatesRef.current.delete(updatedNote.id);
 
-      setSelectedNote((prev) =>
-        prev?.id === updatedNote.id ? updatedNote : prev
-      );
-      setCurrentNote((prev) =>
-        prev?.id === updatedNote.id ? updatedNote : prev
-      );
+      // CORREÇÃO: Só invalida queries se não estiver editando ativamente
+      if (!isEditingRef.current) {
+        queryClient.invalidateQueries({ queryKey: ["notes"] });
+        queryClient.invalidateQueries({ queryKey: ["note", updatedNote.id] });
+
+        setSelectedNote((prev) =>
+          prev?.id === updatedNote.id ? updatedNote : prev
+        );
+        setCurrentNote((prev) =>
+          prev?.id === updatedNote.id ? updatedNote : prev
+        );
+      } else {
+        // Se estiver editando, apenas atualiza silenciosamente em background
+        queryClient.setQueryData<Note[]>(
+          ["notes"],
+          (old = []) =>
+            old?.map((note) =>
+              note.id === updatedNote.id ? updatedNote : note
+            ) || []
+        );
+      }
 
       setIsUpdating(false);
     },
@@ -241,6 +277,8 @@ export const RetractingSideBar = ({
       queryClient.invalidateQueries({ queryKey: ["notes"] });
       setSelectedNote(data);
       setCurrentNote(data);
+      setLocalContent(data.content);
+      setLocalTitle(data.title);
       form.setValue("title", data.title);
     },
   });
@@ -256,8 +294,14 @@ export const RetractingSideBar = ({
 
     const newVersion = generateVersion();
     currentVersionRef.current = newVersion;
+
+    // Reset do estado de edição
+    isEditingRef.current = false;
+
     setSelectedNote(note);
     setCurrentNote(note);
+    setLocalContent(note.content);
+    setLocalTitle(note.title);
     form.setValue("title", note.title);
   };
 
@@ -266,12 +310,18 @@ export const RetractingSideBar = ({
       if (!selectedNote?.id) return;
       if (version !== currentVersionRef.current) return;
 
+      // Marca que está editando
+      isEditingRef.current = true;
+
+      const newContent = editor.getJSON();
+      setLocalContent(newContent);
       setIsUpdating(true);
+
       try {
         updateNote({
           id: selectedNote.id,
-          title: selectedNote.title,
-          content: JSON.stringify(editor.getJSON()),
+          title: localTitle || selectedNote.title,
+          content: JSON.stringify(newContent),
           version,
         });
       } catch (error) {
@@ -284,19 +334,24 @@ export const RetractingSideBar = ({
         setIsUpdating(false);
       }
     }, 1000),
-    [selectedNote, updateNote]
+    [selectedNote, updateNote, localTitle]
   );
 
   const handleTitleChange = useCallback(
     debounce((title: string) => {
       if (!selectedNote?.id) return;
 
+      // Marca que está editando
+      isEditingRef.current = true;
+
+      setLocalTitle(title);
       setIsUpdating(true);
+
       try {
         updateNote({
           id: selectedNote.id,
           title: title,
-          content: selectedNote.content,
+          content: localContent || selectedNote.content,
         });
       } catch (error) {
         console.error("Error updating title:", error);
@@ -308,7 +363,7 @@ export const RetractingSideBar = ({
         setIsUpdating(false);
       }
     }, 500),
-    [selectedNote, updateNote]
+    [selectedNote, updateNote, localContent]
   );
 
   const handleArchiveClick = () => {
@@ -320,6 +375,8 @@ export const RetractingSideBar = ({
     if (selectedNote?.id === noteToArchive) {
       setSelectedNote(null);
       setCurrentNote(null);
+      setLocalContent(null);
+      setLocalTitle("");
     }
     setNoteToArchive(null);
   }, [selectedNote?.id, noteToArchive]);
@@ -333,9 +390,23 @@ export const RetractingSideBar = ({
       const firstNote = notes[0];
       setSelectedNote(firstNote);
       setCurrentNote(firstNote);
+      setLocalContent(firstNote.content);
+      setLocalTitle(firstNote.title);
       form.setValue("title", firstNote.title);
     }
   }, [notes, selectedNote, form]);
+
+  // Effect para sincronizar estado local com mudanças externas
+  React.useEffect(() => {
+    if (
+      selectedNote &&
+      !isEditingRef.current &&
+      !pendingUpdatesRef.current.has(selectedNote.id)
+    ) {
+      setLocalContent(selectedNote.content);
+      setLocalTitle(selectedNote.title);
+    }
+  }, [selectedNote]);
 
   return (
     <div className="flex h-screen">
@@ -395,15 +466,6 @@ export const RetractingSideBar = ({
           </div>
 
           <div className="flex-1 overflow-hidden">
-            {/* <div className="p-2">
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Pesquisar notas..."
-                  className={cn("w-full p-8", !open && "hidden")}
-                />
-              </div>
-            </div> */}
             <ScrollArea className="h-[calc(100%-60px)]">
               {open &&
                 (isLoading ? (
@@ -482,7 +544,7 @@ export const RetractingSideBar = ({
             <>
               <div className="flex items-center justify-between p-4 border-b">
                 <Input
-                  value={selectedNote.title}
+                  value={localTitle}
                   placeholder="Sem título"
                   readOnly
                   className="text-xl font-semibold bg-transparent border-none h-auto p-0 focus-visible:ring-0 placeholder:text-muted-foreground placeholder:font-normal"
@@ -513,7 +575,7 @@ export const RetractingSideBar = ({
               <div className="flex-1 overflow-y-auto py-10 sm:py-10 md:py-12 lg:py-16 xl:py-20 px-32 sm:px-32 md:px-48 lg:px-60 xl:px-72">
                 <Editor
                   form={form}
-                  content={currentNote?.content}
+                  content={localContent}
                   handleChangeContent={handleChangeContent}
                   onTitleChange={handleTitleChange}
                   version={currentVersionRef.current}
