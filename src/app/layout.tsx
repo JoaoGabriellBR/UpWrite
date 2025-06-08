@@ -10,7 +10,7 @@ import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "UpWrite",
-  description: "Simplifique sua vida e aumente sua produtividade",
+  description: "Crie currículos, e-mails e muito mais de forma rápida e fácil",
 };
 
 const fontSans = Inter({

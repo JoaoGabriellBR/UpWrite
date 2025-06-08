@@ -55,7 +55,7 @@ export default function TrashPopover({ isTrashOpen, setIsTrashOpen }: any) {
               <div key={note?.id} className="flex items-center justify-between">
                 <Link href={`/editnote/${note?.id}`}>
                   <Label className="cursor-pointer hover:underline underline-offset-2">
-                    {note?.title}
+                    {note?.title || "Sem título"}
                   </Label>
                 </Link>
                 <div className="flex flex-row items-center">
