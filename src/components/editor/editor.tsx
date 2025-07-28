@@ -15,7 +15,7 @@ import TiptapLink from "@tiptap/extension-link";
 import Dropcursor from "@tiptap/extension-dropcursor";
 import { Markdown } from "tiptap-markdown";
 import SlashCommand from "./slash-command";
-import { EditorProps } from "@/lib/types";
+// import { EditorProps } from "@/lib/types";
 import {
   Form,
   FormControl,
@@ -49,7 +49,7 @@ export default function Editor({
   const isUserEditingRef = useRef(false);
   const lastUserInteractionRef = useRef(0);
   const editorInitializedRef = useRef(false);
-  
+
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -148,14 +148,14 @@ export default function Editor({
         // Marca que o usuário está editando ativamente
         isUserEditingRef.current = true;
         lastUserInteractionRef.current = Date.now();
-        
+
         // Para de considerar que está editando após 2 segundos de inatividade
         setTimeout(() => {
           if (Date.now() - lastUserInteractionRef.current >= 2000) {
             isUserEditingRef.current = false;
           }
         }, 2000);
-        
+
         handleChangeContent({ editor, version });
       }
     },
@@ -187,21 +187,22 @@ export default function Editor({
     // 3. Usuário não está editando ativamente
     // 4. O conteúdo realmente mudou
     if (
-      editor && 
-      editorInitializedRef.current && 
-      content && 
+      editor &&
+      editorInitializedRef.current &&
+      content &&
       !isUserEditingRef.current
     ) {
       const currentContent = editor.getJSON();
-      const contentChanged = JSON.stringify(currentContent) !== JSON.stringify(content);
-      
+      const contentChanged =
+        JSON.stringify(currentContent) !== JSON.stringify(content);
+
       if (contentChanged) {
         // Preserva a seleção atual se possível
         const selection = editor.state.selection;
-        
+
         // Atualiza o conteúdo sem interferir na digitação
         editor.commands.setContent(content, false);
-        
+
         // Tenta restaurar a seleção se ainda for válida
         try {
           if (selection && selection.from <= editor.state.doc.content.size) {
@@ -209,7 +210,7 @@ export default function Editor({
           }
         } catch (e) {
           // Se não conseguir restaurar a seleção, não faz nada
-          console.debug('Could not restore selection after content update');
+          console.debug("Could not restore selection after content update");
         }
       }
     }
