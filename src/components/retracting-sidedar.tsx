@@ -120,7 +120,7 @@ export const RetractingSideBar = ({
       title,
       content,
       version,
-    }: UpdateNoteData & { version: string }) => {
+    }: UpdateNoteData & { version?: string }) => {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
@@ -306,7 +306,7 @@ export const RetractingSideBar = ({
   };
 
   const handleChangeContent = useCallback(
-    debounce(({ editor, version }: { editor: any; version: string }) => {
+    debounce(({ editor, version }: { editor: any; version?: string }) => {
       if (!selectedNote?.id) return;
       if (version !== currentVersionRef.current) return;
 
