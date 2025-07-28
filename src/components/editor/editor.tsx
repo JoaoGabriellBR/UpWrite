@@ -31,10 +31,10 @@ import { useEffect, useRef } from "react";
 export interface EditorProps {
   form: any;
   content: any;
-  handleChangeContent: (params: { editor: any; version: string }) => void;
+  handleChangeContent: (params: { editor: any; version?: string }) => void;
   onTitleChange?: (title: string) => void;
   readOnly?: boolean;
-  version: string;
+  version?: string;
 }
 
 export default function Editor({
