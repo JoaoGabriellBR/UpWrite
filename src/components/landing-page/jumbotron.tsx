@@ -18,7 +18,7 @@ export default function Jumbotron() {
             Confira o projeto no Github
           </Link>
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-8xl">
-            Crie currículos, e-mails e muito mais de forma rápida e fácil
+            Crie documentos com facilidade e rapidez.
           </h1>
           <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
             Crie notas e páginas com recursos avançados de edição de texto,
