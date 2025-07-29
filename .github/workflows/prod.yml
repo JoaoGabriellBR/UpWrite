@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
+      POSTGRES_URL_NON_POOLING: ${{ secrets.POSTGRES_URL_NON_POOLING }}
     steps:
       - name: Checar código
         uses: actions/checkout@v3
@@ -21,9 +24,6 @@ jobs:
         run: npm install
 
       - name: Aplicar migrations Prisma
-        env:
-            POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
-            POSTGRES_URL_NON_POOLING: ${{ secrets.POSTGRES_URL_NON_POOLING }}
         run: |
           npx prisma migrate deploy
           npx prisma generate
