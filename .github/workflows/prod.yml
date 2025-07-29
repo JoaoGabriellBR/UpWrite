@@ -1,5 +1,4 @@
 name: Build and Push to Vercel
-description: Build the application and deploy to Vercel on push to main branch
 
 on:
   push:
@@ -20,6 +19,14 @@ jobs:
 
       - name: Instalar dependências
         run: npm install
+
+      - name: Aplicar migrations Prisma
+        env:
+            POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
+            POSTGRES_URL_NON_POOLING: ${{ secrets.POSTGRES_URL_NON_POOLING }}
+        run: |
+          npx prisma migrate deploy
+          npx prisma generate
 
       - name: Build da aplicação
         run: npm run build
