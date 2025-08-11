@@ -74,7 +74,7 @@ Esse projeto está sob a licença MIT - acesse os detalhes [LICENSE.md](/LICENSE
 [Email-url]: joaoname9@gmail.com
 
 [Porfolio]: https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white
-[Porfolio-url]: https://joaogabrielsilva.vercel.app
+[Porfolio-url]: https://joaogabrielsilva.com.br
 
 [Linkedin]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=blue
 [Linkedin-url]: https://www.linkedin.com/in/joaogabriel-silva
